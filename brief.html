@@ -128,14 +128,14 @@
 
   /* main content */
   main {
-    padding: 110px 0 80px;
+    padding: 160px 0 40px;
   }
   .brief-intro {
     margin-bottom: 52px;
-    padding: 24px 28px;
-    background: var(--sage);
+    padding: 22px 26px;
+    background: linear-gradient(135deg, var(--butter-soft) 0%, #fff 100%);
+    border: 1px solid rgba(244,214,122,0.5);
     border-radius: 16px;
-    color: #fff;
   }
   .brief-intro-badge {
     display: inline-flex; align-items: center; gap: 8px;
@@ -143,23 +143,22 @@
     font-size: 11px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #fff;
+    color: var(--ink);
     font-weight: 500;
-    margin-bottom: 10px;
-    opacity: 0.9;
+    margin-bottom: 8px;
   }
   .brief-intro-badge .dot {
     width: 6px; height: 6px; border-radius: 50%;
-    background: #c8ff2b;
-    box-shadow: 0 0 0 3px rgba(200,255,43,0.22);
+    background: var(--accent);
+    box-shadow: 0 0 0 3px rgba(255,92,62,0.15);
   }
   .brief-intro-text {
-    font-size: 14.5px;
-    color: rgba(255,255,255,0.92);
-    line-height: 1.6;
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.55;
     margin: 0;
   }
-  .brief-intro-text strong { color: #fff; font-weight: 600; }
+  .brief-intro-text strong { color: var(--ink); font-weight: 500; }
 
   .step {
     display: none;
@@ -399,7 +398,7 @@
 
   @media (max-width: 640px) {
     .wrap, .wrap-wide { padding: 0 18px; }
-    main { padding: 64px 0 50px; }
+    main { padding: 100px 0 30px; }
     .step h2 { font-size: 26px; }
     .step-hint { font-size: 13px; margin-bottom: 22px; }
     .options.wide { grid-template-columns: 1fr; }
