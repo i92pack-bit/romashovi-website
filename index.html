@@ -2200,6 +2200,19 @@
 <script>
   document.getElementById('cp').textContent = '© ромашовы · ' + new Date().getFullYear();
 
+  // cookie toast — показываем до первого закрытия
+  (function cookieToast() {
+    const KEY = 'cookieAck_v1';
+    const toast = document.getElementById('cookie-toast');
+    if (!toast) return;
+    if (!localStorage.getItem(KEY)) toast.hidden = false;
+    const close = document.getElementById('ct-close');
+    if (close) close.addEventListener('click', () => {
+      localStorage.setItem(KEY, '1');
+      toast.hidden = true;
+    });
+  })();
+
   // sticky header — add .scrolled once user scrolls past 8px
   const header = document.getElementById('site-header');
   const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 8);

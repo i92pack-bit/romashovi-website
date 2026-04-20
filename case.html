@@ -348,6 +348,40 @@
     line-height: 1.55;
   }
 
+  /* cookie toast */
+  .cookie-toast {
+    position: fixed;
+    right: 20px; bottom: 20px;
+    max-width: 320px;
+    background: var(--ink); color: var(--bg);
+    padding: 16px 18px;
+    border-radius: 14px;
+    box-shadow: 0 20px 50px -20px rgba(0,0,0,0.4);
+    font-size: 13px;
+    line-height: 1.5;
+    z-index: 100;
+    display: flex; align-items: flex-start; gap: 14px;
+    animation: ct-in .4s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes ct-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+  .cookie-toast[hidden] { display: none !important; }
+  .cookie-toast a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+  .cookie-toast .ct-close {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    color: var(--bg);
+    cursor: pointer; border: none;
+    font-size: 16px; line-height: 1;
+    display: grid; place-items: center;
+    transition: background .2s ease;
+  }
+  .cookie-toast .ct-close:hover { background: rgba(255,255,255,0.18); }
+  @media (max-width: 640px) {
+    .cookie-toast { right: 12px; left: 12px; bottom: 12px; max-width: none; }
+  }
+
   /* strip CTA — как на главной */
   .strip {
     margin: 60px 0 40px;
@@ -561,6 +595,12 @@
     </footer>
   </div>
 
+  <!-- cookie toast -->
+  <div class="cookie-toast" id="cookie-toast" hidden>
+    <div>Мы собираем <a href="/cookies/policy">Cookie</a>, чтобы улучшить работу сайта.</div>
+    <button class="ct-close" id="ct-close" aria-label="Закрыть">×</button>
+  </div>
+
   <!-- lightbox -->
   <div class="lightbox" id="lightbox" hidden>
     <button class="lb-close" id="lb-close" aria-label="Закрыть">×</button>
@@ -570,8 +610,19 @@
 <script>
   const cpEl = document.getElementById('cp');
   if (cpEl) cpEl.textContent = '© ромашовы · ' + new Date().getFullYear();
-  const yearEl = document.getElementById('year');
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  // cookie toast
+  (function cookieToast() {
+    const KEY = 'cookieAck_v1';
+    const toast = document.getElementById('cookie-toast');
+    if (!toast) return;
+    if (!localStorage.getItem(KEY)) toast.hidden = false;
+    const close = document.getElementById('ct-close');
+    if (close) close.addEventListener('click', () => {
+      localStorage.setItem(KEY, '1');
+      toast.hidden = true;
+    });
+  })();
 
   // читаем slug из ?slug=xxx или из pathname /cases/xxx
   const _url = new URL(location.href);
