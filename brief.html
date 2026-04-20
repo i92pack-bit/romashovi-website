@@ -131,7 +131,7 @@
   /* main content */
   main {
     flex: 1;
-    padding: 50px 0 60px;
+    padding: 80px 0 60px;
   }
 
   .step {
@@ -372,7 +372,7 @@
 
   @media (max-width: 640px) {
     .wrap, .wrap-wide { padding: 0 18px; }
-    main { padding: 30px 0 40px; }
+    main { padding: 48px 0 40px; }
     .step h2 { font-size: 26px; }
     .step-hint { font-size: 13px; margin-bottom: 22px; }
     .options.wide { grid-template-columns: 1fr; }
@@ -438,12 +438,12 @@
     <h2>к какой сфере относитесь</h2>
     <p class="step-hint">выберите что ближе всего</p>
     <div class="options wide" data-group="niche" data-type="radio">
-      <label class="opt" data-type="radio"><span class="mark"></span><span>e-commerce</span><input type="radio" name="niche" value="e-com" hidden></label>
-      <label class="opt" data-type="radio"><span class="mark"></span><span>услуги</span><input type="radio" name="niche" value="услуги" hidden></label>
-      <label class="opt" data-type="radio"><span class="mark"></span><span>SaaS / сервисы</span><input type="radio" name="niche" value="SaaS" hidden></label>
-      <label class="opt" data-type="radio"><span class="mark"></span><span>инфобиз / онлайн-школы</span><input type="radio" name="niche" value="инфобиз" hidden></label>
-      <label class="opt" data-type="radio"><span class="mark"></span><span>франшиза / офлайн-сеть</span><input type="radio" name="niche" value="франшиза" hidden></label>
-      <label class="opt" data-type="radio"><span class="mark"></span><span>другое</span><input type="radio" name="niche" value="другое" hidden></label>
+      <div class="opt" data-type="radio" data-name="niche" data-value="e-com" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>e-commerce</span></div>
+      <div class="opt" data-type="radio" data-name="niche" data-value="услуги" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>услуги</span></div>
+      <div class="opt" data-type="radio" data-name="niche" data-value="SaaS" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>SaaS / сервисы</span></div>
+      <div class="opt" data-type="radio" data-name="niche" data-value="инфобиз" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>инфобиз / онлайн-школы</span></div>
+      <div class="opt" data-type="radio" data-name="niche" data-value="франшиза" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>франшиза / офлайн-сеть</span></div>
+      <div class="opt" data-type="radio" data-name="niche" data-value="другое" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>другое</span></div>
     </div>
     <div class="step-nav">
       <button class="btn btn-secondary" data-prev>← назад</button>
@@ -460,23 +460,23 @@
     <div style="margin-bottom: 22px;">
       <div style="font-size: 13px; color: var(--muted); margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase;">площадки</div>
       <div class="options wide" data-group="platforms" data-type="checkbox">
-        <label class="opt" data-type="checkbox"><span class="mark"></span><span>VK Ads</span><input type="checkbox" name="platforms" value="VK Ads" hidden></label>
-        <label class="opt" data-type="checkbox"><span class="mark"></span><span>Яндекс Директ</span><input type="checkbox" name="platforms" value="Яндекс Директ" hidden></label>
-        <label class="opt" data-type="checkbox"><span class="mark"></span><span>Telegram Ads</span><input type="checkbox" name="platforms" value="Telegram Ads" hidden></label>
-        <label class="opt" data-type="checkbox"><span class="mark"></span><span>Google Ads</span><input type="checkbox" name="platforms" value="Google Ads" hidden></label>
-        <label class="opt" data-type="checkbox"><span class="mark"></span><span>Meta Ads</span><input type="checkbox" name="platforms" value="Meta Ads" hidden></label>
-        <label class="opt" data-type="checkbox"><span class="mark"></span><span>пока не знаю</span><input type="checkbox" name="platforms" value="не знаю" hidden></label>
+        <div class="opt" data-type="checkbox" data-name="platforms" data-value="VK Ads" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span>VK Ads</span></div>
+        <div class="opt" data-type="checkbox" data-name="platforms" data-value="Яндекс Директ" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span>Яндекс Директ</span></div>
+        <div class="opt" data-type="checkbox" data-name="platforms" data-value="Telegram Ads" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span>Telegram Ads</span></div>
+        <div class="opt" data-type="checkbox" data-name="platforms" data-value="Google Ads" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span>Google Ads</span></div>
+        <div class="opt" data-type="checkbox" data-name="platforms" data-value="Meta Ads" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span>Meta Ads</span></div>
+        <div class="opt" data-type="checkbox" data-name="platforms" data-value="не знаю" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span>пока не знаю</span></div>
       </div>
     </div>
 
     <div>
       <div style="font-size: 13px; color: var(--muted); margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase;">месячный бюджет на рекламу</div>
       <div class="options wide" data-group="budget" data-type="radio">
-        <label class="opt" data-type="radio"><span class="mark"></span><span>до 100 000 ₽</span><input type="radio" name="budget" value="до 100k ₽" hidden></label>
-        <label class="opt" data-type="radio"><span class="mark"></span><span>100 000 — 500 000 ₽</span><input type="radio" name="budget" value="100k–500k ₽" hidden></label>
-        <label class="opt" data-type="radio"><span class="mark"></span><span>500 000 — 1 000 000 ₽</span><input type="radio" name="budget" value="500k–1M ₽" hidden></label>
-        <label class="opt" data-type="radio"><span class="mark"></span><span>более 1 000 000 ₽</span><input type="radio" name="budget" value="1M+ ₽" hidden></label>
-        <label class="opt" data-type="radio"><span class="mark"></span><span>пока думаем</span><input type="radio" name="budget" value="пока думаем" hidden></label>
+        <div class="opt" data-type="radio" data-name="budget" data-value="до 100k ₽" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>до 100 000 ₽</span></div>
+        <div class="opt" data-type="radio" data-name="budget" data-value="100k–500k ₽" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>100 000 — 500 000 ₽</span></div>
+        <div class="opt" data-type="radio" data-name="budget" data-value="500k–1M ₽" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>500 000 — 1 000 000 ₽</span></div>
+        <div class="opt" data-type="radio" data-name="budget" data-value="1M+ ₽" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>более 1 000 000 ₽</span></div>
+        <div class="opt" data-type="radio" data-name="budget" data-value="пока думаем" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>пока думаем</span></div>
       </div>
     </div>
 
@@ -495,18 +495,18 @@
     <div style="margin-bottom: 22px;">
       <div style="font-size: 13px; color: var(--muted); margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase;">текущий этап</div>
       <div class="options full" data-group="stage" data-type="radio">
-        <label class="opt" data-type="radio"><span class="mark"></span><span>ещё не запускали рекламу</span><input type="radio" name="stage" value="не запускали" hidden></label>
-        <label class="opt" data-type="radio"><span class="mark"></span><span>есть свой опыт, хочу подключить профессионалов</span><input type="radio" name="stage" value="свой опыт" hidden></label>
-        <label class="opt" data-type="radio"><span class="mark"></span><span>работаем с подрядчиком, ищу замену</span><input type="radio" name="stage" value="смена подрядчика" hidden></label>
+        <div class="opt" data-type="radio" data-name="stage" data-value="не запускали" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>ещё не запускали рекламу</span></div>
+        <div class="opt" data-type="radio" data-name="stage" data-value="свой опыт" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>есть свой опыт, хочу подключить профессионалов</span></div>
+        <div class="opt" data-type="radio" data-name="stage" data-value="смена подрядчика" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>работаем с подрядчиком, ищу замену</span></div>
       </div>
     </div>
 
     <div>
       <div style="font-size: 13px; color: var(--muted); margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase;">сроки</div>
       <div class="options wide" data-group="timing" data-type="radio">
-        <label class="opt" data-type="radio"><span class="mark"></span><span>готов стартовать сейчас</span><input type="radio" name="timing" value="сейчас" hidden></label>
-        <label class="opt" data-type="radio"><span class="mark"></span><span>в течение месяца</span><input type="radio" name="timing" value="в течение месяца" hidden></label>
-        <label class="opt" data-type="radio"><span class="mark"></span><span>пока просто изучаю</span><input type="radio" name="timing" value="изучаю" hidden></label>
+        <div class="opt" data-type="radio" data-name="timing" data-value="сейчас" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>готов стартовать сейчас</span></div>
+        <div class="opt" data-type="radio" data-name="timing" data-value="в течение месяца" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>в течение месяца</span></div>
+        <div class="opt" data-type="radio" data-name="timing" data-value="изучаю" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>пока просто изучаю</span></div>
       </div>
     </div>
 
@@ -582,20 +582,32 @@
   document.querySelectorAll('.options').forEach(group => {
     const type = group.dataset.type;
     const name = group.dataset.group;
+    const handleClick = (opt) => {
+      const val = opt.dataset.value;
+      if (type === 'radio') {
+        group.querySelectorAll('.opt').forEach(o => {
+          o.classList.remove('checked');
+          o.setAttribute('aria-checked', 'false');
+        });
+        opt.classList.add('checked');
+        opt.setAttribute('aria-checked', 'true');
+        state.data[name] = val;
+      } else {
+        const wasChecked = opt.classList.toggle('checked');
+        opt.setAttribute('aria-checked', wasChecked ? 'true' : 'false');
+        const checked = Array.from(group.querySelectorAll('.opt.checked'))
+          .map(o => o.dataset.value);
+        state.data[name] = checked;
+      }
+      updateNavState();
+    };
     group.querySelectorAll('.opt').forEach(opt => {
-      const input = opt.querySelector('input');
-      opt.addEventListener('click', () => {
-        if (type === 'radio') {
-          group.querySelectorAll('.opt').forEach(o => o.classList.remove('checked'));
-          opt.classList.add('checked');
-          state.data[name] = input.value;
-        } else {
-          opt.classList.toggle('checked');
-          const checked = Array.from(group.querySelectorAll('.opt.checked'))
-            .map(o => o.querySelector('input').value);
-          state.data[name] = checked;
+      opt.addEventListener('click', () => handleClick(opt));
+      opt.addEventListener('keydown', (e) => {
+        if (e.key === ' ' || e.key === 'Enter') {
+          e.preventDefault();
+          handleClick(opt);
         }
-        updateNavState();
       });
     });
   });
