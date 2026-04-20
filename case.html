@@ -97,16 +97,28 @@
     padding: 60px 0 40px;
     border-bottom: 1px solid var(--line);
   }
-  .case-crumb {
+  .case-top-bar {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .case-top-bar .sep {
+    color: var(--faint);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+  .case-platforms-top {
+    display: inline-flex; gap: 6px; flex-wrap: wrap;
+  }
+  .case-period-top {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     color: var(--muted);
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    margin-bottom: 20px;
-    display: inline-flex; align-items: center; gap: 10px;
   }
-  .case-crumb .sep { color: var(--faint); }
   .case-title {
     font-family: 'Fraunces', serif;
     font-size: clamp(34px, 5.5vw, 64px);
@@ -336,65 +348,94 @@
     line-height: 1.55;
   }
 
-  /* CTA внизу кейса */
-  .case-cta {
+  /* strip CTA — как на главной */
+  .strip {
     margin: 60px 0 40px;
-    padding: 48px;
+    padding: 64px;
     background: var(--ink);
     color: var(--bg);
-    border-radius: 24px;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 32px;
-    align-items: center;
+    border-radius: 28px;
     position: relative;
     overflow: hidden;
   }
-  .case-cta::before {
-    content: '';
-    position: absolute;
-    right: -60px; bottom: -60px;
-    width: 240px; height: 240px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, var(--accent) 0%, transparent 70%);
-    opacity: 0.4;
-    filter: blur(20px);
+  .strip-inner {
+    position: relative; z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    align-items: center;
   }
-  .case-cta > * { position: relative; z-index: 1; }
-  .case-cta h2 {
+  .strip h2 {
     font-family: 'Fraunces', serif;
-    font-size: clamp(24px, 3vw, 34px);
+    font-size: clamp(32px, 4.5vw, 54px);
     font-weight: 400;
-    letter-spacing: -0.025em;
-    line-height: 1.1;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
     font-variation-settings: 'SOFT' 80;
-    margin-bottom: 8px;
+    max-width: 680px;
   }
-  .case-cta h2 em { font-style: italic; color: var(--butter); }
-  .case-cta p { color: var(--faint); font-size: 14px; }
+  .strip h2 em { font-style: italic; color: var(--butter); }
+  .strip p {
+    margin-top: 18px;
+    color: var(--faint);
+    max-width: 520px;
+    font-size: 15px;
+  }
   .btn-tg {
-    display: inline-flex; align-items: center; gap: 12px;
-    padding: 16px 22px;
+    display: inline-flex; align-items: center; gap: 14px;
+    padding: 20px 26px;
     background: linear-gradient(135deg, #2aa9e0, #1e8cbf);
     color: #fff;
     border-radius: 999px;
-    font-weight: 500; font-size: 15px;
+    font-weight: 500; font-size: 16px;
     transition: all .3s ease;
     box-shadow: 0 12px 30px -12px rgba(42,169,224,0.5);
   }
-  .btn-tg:hover { transform: translateY(-2px); }
+  .btn-tg:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -14px rgba(42,169,224,0.7); }
   .btn-tg .tg-ic {
-    width: 22px; height: 22px; border-radius: 50%;
+    width: 28px; height: 28px; border-radius: 50%;
     background: #fff; color: #1e8cbf;
     display: inline-grid; place-items: center;
   }
+  .btn-tg .tg-ic svg { display: block; }
+  .btn-tg .handle {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .btn-tg .a {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: rgba(255,255,255,0.22);
+    color: #fff;
+    display: inline-grid; place-items: center;
+    transition: transform .3s ease;
+    font-size: 13px;
+  }
+  .btn-tg:hover .a { transform: rotate(-45deg); background: #fff; color: #1e8cbf; }
+  .strip::before, .strip::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.35;
+  }
+  .strip::before { width: 320px; height: 320px; background: var(--accent); left: -80px; bottom: -100px; }
+  .strip::after { width: 260px; height: 260px; background: var(--sage); right: -60px; top: -80px; opacity: 0.25; }
+  .strip-meta {
+    margin-top: 22px;
+    display: inline-flex; align-items: center; gap: 14px;
+    font-size: 14px;
+    color: var(--faint);
+    flex-wrap: wrap;
+  }
+  .strip-meta .sep { width: 4px; height: 4px; border-radius: 50%; background: var(--faint); opacity: 0.5; }
 
-  /* footer (упрощённый) */
+  /* footer */
   footer {
-    padding: 30px 0 40px;
-    border-top: 1px solid var(--line);
+    padding: 40px 0;
     color: var(--faint);
     font-size: 12px;
+    line-height: 1.55;
     text-align: center;
   }
 
