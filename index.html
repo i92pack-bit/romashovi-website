@@ -2643,62 +2643,114 @@
     const tasks = document.getElementById('ai-tasks');
     if (!viz || !stream || !tasks) return;
 
-    const LOG_POOL = [
-      { t: 'info', s: 'init · сканирую нишу и <N> конкурентов' },
-      { t: 'info', s: 'найдено <N> неочевидных связок аудитория × оффер' },
-      { t: 'info', s: 'генерирую <N> вариантов креативов под сегменты' },
-      { t: 'ok',   s: '✓ группы подготовлены к запуску' },
-      { t: 'warn', s: '◆ обнаружен слив в кампании #<N>' },
-      { t: 'info', s: 'рекомендовано <N> действий по оптимизации' },
-      { t: 'info', s: 'анализирую отчёты по <P>' },
-      { t: 'ok',   s: '✓ гипотеза #<N> подтверждена, ROAS <R>x' },
-      { t: 'info', s: 'собираю look-alike <N>% от топ-покупателей' },
-      { t: 'warn', s: '◆ CPC вырос на <N>% за 24ч' },
-      { t: 'ok',   s: '✓ запущено <N> новых кампаний в <P>' },
-      { t: 'info', s: 'A/B тест #<N> · вариант B лучше на <N>%' },
-      { t: 'info', s: 'парсинг комментариев в нише · <N> постов' },
-      { t: 'ok',   s: '✓ снижен CPL на <N>% в <P>' },
-      { t: 'info', s: 'скоринг аудиторий · обработано <N>k записей' },
-      { t: 'warn', s: '◆ низкий CTR в группе #<N>, реагирую' },
-      { t: 'ok',   s: '✓ бюджет перераспределён в пользу топ-3 групп' },
-      { t: 'info', s: 'генерация заголовков для посадочной · <N> вариантов' },
-    ];
-    const PLATFORMS = ['VK Ads', 'Директ', 'Telegram Ads', 'Google Ads', 'Meta Ads'];
+    const POOLS = {
+      ru: {
+        LOG: [
+          { t: 'info', s: 'init · сканирую нишу и <N> конкурентов' },
+          { t: 'info', s: 'найдено <N> неочевидных связок аудитория × оффер' },
+          { t: 'info', s: 'генерирую <N> вариантов креативов под сегменты' },
+          { t: 'ok',   s: '✓ группы подготовлены к запуску' },
+          { t: 'warn', s: '◆ обнаружен слив в кампании #<N>' },
+          { t: 'info', s: 'рекомендовано <N> действий по оптимизации' },
+          { t: 'info', s: 'анализирую отчёты по <P>' },
+          { t: 'ok',   s: '✓ гипотеза #<N> подтверждена, ROAS <R>x' },
+          { t: 'info', s: 'собираю look-alike <N>% от топ-покупателей' },
+          { t: 'warn', s: '◆ CPC вырос на <N>% за 24ч' },
+          { t: 'ok',   s: '✓ запущено <N> новых кампаний в <P>' },
+          { t: 'info', s: 'A/B тест #<N> · вариант B лучше на <N>%' },
+          { t: 'info', s: 'парсинг комментариев в нише · <N> постов' },
+          { t: 'ok',   s: '✓ снижен CPL на <N>% в <P>' },
+          { t: 'info', s: 'скоринг аудиторий · обработано <N>k записей' },
+          { t: 'warn', s: '◆ низкий CTR в группе #<N>, реагирую' },
+          { t: 'ok',   s: '✓ бюджет перераспределён в пользу топ-3 групп' },
+          { t: 'info', s: 'генерация заголовков для посадочной · <N> вариантов' },
+        ],
+        PLATFORMS: ['VK Ads', 'Директ', 'Telegram Ads', 'Google Ads', 'Meta Ads'],
+        TASKS: [
+          'парсинг конкурентов', 'генерация креативов', 'анализ аудиторий',
+          'оптимизация ставок', 'обучение модели', 'сборка look-alike',
+          'A/B тест гипотез', 'скоринг офферов', 'семантика для директа',
+          'кластеризация отзывов', 'генерация заголовков', 'аудит кампаний',
+        ],
+        PROMPTS: [
+          { u: 'проанализируй кампанию #42 в VK за 7 дней', a: 'CPC вырос на 23%. предлагаю снизить ставку на lal-5%' },
+          { u: 'собери look-alike 1% от топ-покупателей', a: 'найдено 240k профилей, готов к запуску' },
+          { u: 'сгенерируй 10 заголовков для посадочной', a: '8 жизнеспособных, 2 слабых — убрал. готов к A/B' },
+          { u: 'оцени конкурентов в нише онлайн-школ', a: 'топ-3 захватили 68% трафика, средний CPC 142₽' },
+          { u: 'найди слив в кампании директа', a: 'группа "общие ключи" тратит 38% при CR 0.4% — стопаю' },
+          { u: 'перепиши оффер под холодную аудиторию', a: '5 вариантов: фокус на боль, а не на фичи продукта' },
+          { u: 'рекомендуй стратегию на май', a: 'фокус на Telegram Ads — CPC там в 2.1x ниже VK сейчас' },
+          { u: 'проверь гипотезу: ретаргет после 3 касаний', a: 'подтверждено на выборке 14k · ROAS вырос 1.8x' },
+          { u: 'покажи топ-офферы у конкурентов за квартал', a: 'собрал 47 · основной паттерн: гарантия + скорость' },
+          { u: 'дай 3 аудитории для ретаргета в директе', a: 'сегменты: корзина 7d · просмотр 30d · lookalike от них' },
+          { u: 'сделай текст для баннера под e-com', a: 'готово: 6 вариантов · тон: дружелюбный, CTA — прямой' },
+          { u: 'подбери семантику для новой кампании', a: '312 ключей высокой частотности, очистил мусор' },
+        ],
+      },
+      en: {
+        LOG: [
+          { t: 'info', s: 'init · scanning the niche and <N> competitors' },
+          { t: 'info', s: 'found <N> non-obvious audience × offer combos' },
+          { t: 'info', s: 'generating <N> creative variants per segment' },
+          { t: 'ok',   s: '✓ ad groups ready to launch' },
+          { t: 'warn', s: '◆ budget leak detected in campaign #<N>' },
+          { t: 'info', s: '<N> optimization actions recommended' },
+          { t: 'info', s: 'analyzing reports on <P>' },
+          { t: 'ok',   s: '✓ hypothesis #<N> confirmed, ROAS <R>x' },
+          { t: 'info', s: 'building look-alike <N>% from top buyers' },
+          { t: 'warn', s: '◆ CPC up <N>% over 24h' },
+          { t: 'ok',   s: '✓ <N> new campaigns launched on <P>' },
+          { t: 'info', s: 'A/B test #<N> · variant B wins by <N>%' },
+          { t: 'info', s: 'parsing niche comments · <N> posts' },
+          { t: 'ok',   s: '✓ CPL reduced by <N>% on <P>' },
+          { t: 'info', s: 'audience scoring · <N>k records processed' },
+          { t: 'warn', s: '◆ low CTR in group #<N>, reacting' },
+          { t: 'ok',   s: '✓ budget reallocated to top 3 groups' },
+          { t: 'info', s: 'generating landing headlines · <N> variants' },
+        ],
+        PLATFORMS: ['VK Ads', 'Yandex Direct', 'Telegram Ads', 'Google Ads', 'Meta Ads'],
+        TASKS: [
+          'competitor parsing', 'creatives generation', 'audience analysis',
+          'bid optimization', 'model training', 'lookalike building',
+          'hypothesis A/B test', 'offer scoring', 'semantic research',
+          'reviews clustering', 'headline generation', 'campaign audit',
+        ],
+        PROMPTS: [
+          { u: 'analyze VK campaign #42 for the last 7 days', a: 'CPC up 23%. suggest lowering bid on lal-5%' },
+          { u: 'build a 1% look-alike from top buyers', a: 'found 240k profiles, ready to launch' },
+          { u: 'generate 10 landing headlines', a: '8 viable, 2 weak — dropped. ready for A/B' },
+          { u: 'benchmark competitors in online-schools niche', a: 'top-3 captured 68% of traffic, avg CPC $1.7' },
+          { u: 'find the leak in Direct campaign', a: 'the "broad keywords" group spends 38% at CR 0.4% — pausing' },
+          { u: 'rewrite the offer for cold audience', a: '5 variants: pain-focused, not feature-focused' },
+          { u: 'recommend strategy for May', a: 'double down on Telegram Ads — CPC is 2.1x lower than VK now' },
+          { u: 'test hypothesis: retarget after 3 touches', a: 'confirmed on 14k sample · ROAS up 1.8x' },
+          { u: 'show top offers from competitors this quarter', a: 'collected 47 · main pattern: guarantee + speed' },
+          { u: 'suggest 3 retarget audiences for Direct', a: 'segments: cart 7d · view 30d · lookalike from them' },
+          { u: 'write a banner copy for e-com', a: 'done: 6 variants · friendly tone, direct CTA' },
+          { u: 'build semantic core for a new campaign', a: '312 high-frequency keywords, junk removed' },
+        ],
+      }
+    };
+    const getPool = () => POOLS[currentLang] || POOLS.ru;
+    let LOG_POOL = getPool().LOG;
+    let PLATFORMS = getPool().PLATFORMS;
+    let TASK_POOL = getPool().TASKS;
+    let PROMPTS = getPool().PROMPTS;
+    const syncPools = () => {
+      const p = getPool();
+      LOG_POOL = p.LOG;
+      PLATFORMS = p.PLATFORMS;
+      TASK_POOL = p.TASKS;
+      PROMPTS = p.PROMPTS;
+    };
+    // observe language changes via MutationObserver on <html lang>
+    new MutationObserver(syncPools).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
     const MODELS = [
       'gpt-4o', 'gpt-4.1', 'gpt-5', 'gpt-5-mini',
       'claude-4.6-sonnet', 'claude-4.7-opus', 'claude-3.5-haiku',
       'gemini-2.5-pro', 'gemini-3-flash',
       'llama-3.3-70b', 'deepseek-r1', 'qwen-2.5-72b', 'mistral-large',
     ];
-    const PROMPTS = [
-      { u: 'проанализируй кампанию #42 в VK за 7 дней', a: 'CPC вырос на 23%. предлагаю снизить ставку на lal-5%' },
-      { u: 'собери look-alike 1% от топ-покупателей', a: 'найдено 240k профилей, готов к запуску' },
-      { u: 'сгенерируй 10 заголовков для посадочной', a: '8 жизнеспособных, 2 слабых — убрал. готов к A/B' },
-      { u: 'оцени конкурентов в нише онлайн-школ', a: 'топ-3 захватили 68% трафика, средний CPC 142₽' },
-      { u: 'найди слив в кампании директа', a: 'группа "общие ключи" тратит 38% при CR 0.4% — стопаю' },
-      { u: 'перепиши оффер под холодную аудиторию', a: '5 вариантов: фокус на боль, а не на фичи продукта' },
-      { u: 'рекомендуй стратегию на май', a: 'фокус на Telegram Ads — CPC там в 2.1x ниже VK сейчас' },
-      { u: 'проверь гипотезу: ретаргет после 3 касаний', a: 'подтверждено на выборке 14k · ROAS вырос 1.8x' },
-      { u: 'покажи топ-офферы у конкурентов за квартал', a: 'собрал 47 · основной паттерн: гарантия + скорость' },
-      { u: 'дай 3 аудитории для ретаргета в директе', a: 'сегменты: корзина 7d · просмотр 30d · lookalike от них' },
-      { u: 'сделай текст для баннера под e-com', a: 'готово: 6 вариантов · тон: дружелюбный, CTA — прямой' },
-      { u: 'подбери семантику для новой кампании', a: '312 ключей высокой частотности, очистил мусор' },
-    ];
-    const TASK_POOL = [
-      'парсинг конкурентов',
-      'генерация креативов',
-      'анализ аудиторий',
-      'оптимизация ставок',
-      'обучение модели',
-      'сборка look-alike',
-      'A/B тест гипотез',
-      'скоринг офферов',
-      'семантика для директа',
-      'кластеризация отзывов',
-      'генерация заголовков',
-      'аудит кампаний',
-    ];
-
     const rand = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
     const pick = (a) => a[Math.floor(Math.random() * a.length)];
     const pad = (n) => String(n).padStart(2, '0');
