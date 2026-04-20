@@ -544,8 +544,8 @@
     document.getElementById('page-title').textContent = `${m.name} · Кейс Ромашовых-диджитал`;
     document.getElementById('og-title').setAttribute('content', m.name);
     if (m.result) {
-      document.getElementById('page-desc').setAttribute('content', `${m.client ? m.client + ' · ' : ''}${m.result}`);
-      document.getElementById('og-desc').setAttribute('content', `${m.client ? m.client + ' · ' : ''}${m.result}`);
+      document.getElementById('page-desc').setAttribute('content', m.result || 'Кейс команды Ромашовы-диджитал');
+      document.getElementById('og-desc').setAttribute('content', m.result || 'Кейс команды Ромашовы-диджитал');
     }
 
     const platforms = (m.platform || []).map(p => {
@@ -557,8 +557,7 @@
       <section class="case-hero">
         <div class="case-crumb">
           <span>Кейс</span>
-          <span class="sep">/</span>
-          ${m.client ? `<span>${escapeHtml(m.client)}</span>` : '<span>client</span>'}
+          ${m.period ? `<span class="sep">/</span><span>${escapeHtml(m.period)}</span>` : ''}
         </div>
         <h1 class="case-title">${renderInlineName(m.name)}</h1>
         <div class="case-meta">
@@ -677,10 +676,11 @@
 
   function platformKey(name) {
     const n = (name || '').toLowerCase();
+    if (n.includes('meta') || n.includes('facebook') || n.includes('instagram')) return 'meta';
     if (n.includes('vk') || n.includes('вк')) return 'vk';
-    if (n.includes('ya') || n.includes('я') || n.includes('директ')) return 'ya';
+    if (n.includes('ya') || n.includes('яндекс') || n.includes('директ')) return 'ya';
     if (n.includes('tg') || n.includes('tele')) return 'tg';
-    if (n.includes('g') || n.includes('goog')) return 'g';
+    if (n.includes('goog')) return 'g';
     return '';
   }
 

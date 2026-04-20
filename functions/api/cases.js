@@ -47,7 +47,7 @@ function formatCase(page) {
     id: page.id,
     slug: plainText(p.slug),
     name: titleText(p.Name) || 'Без названия',
-    client: plainText(p.client),
+    description: plainText(p.description),
     platform: multiSelect(p.platform),
     result: plainText(p.result),
     period: plainText(p.period),

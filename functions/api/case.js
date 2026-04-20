@@ -116,7 +116,7 @@ function formatMeta(page) {
     id: page.id,
     slug: (p.slug && p.slug.rich_text) ? p.slug.rich_text.map(t => t.plain_text).join('') : '',
     name: (p.Name && p.Name.title) ? p.Name.title.map(t => t.plain_text).join('') : 'Без названия',
-    client: (p.client && p.client.rich_text) ? p.client.rich_text.map(t => t.plain_text).join('') : '',
+    description: (p.description && p.description.rich_text) ? p.description.rich_text.map(t => t.plain_text).join('') : '',
     platform: (p.platform && p.platform.multi_select) ? p.platform.multi_select.map(o => o.name) : [],
     result: (p.result && p.result.rich_text) ? p.result.rich_text.map(t => t.plain_text).join('') : '',
     period: (p.period && p.period.rich_text) ? p.period.rich_text.map(t => t.plain_text).join('') : '',
