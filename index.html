@@ -1276,26 +1276,22 @@
 
   .gallery {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 14px;
   }
   .sg {
-    grid-column: span 6;
     background: #fff;
     border: 1px solid var(--line);
     border-radius: 18px;
     overflow: hidden;
     transition: all .35s cubic-bezier(.2,.8,.2,1);
     position: relative;
-    display: flex; flex-direction: column;
   }
   .sg:hover { transform: translateY(-4px); box-shadow: 0 24px 50px -20px rgba(0,0,0,0.18); }
-  .sg.sm { grid-column: span 4; }
-  .sg.lg { grid-column: span 8; }
 
   .sg-frame {
     position: relative;
-    aspect-ratio: 16/10;
+    aspect-ratio: 16/9;
     overflow: hidden;
     background:
       linear-gradient(135deg, var(--surface) 0%, #fff 70%);
@@ -1575,7 +1571,6 @@
     .ai-viz { aspect-ratio: auto; min-height: 280px; }
     .cases-head { grid-template-columns: 1fr; gap: 16px; }
     .cases-count { padding-bottom: 0; }
-    .sg.lg, .sg.sm { grid-column: span 6; }
     .process-head { grid-template-columns: 1fr; gap: 16px; }
     .process-meta { padding-bottom: 0; }
     .steps { grid-template-columns: repeat(2, 1fr); }
@@ -1599,7 +1594,7 @@
     .case-arrow { width: 36px; height: 36px; font-size: 14px; }
     .card.big h3 { font-size: 30px; }
     .card h3 { font-size: 26px; }
-    .sg, .sg.lg, .sg.sm { grid-column: 1 / -1; }
+    .gallery { grid-template-columns: 1fr; }
     .gallery { grid-template-columns: 1fr; }
     .ai-inner { padding: 44px 24px; }
     .ai-feat { padding: 12px 14px; font-size: 13px; }
@@ -1693,7 +1688,6 @@
     .stab { font-size: 13px; padding: 9px 14px; flex-shrink: 0; }
     .stab .count { font-size: 10px; }
     .sg { border-radius: 14px; }
-    .sg-frame { aspect-ratio: 16/11; }
     .sg-placeholder .ic { width: 44px; height: 44px; margin-bottom: 8px; }
     .sg-placeholder .t { font-size: 11px; }
     .sg-placeholder .fn { font-size: 10px; }
