@@ -2189,6 +2189,55 @@
     budgetNum.textContent = BUDGET_TARGET;
   }
 
+  // load cases list from Notion and replace the static placeholder rows
+  // fails silently if API is not set up yet — static rows stay as a fallback
+  (async function loadCases() {
+    try {
+      const res = await fetch('/api/cases');
+      if (!res.ok) return;
+      const data = await res.json();
+      const cases = (data.cases || []).filter(c => c.slug);
+      if (!cases.length) return;
+
+      const list = document.querySelector('.case-list');
+      if (!list) return;
+
+      const icons = ['✦', '◆', '⟐', '⚘', '❋', '✺'];
+      const iconClasses = ['a', 'b', 'c', 'd', 'e', 'a'];
+      const pkey = (p) => {
+        const n = (p || '').toLowerCase();
+        if (n.includes('vk') || n.includes('вк')) return 'vk';
+        if (n.includes('ya') || n.includes('я') || n.includes('директ')) return 'ya';
+        if (n.includes('tg') || n.includes('tele')) return 'tg';
+        if (n.includes('g') || n.includes('goog')) return 'g';
+        return '';
+      };
+      const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+      list.innerHTML = cases.map((c, i) => {
+        const icon = icons[i % icons.length];
+        const ic = iconClasses[i % iconClasses.length];
+        const platforms = (c.platform || []).slice(0, 2).map(p =>
+          `<span class="case-chip ${pkey(p)}">${esc(p)}</span>`).join('');
+        const result = c.result ? `<span class="case-chip result">${esc(c.result)}</span>` : '';
+        return `
+          <a href="/cases/${esc(c.slug)}" class="case-row">
+            <div class="case-ic ${ic}"><span>${icon}</span></div>
+            <div class="case-main">
+              <div class="case-title">${esc(c.name)}${c.client ? ` / <em>${esc(c.client)}</em>` : ''}</div>
+              ${c.result || c.period ? `<div class="case-desc">${c.period ? esc(c.period) + ' · ' : ''}${c.result ? esc(c.result) : ''}</div>` : ''}
+            </div>
+            <div class="case-meta">${platforms}${result}</div>
+            <div class="case-arrow">→</div>
+          </a>
+        `;
+      }).join('');
+
+      const countEl = document.querySelector('.cases-count b');
+      if (countEl) countEl.textContent = String(cases.length).padStart(2, '0');
+    } catch (e) { /* API not up — static fallback stays */ }
+  })();
+
   // probe & populate screenshots dynamically
   const PLATFORMS = ['vk', 'ya', 'tg', 'g'];
   const EXTS = ['.jpg', '.jpeg', '.png', '.webp'];
