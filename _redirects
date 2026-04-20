@@ -1,2 +1,5 @@
+# /cases without slug → back to landing list section
+/cases         /#cases                  302
+
 # pretty URLs for cases: /cases/slug → /cases.html?slug=slug
 /cases/:slug   /cases.html?slug=:slug   200
