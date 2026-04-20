@@ -833,7 +833,7 @@
     border-radius: 14px;
     padding: 18px 20px;
     font-family: 'JetBrains Mono', monospace;
-    min-height: 420px;
+    min-height: 540px;
     display: flex; flex-direction: column;
     overflow: hidden;
     box-shadow: inset 0 0 40px rgba(0,0,0,0.4), 0 20px 50px -20px rgba(0,0,0,0.5);
@@ -879,6 +879,113 @@
   .ai-viz .viz-head .dots { display: inline-flex; gap: 5px; }
   .ai-viz .viz-head .dots span { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.1); }
   .ai-viz .viz-head .dots span:first-child { background: #c8ff2b; box-shadow: 0 0 8px #c8ff2b; }
+
+  /* model pill in header */
+  .model-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 9px;
+    border: 1px solid rgba(200,255,43,0.25);
+    border-radius: 999px;
+    font-size: 10px;
+    letter-spacing: 0.02em;
+    color: rgba(255,255,255,0.5);
+    text-transform: lowercase;
+    background: rgba(200,255,43,0.03);
+  }
+  .model-pill .model-lbl { color: rgba(255,255,255,0.35); }
+  .model-pill .model-name {
+    color: #c8ff2b;
+    font-weight: 500;
+    min-width: 80px;
+    display: inline-block;
+  }
+  .model-pill .model-name.flip {
+    animation: m-flip .45s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes m-flip {
+    0% { opacity: 0; transform: translateY(-6px); filter: blur(2px); }
+    60% { opacity: 0; }
+    100% { opacity: 1; transform: none; filter: none; }
+  }
+
+  /* sparkline */
+  .viz-spark {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0 12px;
+    border-top: 1px dashed rgba(200,255,43,0.15);
+    position: relative; z-index: 1;
+  }
+  .viz-spark .spark-label {
+    font-size: 9px;
+    color: rgba(255,255,255,0.38);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .viz-spark svg {
+    width: 100%; height: 32px;
+    display: block;
+  }
+  .viz-spark .spark-value {
+    font-size: 12px;
+    color: #c8ff2b;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    min-width: 54px;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .viz-spark .spark-value .unit {
+    color: rgba(255,255,255,0.35);
+    font-size: 9px;
+    margin-left: 3px;
+  }
+
+  /* prompt/response preview */
+  .viz-prompt {
+    padding: 10px 0 12px;
+    border-top: 1px dashed rgba(200,255,43,0.15);
+    font-size: 11px;
+    line-height: 1.45;
+    min-height: 54px;
+    display: flex; flex-direction: column;
+    gap: 4px;
+    position: relative; z-index: 1;
+    overflow: hidden;
+  }
+  .pp-row {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    align-items: baseline;
+    gap: 10px;
+    animation: pp-in .35s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes pp-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: none; }
+  }
+  .pp-row.fade-out { animation: pp-out .3s ease forwards; }
+  @keyframes pp-out { to { opacity: 0; transform: translateY(-4px); } }
+  .pp-tag {
+    color: rgba(255,255,255,0.35);
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pp-row.assistant .pp-tag { color: #c8ff2b; text-transform: lowercase; letter-spacing: 0.02em; }
+  .pp-text {
+    color: rgba(255,255,255,0.82);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pp-row.assistant .pp-text { color: rgba(200,255,43,0.9); }
   /* top metrics grid */
   .viz-metrics {
     display: grid;
@@ -2102,7 +2209,13 @@
 
           <div class="ai-viz" id="ai-viz">
             <div class="viz-head">
-              <span class="grp"><span class="tag">● ai-engine</span> <span>/ live</span></span>
+              <span class="grp">
+                <span class="tag">● ai-engine</span>
+                <span class="model-pill">
+                  <span class="model-lbl">→</span>
+                  <span class="model-name" id="model-name">gpt-4o</span>
+                </span>
+              </span>
               <span class="dots"><span></span><span></span><span></span></span>
             </div>
 
@@ -2112,6 +2225,23 @@
               <div class="viz-metric"><span class="lbl">очередь</span><span class="val" id="m-queue">—</span></div>
               <div class="viz-metric"><span class="lbl">uptime</span><span class="val" id="m-uptime">—</span></div>
             </div>
+
+            <div class="viz-spark">
+              <span class="spark-label">tokens/sec</span>
+              <svg viewBox="0 0 120 32" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="spark-grad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#c8ff2b" stop-opacity="0.35"/>
+                    <stop offset="100%" stop-color="#c8ff2b" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <polygon id="spark-fill" fill="url(#spark-grad)" points=""/>
+                <polyline id="spark-line" fill="none" stroke="#c8ff2b" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" points=""/>
+              </svg>
+              <span class="spark-value"><span id="spark-val">—</span><span class="unit">t/s</span></span>
+            </div>
+
+            <div class="viz-prompt" id="viz-prompt"></div>
 
             <div class="stream" id="ai-stream"></div>
 
