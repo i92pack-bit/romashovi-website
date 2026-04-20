@@ -1343,6 +1343,48 @@
     letter-spacing: 0.02em;
   }
 
+  /* empty-state — когда нет скринов в площадке */
+  .sg-empty {
+    grid-column: 1 / -1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px;
+    padding: 56px 24px;
+    background:
+      linear-gradient(135deg, var(--surface) 0%, #fff 70%);
+    border: 1px dashed rgba(26,26,23,0.18);
+    border-radius: 18px;
+    text-align: center;
+  }
+  .sg-empty-ic {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: grid; place-items: center;
+    background: #fff;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    margin-bottom: 6px;
+  }
+  .sg-empty-t {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--ink-soft);
+    font-variation-settings: 'SOFT' 100;
+    letter-spacing: -0.015em;
+  }
+  .sg-empty-fn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--faint);
+    letter-spacing: 0.02em;
+  }
+  .sg-empty-fn code {
+    background: rgba(26,26,23,0.06);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+  }
+
   /* clickable screenshots (only when image loaded) */
   .sg:has(.sg-frame img) { cursor: zoom-in; }
   .sg:has(.sg-frame img) .sg-frame::after {
@@ -2147,12 +2189,53 @@
     budgetNum.textContent = BUDGET_TARGET;
   }
 
-  // auto-count screenshots per tab
-  document.querySelectorAll('.shots-pane').forEach(pane => {
-    const n = pane.querySelectorAll('.sg').length;
-    const badge = document.querySelector(`.stab[data-tab="${pane.dataset.pane}"] .count`);
-    if (badge) badge.textContent = String(n).padStart(2, '0');
-  });
+  // probe & populate screenshots dynamically
+  const PLATFORMS = ['vk', 'ya', 'tg', 'g'];
+  const EXTS = ['.jpg', '.jpeg', '.png', '.webp'];
+  const MAX_PROBE = 20;
+
+  function tryLoad(src) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = src;
+    });
+  }
+  async function findScreen(platform, idx) {
+    for (const ext of EXTS) {
+      const src = `screenshots/${platform}-${idx}${ext}`;
+      if (await tryLoad(src)) return src;
+    }
+    return null;
+  }
+
+  async function populate(platform) {
+    const gallery = document.querySelector(`.gallery[data-platform="${platform}"]`);
+    const badge = document.querySelector(`.stab[data-tab="${platform}"] .count`);
+    let count = 0;
+    for (let i = 1; i <= MAX_PROBE; i++) {
+      const url = await findScreen(platform, i);
+      if (!url) break;
+      const sg = document.createElement('div');
+      sg.className = 'sg';
+      sg.innerHTML = `<div class="sg-frame"><img src="${url}" alt="" /></div>`;
+      gallery.appendChild(sg);
+      count++;
+      if (badge) badge.textContent = String(count).padStart(2, '0');
+    }
+    if (count === 0) {
+      gallery.insertAdjacentHTML('beforeend', `
+        <div class="sg-empty">
+          <div class="sg-empty-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15l5-5 4 4 4-4 5 5"/><circle cx="8" cy="9" r="1.5"/></svg></div>
+          <div class="sg-empty-t">пока нет скринов</div>
+          <div class="sg-empty-fn">положи файл <code>screenshots/${platform}-1.jpg</code></div>
+        </div>
+      `);
+      if (badge) badge.textContent = '00';
+    }
+  }
+  PLATFORMS.forEach(populate);
 
   // lightbox for screenshots
   const lb = document.getElementById('lightbox');
@@ -2204,18 +2287,17 @@
     else if (e.key === 'ArrowRight') lbShow(lbCur + 1);
   });
 
-  // wire up clicks on .sg cards — only when image loaded
+  // wire up clicks on .sg cards via event delegation
+  // (screenshots are added dynamically, so we listen on the pane)
   document.querySelectorAll('.shots-pane').forEach(pane => {
-    pane.querySelectorAll('.sg').forEach(sg => {
-      sg.addEventListener('click', () => {
-        // collect all currently-loaded images in this pane (img still in DOM = not failed)
-        const imgs = Array.from(pane.querySelectorAll('.sg-frame img'));
-        if (!imgs.length) return;
-        const myImg = sg.querySelector('.sg-frame img');
-        if (!myImg) return;
-        const startIdx = imgs.indexOf(myImg);
-        lbOpen(imgs.map(i => i.src), startIdx);
-      });
+    pane.addEventListener('click', (e) => {
+      const sg = e.target.closest('.sg');
+      if (!sg || !pane.contains(sg)) return;
+      const myImg = sg.querySelector('.sg-frame img');
+      if (!myImg) return;
+      const imgs = Array.from(pane.querySelectorAll('.sg-frame img'));
+      const startIdx = imgs.indexOf(myImg);
+      lbOpen(imgs.map(i => i.src), startIdx);
     });
   });
 
