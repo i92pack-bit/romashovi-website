@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#fbfaf7" />
+
+<title id="page-title">Кейс · Ромашовы-диджитал</title>
+<meta name="description" id="page-desc" content="Кейс перформанс-команды Ромашовы-диджитал" />
+
+<meta property="og:type" content="article" />
+<meta property="og:title" id="og-title" content="Кейс · Ромашовы-диджитал" />
+<meta property="og:description" id="og-desc" content="Кейс перформанс-команды" />
+<meta property="og:locale" content="ru_RU" />
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Cg fill='%23ff5c3e'%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5'/%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5' transform='rotate(72 14 14)'/%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5' transform='rotate(144 14 14)'/%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5' transform='rotate(216 14 14)'/%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5' transform='rotate(288 14 14)'/%3E%3C/g%3E%3Ccircle cx='14' cy='14' r='3.2' fill='%231a1a17'/%3E%3C/svg%3E" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --surface: #f3f1ea;
+    --ink: #1a1a17;
+    --ink-soft: #3d3d38;
+    --muted: #7a7870;
+    --faint: #b5b3aa;
+    --line: rgba(26,26,23,0.10);
+    --accent: #ff5c3e;
+    --accent-soft: #ffe8e0;
+    --butter: #f4d67a;
+    --butter-soft: #fbeab5;
+    --sage: #8ba888;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; border: none; background: none; cursor: pointer; color: inherit; }
+  body {
+    font-family: 'Geist', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: 'ss01';
+    overflow-x: hidden;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+  .wrap-wide { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+  /* header — упрощённая версия из лендинга */
+  .site-header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(251,250,247,0.82);
+    backdrop-filter: blur(14px) saturate(1.4);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0;
+  }
+  .nav-logo {
+    display: inline-flex; align-items: center; gap: 10px;
+    color: var(--ink);
+  }
+  .nav-logo .logo-mark { width: 28px; height: 28px; }
+  .nav-logo .logo-mark svg { width: 100%; height: 100%; transition: transform .7s cubic-bezier(.2,.8,.2,1); }
+  .nav-logo:hover .logo-mark svg { transform: rotate(72deg); }
+  .nav-logo .brand-text { display: inline-flex; flex-direction: column; line-height: 1; gap: 2px; }
+  .nav-logo .brand-text .main { font-weight: 500; font-size: 15px; letter-spacing: -0.02em; }
+  .nav-logo .brand-text em {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 14px; color: var(--accent);
+    font-variation-settings: 'SOFT' 100, 'opsz' 120;
+  }
+  .nav-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 14px; color: var(--ink-soft);
+    padding: 8px 14px;
+    border-radius: 999px;
+    transition: all .25s ease;
+  }
+  .nav-back:hover { color: var(--ink); background: var(--surface); }
+  .nav-back .ar {
+    display: inline-grid; place-items: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--ink); color: var(--bg); font-size: 11px;
+  }
+
+  /* hero */
+  .case-hero {
+    padding: 60px 0 40px;
+    border-bottom: 1px solid var(--line);
+  }
+  .case-crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .case-crumb .sep { color: var(--faint); }
+  .case-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(34px, 5.5vw, 64px);
+    font-weight: 400;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+    font-variation-settings: 'SOFT' 70, 'opsz' 144;
+    margin-bottom: 28px;
+  }
+  .case-title em { font-style: italic; color: var(--accent); }
+
+  .case-meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+  .case-meta > div {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .case-meta .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .case-meta .val {
+    font-size: 15px;
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+  .case-meta .val.hl {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--accent);
+    font-variation-settings: 'SOFT' 100;
+  }
+  .case-platforms {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .case-chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink-soft);
+  }
+  .case-chip.vk { background: #e4eeff; color: #0066dd; }
+  .case-chip.ya { background: #ffe4df; color: #d52b0e; }
+  .case-chip.tg { background: #def1fc; color: #1e8cbf; }
+  .case-chip.g  { background: var(--butter-soft); color: #6e5508; }
+
+  /* cover image */
+  .case-cover {
+    margin-top: 28px;
+    aspect-ratio: 16/9;
+    border-radius: 18px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .case-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* body — Notion rendered content */
+  .case-body {
+    padding: 60px 0 40px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+  .case-body > * + * { margin-top: 1.1em; }
+  .case-body h1, .case-body h2, .case-body h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    font-variation-settings: 'SOFT' 60, 'opsz' 144;
+  }
+  .case-body h1, .case-body .nt-heading_1 { font-size: clamp(28px, 3.6vw, 40px); margin-top: 1.8em; }
+  .case-body h2, .case-body .nt-heading_2 { font-size: clamp(24px, 3vw, 32px); margin-top: 1.6em; }
+  .case-body h3, .case-body .nt-heading_3 { font-size: clamp(20px, 2.4vw, 24px); margin-top: 1.4em; }
+  .case-body .nt-heading_1 em, .case-body .nt-heading_2 em, .case-body .nt-heading_3 em {
+    font-style: italic; color: var(--accent);
+    font-variation-settings: 'SOFT' 100;
+  }
+  .case-body p, .case-body .nt-paragraph {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+  .case-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+  .case-body a:hover { text-decoration-thickness: 2px; }
+  .case-body strong, .case-body b { color: var(--ink); font-weight: 500; }
+  .case-body em, .case-body i {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-variation-settings: 'SOFT' 100;
+    color: var(--ink);
+  }
+  .case-body code, .case-body .nt-code-inline {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88em;
+    background: var(--surface);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--ink);
+  }
+
+  .case-body .nt-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  .case-body .nt-list li {
+    position: relative;
+    padding-left: 28px;
+    margin-top: 0.6em;
+  }
+  .case-body .nt-list.bulleted li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0.65em;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .case-body .nt-list.numbered {
+    counter-reset: nlist;
+  }
+  .case-body .nt-list.numbered li {
+    counter-increment: nlist;
+  }
+  .case-body .nt-list.numbered li::before {
+    content: counter(nlist, decimal-leading-zero) " ";
+    position: absolute;
+    left: 0; top: 0.05em;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8em;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .case-body .nt-quote {
+    border-left: 3px solid var(--accent);
+    padding: 8px 0 8px 22px;
+    margin: 1.4em 0;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--ink);
+    font-variation-settings: 'SOFT' 100;
+  }
+
+  .case-body .nt-callout {
+    display: flex;
+    gap: 14px;
+    padding: 20px 22px;
+    background: var(--accent-soft);
+    border-radius: 14px;
+    margin: 1.4em 0;
+  }
+  .case-body .nt-callout .icon { font-size: 22px; line-height: 1.3; flex-shrink: 0; }
+  .case-body .nt-callout .content { flex: 1; color: var(--ink); }
+
+  .case-body .nt-image {
+    margin: 1.8em 0;
+  }
+  .case-body .nt-image .img-wrap {
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--surface);
+    cursor: zoom-in;
+    position: relative;
+  }
+  .case-body .nt-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: opacity .3s ease;
+  }
+  .case-body .nt-image .img-wrap::after {
+    content: '';
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.94) url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%231a1a17' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6'/%3E%3C/svg%3E") center / 18px no-repeat;
+    box-shadow: 0 6px 18px -4px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: scale(0.85);
+    transition: all .3s cubic-bezier(.2,.8,.2,1);
+  }
+  .case-body .nt-image .img-wrap:hover::after {
+    opacity: 1; transform: scale(1);
+  }
+  .case-body .nt-image figcaption {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    font-style: italic;
+  }
+
+  .case-body .nt-divider {
+    height: 1px;
+    background: var(--line);
+    margin: 2em 0;
+    border: none;
+  }
+
+  .case-body .nt-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    background: var(--ink);
+    color: var(--bg);
+    padding: 16px 20px;
+    border-radius: 10px;
+    overflow-x: auto;
+    line-height: 1.55;
+  }
+
+  /* CTA внизу кейса */
+  .case-cta {
+    margin: 60px 0 40px;
+    padding: 48px;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 24px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .case-cta::before {
+    content: '';
+    position: absolute;
+    right: -60px; bottom: -60px;
+    width: 240px; height: 240px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, var(--accent) 0%, transparent 70%);
+    opacity: 0.4;
+    filter: blur(20px);
+  }
+  .case-cta > * { position: relative; z-index: 1; }
+  .case-cta h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(24px, 3vw, 34px);
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    font-variation-settings: 'SOFT' 80;
+    margin-bottom: 8px;
+  }
+  .case-cta h2 em { font-style: italic; color: var(--butter); }
+  .case-cta p { color: var(--faint); font-size: 14px; }
+  .btn-tg {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 16px 22px;
+    background: linear-gradient(135deg, #2aa9e0, #1e8cbf);
+    color: #fff;
+    border-radius: 999px;
+    font-weight: 500; font-size: 15px;
+    transition: all .3s ease;
+    box-shadow: 0 12px 30px -12px rgba(42,169,224,0.5);
+  }
+  .btn-tg:hover { transform: translateY(-2px); }
+  .btn-tg .tg-ic {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #fff; color: #1e8cbf;
+    display: inline-grid; place-items: center;
+  }
+
+  /* footer (упрощённый) */
+  footer {
+    padding: 30px 0 40px;
+    border-top: 1px solid var(--line);
+    color: var(--faint);
+    font-size: 12px;
+    text-align: center;
+  }
+
+  /* loading/error */
+  .case-loading, .case-error {
+    padding: 120px 0;
+    text-align: center;
+    color: var(--muted);
+  }
+  .case-loading .spinner {
+    width: 32px; height: 32px;
+    border: 2px solid var(--line);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    margin: 0 auto 14px;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .case-error h2 {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 28px;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .case-error a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* LIGHTBOX (для изображений в контенте) */
+  .lightbox {
+    position: fixed; inset: 0;
+    z-index: 1000;
+    background: rgba(10,10,8,0.96);
+    backdrop-filter: blur(10px);
+    display: flex; align-items: center; justify-content: center;
+    animation: lb-in .25s cubic-bezier(.2,.8,.2,1);
+  }
+  .lightbox[hidden] { display: none !important; }
+  @keyframes lb-in { from { opacity: 0 } to { opacity: 1 } }
+  .lightbox img {
+    max-width: 94vw; max-height: 88vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,0.7);
+  }
+  .lb-close {
+    position: fixed; top: 20px; right: 20px;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #fff; font-size: 22px;
+    display: grid; place-items: center;
+    cursor: pointer;
+  }
+
+  @media (max-width: 640px) {
+    .wrap, .wrap-wide { padding: 0 18px; }
+    .case-hero { padding: 40px 0 30px; }
+    .case-body { padding: 40px 0 30px; font-size: 16px; }
+    .case-body p { font-size: 16px; }
+    .case-meta { grid-template-columns: 1fr; gap: 16px; }
+    .case-cta { padding: 30px 22px; grid-template-columns: 1fr; }
+    .case-body .nt-quote { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap-wide">
+      <nav class="nav">
+        <a href="/" class="nav-logo" aria-label="Ромашовы-диджитал — на главную">
+          <span class="logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g><ellipse cx="14" cy="5" rx="2.7" ry="5" fill="#ff5c3e"/><ellipse cx="14" cy="5" rx="2.7" ry="5" fill="#ff5c3e" transform="rotate(72 14 14)"/><ellipse cx="14" cy="5" rx="2.7" ry="5" fill="#ff5c3e" transform="rotate(144 14 14)"/><ellipse cx="14" cy="5" rx="2.7" ry="5" fill="#ff5c3e" transform="rotate(216 14 14)"/><ellipse cx="14" cy="5" rx="2.7" ry="5" fill="#ff5c3e" transform="rotate(288 14 14)"/></g>
+              <circle cx="14" cy="14" r="3.2" fill="#1a1a17"/>
+            </svg>
+          </span>
+          <span class="brand-text">
+            <span class="main">ромашовы</span>
+            <em>диджитал</em>
+          </span>
+        </a>
+        <a href="/#cases" class="nav-back">
+          <span class="ar">←</span>
+          <span>все кейсы</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="wrap" id="case-root">
+    <div class="case-loading">
+      <div class="spinner"></div>
+      загружаем кейс…
+    </div>
+  </div>
+
+  <footer>
+    © ромашовы-диджитал · <span id="year"></span>
+  </footer>
+
+  <!-- lightbox -->
+  <div class="lightbox" id="lightbox" hidden>
+    <button class="lb-close" id="lb-close" aria-label="Закрыть">×</button>
+    <img id="lb-img" src="" alt="" />
+  </div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const slug = new URL(location.href).searchParams.get('slug') || '';
+  const root = document.getElementById('case-root');
+
+  async function load() {
+    if (!slug) {
+      showError('Кейс не указан', '<a href="/#cases">Вернуться к списку</a>');
+      return;
+    }
+    try {
+      const res = await fetch('/api/case?slug=' + encodeURIComponent(slug));
+      const data = await res.json();
+      if (!res.ok) {
+        if (res.status === 404) {
+          showError('Кейс не найден', 'Возможно, он ещё в работе. <a href="/#cases">К списку кейсов</a>');
+        } else {
+          showError('Ошибка загрузки', data.error || '');
+        }
+        return;
+      }
+      render(data);
+    } catch (e) {
+      showError('Сеть недоступна', String(e));
+    }
+  }
+
+  function showError(title, body) {
+    root.innerHTML = `<div class="case-error"><h2>${title}</h2><p>${body || ''}</p></div>`;
+  }
+
+  function render(data) {
+    const m = data.meta;
+    // update page meta
+    document.getElementById('page-title').textContent = `${m.name} · Кейс Ромашовых-диджитал`;
+    document.getElementById('og-title').setAttribute('content', m.name);
+    if (m.result) {
+      document.getElementById('page-desc').setAttribute('content', `${m.client ? m.client + ' · ' : ''}${m.result}`);
+      document.getElementById('og-desc').setAttribute('content', `${m.client ? m.client + ' · ' : ''}${m.result}`);
+    }
+
+    const platforms = (m.platform || []).map(p => {
+      const key = platformKey(p);
+      return `<span class="case-chip ${key}">${escapeHtml(p)}</span>`;
+    }).join('');
+
+    const heroHtml = `
+      <section class="case-hero">
+        <div class="case-crumb">
+          <span>Кейс</span>
+          <span class="sep">/</span>
+          ${m.client ? `<span>${escapeHtml(m.client)}</span>` : '<span>client</span>'}
+        </div>
+        <h1 class="case-title">${renderInlineName(m.name)}</h1>
+        <div class="case-meta">
+          ${m.result ? `<div><span class="lbl">результат</span><span class="val hl">${escapeHtml(m.result)}</span></div>` : ''}
+          ${m.period ? `<div><span class="lbl">период</span><span class="val">${escapeHtml(m.period)}</span></div>` : ''}
+          ${platforms ? `<div><span class="lbl">площадки</span><span class="val case-platforms">${platforms}</span></div>` : ''}
+        </div>
+        ${m.cover ? `<div class="case-cover"><img src="${m.cover}" alt="" /></div>` : ''}
+      </section>
+    `;
+
+    const bodyHtml = `<article class="case-body">${renderBlocks(data.blocks)}</article>`;
+
+    const ctaHtml = `
+      <section class="case-cta">
+        <div>
+          <h2>проект в <em>голове</em>? обсудим?</h2>
+          <p>отвечаем в течение рабочего дня, скажем честно — подходим или нет.</p>
+        </div>
+        <a href="https://t.me/romashovi" class="btn-tg" target="_blank" rel="noopener">
+          <span class="tg-ic">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M23.1 3.3 19.7 20.5c-.3 1.2-1 1.5-2 1l-5.4-4-2.6 2.5c-.3.3-.5.5-1 .5l.4-5.3 9.9-8.9c.4-.4-.1-.6-.6-.2L6.1 13.7.8 12c-1.1-.4-1.1-1.2.2-1.7L21.8 1.8c1-.4 1.8.2 1.3 1.5z"/></svg>
+          </span>
+          <span>написать в telegram</span>
+        </a>
+      </section>
+    `;
+
+    root.innerHTML = heroHtml + bodyHtml + ctaHtml;
+
+    // wire up lightbox
+    root.querySelectorAll('.nt-image .img-wrap').forEach(w => {
+      w.addEventListener('click', () => {
+        const img = w.querySelector('img');
+        if (img) openLb(img.src);
+      });
+    });
+  }
+
+  function renderBlocks(blocks) {
+    let html = '';
+    let i = 0;
+    while (i < blocks.length) {
+      const b = blocks[i];
+      // group adjacent list items
+      if (b.type === 'bulleted_list_item' || b.type === 'numbered_list_item') {
+        const type = b.type;
+        const tag = type === 'numbered_list_item' ? 'numbered' : 'bulleted';
+        let items = '';
+        while (i < blocks.length && blocks[i].type === type) {
+          items += `<li>${renderRich(blocks[i].text)}</li>`;
+          i++;
+        }
+        html += `<ul class="nt-list ${tag}">${items}</ul>`;
+        continue;
+      }
+      html += renderBlock(b);
+      i++;
+    }
+    return html;
+  }
+
+  function renderBlock(b) {
+    switch (b.type) {
+      case 'paragraph':
+        if (!b.text || b.text.length === 0) return '<p>&nbsp;</p>';
+        return `<p class="nt-paragraph">${renderRich(b.text)}</p>`;
+      case 'heading_1':
+        return `<h2 class="nt-heading_1">${renderRich(b.text)}</h2>`;
+      case 'heading_2':
+        return `<h2 class="nt-heading_2">${renderRich(b.text)}</h2>`;
+      case 'heading_3':
+        return `<h3 class="nt-heading_3">${renderRich(b.text)}</h3>`;
+      case 'quote':
+        return `<blockquote class="nt-quote">${renderRich(b.text)}</blockquote>`;
+      case 'callout':
+        return `<div class="nt-callout"><div class="icon">${escapeHtml(b.icon || '💡')}</div><div class="content">${renderRich(b.text)}</div></div>`;
+      case 'divider':
+        return `<hr class="nt-divider" />`;
+      case 'image':
+        if (!b.url) return '';
+        const cap = b.caption && b.caption.length ? `<figcaption>${renderRich(b.caption)}</figcaption>` : '';
+        return `<figure class="nt-image"><div class="img-wrap"><img src="${b.url}" alt="" loading="lazy" /></div>${cap}</figure>`;
+      case 'code':
+        return `<pre class="nt-code"><code>${escapeHtml(b.text ? b.text.map(t => t.text).join('') : '')}</code></pre>`;
+      case 'bookmark':
+        if (!b.url) return '';
+        return `<p class="nt-paragraph"><a href="${escapeHtml(b.url)}" target="_blank" rel="noopener">${escapeHtml(b.url)}</a></p>`;
+      default:
+        return '';
+    }
+  }
+
+  function renderRich(arr) {
+    if (!arr || !arr.length) return '';
+    return arr.map(t => {
+      let s = escapeHtml(t.text || '');
+      if (t.code) s = `<code class="nt-code-inline">${s}</code>`;
+      if (t.bold) s = `<strong>${s}</strong>`;
+      if (t.italic) s = `<em>${s}</em>`;
+      if (t.strikethrough) s = `<s>${s}</s>`;
+      if (t.underline) s = `<u>${s}</u>`;
+      if (t.link) s = `<a href="${escapeHtml(t.link)}" target="_blank" rel="noopener">${s}</a>`;
+      return s;
+    }).join('');
+  }
+
+  // подсветка курсивом последнего слова в заголовке кейса (стилистика остального сайта)
+  function renderInlineName(name) {
+    const safe = escapeHtml(name);
+    const parts = safe.split(' ');
+    if (parts.length < 2) return safe;
+    const last = parts.pop();
+    return `${parts.join(' ')} <em>${last}</em>`;
+  }
+
+  function platformKey(name) {
+    const n = (name || '').toLowerCase();
+    if (n.includes('vk') || n.includes('вк')) return 'vk';
+    if (n.includes('ya') || n.includes('я') || n.includes('директ')) return 'ya';
+    if (n.includes('tg') || n.includes('tele')) return 'tg';
+    if (n.includes('g') || n.includes('goog')) return 'g';
+    return '';
+  }
+
+  function escapeHtml(s) {
+    return String(s || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // lightbox
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  function openLb(src) {
+    lbImg.src = src;
+    lb.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLb() {
+    lb.hidden = true;
+    document.body.style.overflow = '';
+    lbImg.src = '';
+  }
+  document.getElementById('lb-close').addEventListener('click', closeLb);
+  lb.addEventListener('click', (e) => { if (e.target === lb) closeLb(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
+
+  load();
+</script>
+</body>
+</html>

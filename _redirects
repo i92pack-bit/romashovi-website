@@ -1,0 +1,2 @@
+# pretty URLs for cases: /cases/slug → /cases.html?slug=slug
+/cases/:slug   /cases.html?slug=:slug   200
