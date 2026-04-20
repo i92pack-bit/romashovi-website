@@ -53,6 +53,7 @@
   .nav {
     display: flex; align-items: center; justify-content: space-between;
     padding: 14px 0;
+    gap: 14px;
   }
   .nav-logo {
     display: inline-flex; align-items: center; gap: 10px;
@@ -69,6 +70,9 @@
     font-family: 'Fraunces', serif; font-style: italic; font-size: 14px; color: var(--accent);
     font-variation-settings: 'SOFT' 100, 'opsz' 120;
   }
+  .nav-right {
+    display: inline-flex; align-items: center; gap: 12px;
+  }
   .nav-back {
     display: inline-flex; align-items: center; gap: 8px;
     font-size: 14px; color: var(--ink-soft);
@@ -79,6 +83,35 @@
     display: inline-grid; place-items: center;
     width: 22px; height: 22px; border-radius: 50%;
     background: var(--ink); color: var(--bg); font-size: 11px;
+  }
+
+  /* language switcher */
+  .lang-switch {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    gap: 2px;
+  }
+  .lang-switch button {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    background: transparent;
+    cursor: pointer;
+    border: none;
+    letter-spacing: 0.06em;
+    transition: all .25s ease;
+  }
+  .lang-switch button:hover { color: var(--ink); }
+  .lang-switch button.active {
+    background: var(--ink);
+    color: var(--bg);
   }
 
   /* progress bar */
@@ -126,7 +159,7 @@
     white-space: nowrap;
   }
 
-  /* main content — main.wrap beats .wrap specificity */
+  /* main — main.wrap beats .wrap specificity */
   main.wrap {
     padding-top: 60px;
     padding-bottom: 40px;
@@ -197,6 +230,13 @@
     max-width: 540px;
   }
 
+  .group-label {
+    font-size: 13px; color: var(--muted);
+    margin-bottom: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+
   /* inputs */
   .field textarea, .field input[type="text"], .field input[type="email"] {
     width: 100%;
@@ -224,12 +264,8 @@
     gap: 10px;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   }
-  .options.wide {
-    grid-template-columns: 1fr 1fr;
-  }
-  .options.full {
-    grid-template-columns: 1fr;
-  }
+  .options.wide { grid-template-columns: 1fr 1fr; }
+  .options.full { grid-template-columns: 1fr; }
 
   .opt {
     display: flex; align-items: center; gap: 12px;
@@ -285,14 +321,8 @@
     transition: all .25s cubic-bezier(.2,.8,.2,1);
     border: 1px solid transparent;
   }
-  .btn-primary {
-    background: var(--ink);
-    color: var(--bg);
-  }
-  .btn-primary:hover:not(:disabled) {
-    background: var(--accent);
-    transform: translateY(-1px);
-  }
+  .btn-primary { background: var(--ink); color: var(--bg); }
+  .btn-primary:hover:not(:disabled) { background: var(--accent); transform: translateY(-1px); }
   .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
   .btn-primary .arr {
     display: inline-grid; place-items: center;
@@ -407,6 +437,9 @@
     .summary-row .k { padding-top: 0; }
     .step-nav { flex-direction: column-reverse; }
     .step-nav .btn { width: 100%; justify-content: center; }
+    .nav { gap: 8px; }
+    .nav-back { padding: 6px 10px; font-size: 13px; }
+    .nav-back span:last-child { display: none; }
   }
 </style>
 </head>
@@ -427,10 +460,16 @@
           <em>в диджитал</em>
         </span>
       </a>
-      <a href="/" class="nav-back">
-        <span class="ar">←</span>
-        <span>на главную</span>
-      </a>
+      <div class="nav-right">
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button type="button" data-lang="ru">RU</button>
+          <button type="button" data-lang="en">EN</button>
+        </div>
+        <a href="/" class="nav-back">
+          <span class="ar">←</span>
+          <span data-i18n="nav.back">на главную</span>
+        </a>
+      </div>
     </nav>
   </div>
 </header>
@@ -448,125 +487,125 @@
   <div class="brief-intro">
     <div class="brief-intro-badge">
       <span class="dot"></span>
-      <span>первый контакт · 5 вопросов</span>
+      <span data-i18n="intro.badge">первый контакт · 5 вопросов</span>
     </div>
-    <p class="brief-intro-text">это короткий опросник, чтобы мы поняли, что за проект. <strong>5 простых вопросов — 2 минуты.</strong> детали и точный расчёт — на созвоне после того, как прочитаем.</p>
+    <p class="brief-intro-text" data-i18n-html="intro.text">это короткий опросник, чтобы мы поняли, что за проект. <strong>5 простых вопросов — 2 минуты.</strong> детали и точный расчёт — на созвоне после того, как прочитаем.</p>
   </div>
 
   <!-- Step 1: project -->
   <div class="step active" data-step="1">
-    <div class="kicker">01 · о проекте</div>
-    <h2>расскажите про ваш <em>бизнес</em></h2>
-    <p class="step-hint">коротко: что за продукт/услуга, на какую аудиторию, что уже работает</p>
+    <div class="kicker" data-i18n="s1.kicker">01 · о проекте</div>
+    <h2 data-i18n-html="s1.h2">расскажите про ваш <em>бизнес</em></h2>
+    <p class="step-hint" data-i18n="s1.hint">коротко: что за продукт/услуга, на какую аудиторию, что уже работает</p>
     <div class="field">
-      <textarea id="q-about" placeholder="например: онлайн-школа английского для взрослых, работаем 3 года, 500+ студентов, ищем способы масштабировать лидген…"></textarea>
+      <textarea id="q-about" data-i18n-placeholder="s1.placeholder" placeholder="например: онлайн-школа английского для взрослых, работаем 3 года, 500+ студентов, ищем способы масштабировать лидген…"></textarea>
     </div>
     <div class="step-nav">
       <div></div>
-      <button class="btn btn-primary" data-next>далее <span class="arr">→</span></button>
+      <button class="btn btn-primary" data-next><span data-i18n="btn.next">далее</span> <span class="arr">→</span></button>
     </div>
   </div>
 
   <!-- Step 2: niche -->
   <div class="step" data-step="2">
-    <div class="kicker">02 · ниша</div>
-    <h2>к какой сфере относитесь</h2>
-    <p class="step-hint">выберите что ближе всего</p>
+    <div class="kicker" data-i18n="s2.kicker">02 · ниша</div>
+    <h2 data-i18n="s2.h2">к какой сфере относитесь</h2>
+    <p class="step-hint" data-i18n="s2.hint">выберите что ближе всего</p>
     <div class="options wide" data-group="niche" data-type="radio">
-      <div class="opt" data-type="radio" data-name="niche" data-value="e-com" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>e-commerce</span></div>
-      <div class="opt" data-type="radio" data-name="niche" data-value="услуги" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>услуги</span></div>
-      <div class="opt" data-type="radio" data-name="niche" data-value="SaaS" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>SaaS / сервисы</span></div>
-      <div class="opt" data-type="radio" data-name="niche" data-value="инфобиз" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>инфобиз / онлайн-школы</span></div>
-      <div class="opt" data-type="radio" data-name="niche" data-value="франшиза" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>франшиза / офлайн-сеть</span></div>
-      <div class="opt" data-type="radio" data-name="niche" data-value="другое" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>другое</span></div>
+      <div class="opt" data-type="radio" data-name="niche" data-value="e-com" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.niche.e-com">e-commerce</span></div>
+      <div class="opt" data-type="radio" data-name="niche" data-value="services" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.niche.services">услуги</span></div>
+      <div class="opt" data-type="radio" data-name="niche" data-value="saas" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.niche.saas">SaaS / сервисы</span></div>
+      <div class="opt" data-type="radio" data-name="niche" data-value="infobiz" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.niche.infobiz">инфобиз / онлайн-школы</span></div>
+      <div class="opt" data-type="radio" data-name="niche" data-value="franchise" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.niche.franchise">франшиза / офлайн-сеть</span></div>
+      <div class="opt" data-type="radio" data-name="niche" data-value="other" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.niche.other">другое</span></div>
     </div>
     <div class="step-nav">
-      <button class="btn btn-secondary" data-prev>← назад</button>
-      <button class="btn btn-primary" data-next>далее <span class="arr">→</span></button>
+      <button class="btn btn-secondary" data-prev><span data-i18n="btn.prev">← назад</span></button>
+      <button class="btn btn-primary" data-next><span data-i18n="btn.next">далее</span> <span class="arr">→</span></button>
     </div>
   </div>
 
   <!-- Step 3: platforms + budget -->
   <div class="step" data-step="3">
-    <div class="kicker">03 · бюджет и площадки</div>
-    <h2>где и за сколько</h2>
-    <p class="step-hint">можно выбрать несколько площадок</p>
+    <div class="kicker" data-i18n="s3.kicker">03 · бюджет и площадки</div>
+    <h2 data-i18n="s3.h2">где и за сколько</h2>
+    <p class="step-hint" data-i18n="s3.hint">можно выбрать несколько площадок</p>
 
     <div style="margin-bottom: 22px;">
-      <div style="font-size: 13px; color: var(--muted); margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase;">площадки</div>
+      <div class="group-label" data-i18n="s3.platforms_label">площадки</div>
       <div class="options wide" data-group="platforms" data-type="checkbox">
-        <div class="opt" data-type="checkbox" data-name="platforms" data-value="VK Ads" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span>VK Ads</span></div>
-        <div class="opt" data-type="checkbox" data-name="platforms" data-value="Яндекс Директ" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span>Яндекс Директ</span></div>
-        <div class="opt" data-type="checkbox" data-name="platforms" data-value="Telegram Ads" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span>Telegram Ads</span></div>
-        <div class="opt" data-type="checkbox" data-name="platforms" data-value="Google Ads" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span>Google Ads</span></div>
-        <div class="opt" data-type="checkbox" data-name="platforms" data-value="Meta Ads" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span>Meta Ads</span></div>
-        <div class="opt" data-type="checkbox" data-name="platforms" data-value="не знаю" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span>пока не знаю</span></div>
+        <div class="opt" data-type="checkbox" data-name="platforms" data-value="vk" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.platforms.vk">VK Ads</span></div>
+        <div class="opt" data-type="checkbox" data-name="platforms" data-value="ya" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.platforms.ya">Яндекс Директ</span></div>
+        <div class="opt" data-type="checkbox" data-name="platforms" data-value="tg" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.platforms.tg">Telegram Ads</span></div>
+        <div class="opt" data-type="checkbox" data-name="platforms" data-value="g" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.platforms.g">Google Ads</span></div>
+        <div class="opt" data-type="checkbox" data-name="platforms" data-value="meta" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.platforms.meta">Meta Ads</span></div>
+        <div class="opt" data-type="checkbox" data-name="platforms" data-value="unknown" role="checkbox" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.platforms.unknown">пока не знаю</span></div>
       </div>
     </div>
 
     <div>
-      <div style="font-size: 13px; color: var(--muted); margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase;">месячный бюджет на рекламу</div>
+      <div class="group-label" data-i18n="s3.budget_label">месячный бюджет на рекламу</div>
       <div class="options wide" data-group="budget" data-type="radio">
-        <div class="opt" data-type="radio" data-name="budget" data-value="до 100k ₽" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>до 100 000 ₽</span></div>
-        <div class="opt" data-type="radio" data-name="budget" data-value="100k–500k ₽" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>100 000 — 500 000 ₽</span></div>
-        <div class="opt" data-type="radio" data-name="budget" data-value="500k–1M ₽" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>500 000 — 1 000 000 ₽</span></div>
-        <div class="opt" data-type="radio" data-name="budget" data-value="1M+ ₽" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>более 1 000 000 ₽</span></div>
-        <div class="opt" data-type="radio" data-name="budget" data-value="пока думаем" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>пока думаем</span></div>
+        <div class="opt" data-type="radio" data-name="budget" data-value="lt100k" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.budget.lt100k">до 100 000 ₽</span></div>
+        <div class="opt" data-type="radio" data-name="budget" data-value="100to500k" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.budget.100to500k">100 000 — 500 000 ₽</span></div>
+        <div class="opt" data-type="radio" data-name="budget" data-value="500to1m" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.budget.500to1m">500 000 — 1 000 000 ₽</span></div>
+        <div class="opt" data-type="radio" data-name="budget" data-value="gt1m" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.budget.gt1m">более 1 000 000 ₽</span></div>
+        <div class="opt" data-type="radio" data-name="budget" data-value="thinking" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.budget.thinking">пока думаем</span></div>
       </div>
     </div>
 
     <div class="step-nav">
-      <button class="btn btn-secondary" data-prev>← назад</button>
-      <button class="btn btn-primary" data-next>далее <span class="arr">→</span></button>
+      <button class="btn btn-secondary" data-prev><span data-i18n="btn.prev">← назад</span></button>
+      <button class="btn btn-primary" data-next><span data-i18n="btn.next">далее</span> <span class="arr">→</span></button>
     </div>
   </div>
 
   <!-- Step 4: experience + timing -->
   <div class="step" data-step="4">
-    <div class="kicker">04 · опыт и сроки</div>
-    <h2>что уже <em>пробовали</em></h2>
-    <p class="step-hint">и как быстро хотите стартовать</p>
+    <div class="kicker" data-i18n="s4.kicker">04 · опыт и сроки</div>
+    <h2 data-i18n-html="s4.h2">что уже <em>пробовали</em></h2>
+    <p class="step-hint" data-i18n="s4.hint">и как быстро хотите стартовать</p>
 
     <div style="margin-bottom: 22px;">
-      <div style="font-size: 13px; color: var(--muted); margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase;">текущий этап</div>
+      <div class="group-label" data-i18n="s4.stage_label">текущий этап</div>
       <div class="options full" data-group="stage" data-type="radio">
-        <div class="opt" data-type="radio" data-name="stage" data-value="не запускали" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>ещё не запускали рекламу</span></div>
-        <div class="opt" data-type="radio" data-name="stage" data-value="свой опыт" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>есть свой опыт, хочу подключить профессионалов</span></div>
-        <div class="opt" data-type="radio" data-name="stage" data-value="смена подрядчика" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>работаем с подрядчиком, ищу замену</span></div>
+        <div class="opt" data-type="radio" data-name="stage" data-value="not_started" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.stage.not_started">ещё не запускали рекламу</span></div>
+        <div class="opt" data-type="radio" data-name="stage" data-value="own_experience" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.stage.own_experience">есть свой опыт, хочу подключить профессионалов</span></div>
+        <div class="opt" data-type="radio" data-name="stage" data-value="switching" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.stage.switching">работаем с подрядчиком, ищу замену</span></div>
       </div>
     </div>
 
     <div>
-      <div style="font-size: 13px; color: var(--muted); margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase;">сроки</div>
+      <div class="group-label" data-i18n="s4.timing_label">сроки</div>
       <div class="options wide" data-group="timing" data-type="radio">
-        <div class="opt" data-type="radio" data-name="timing" data-value="сейчас" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>готов стартовать сейчас</span></div>
-        <div class="opt" data-type="radio" data-name="timing" data-value="в течение месяца" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>в течение месяца</span></div>
-        <div class="opt" data-type="radio" data-name="timing" data-value="изучаю" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span>пока просто изучаю</span></div>
+        <div class="opt" data-type="radio" data-name="timing" data-value="now" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.timing.now">готов стартовать сейчас</span></div>
+        <div class="opt" data-type="radio" data-name="timing" data-value="month" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.timing.month">в течение месяца</span></div>
+        <div class="opt" data-type="radio" data-name="timing" data-value="exploring" role="radio" aria-checked="false" tabindex="0"><span class="mark"></span><span data-i18n="opt.timing.exploring">пока просто изучаю</span></div>
       </div>
     </div>
 
     <div class="step-nav">
-      <button class="btn btn-secondary" data-prev>← назад</button>
-      <button class="btn btn-primary" data-next>далее <span class="arr">→</span></button>
+      <button class="btn btn-secondary" data-prev><span data-i18n="btn.prev">← назад</span></button>
+      <button class="btn btn-primary" data-next><span data-i18n="btn.next">далее</span> <span class="arr">→</span></button>
     </div>
   </div>
 
   <!-- Step 5: contact -->
   <div class="step" data-step="5">
-    <div class="kicker">05 · контакт</div>
-    <h2>как с вами <em>связаться</em></h2>
-    <p class="step-hint">мы отправим обратно план и расчёт в течение рабочего дня</p>
+    <div class="kicker" data-i18n="s5.kicker">05 · контакт</div>
+    <h2 data-i18n-html="s5.h2">как с вами <em>связаться</em></h2>
+    <p class="step-hint" data-i18n="s5.hint">мы отправим обратно план и расчёт в течение рабочего дня</p>
 
     <div class="field" style="margin-bottom: 14px;">
-      <input type="text" id="q-name" placeholder="ваше имя" />
+      <input type="text" id="q-name" data-i18n-placeholder="s5.name_ph" placeholder="ваше имя" />
     </div>
     <div class="field">
-      <input type="text" id="q-contact" placeholder="@telegram, email или телефон" />
+      <input type="text" id="q-contact" data-i18n-placeholder="s5.contact_ph" placeholder="@telegram, email или телефон" />
     </div>
 
     <div class="step-nav">
-      <button class="btn btn-secondary" data-prev>← назад</button>
-      <button class="btn btn-primary" id="btn-finish" disabled>собрать бриф <span class="arr">→</span></button>
+      <button class="btn btn-secondary" data-prev><span data-i18n="btn.prev">← назад</span></button>
+      <button class="btn btn-primary" id="btn-finish" disabled><span data-i18n="btn.finish">собрать бриф</span> <span class="arr">→</span></button>
     </div>
   </div>
 
@@ -576,9 +615,9 @@
       <div class="check">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4 10-10"/></svg>
       </div>
-      <div class="kicker">готово · ваш бриф</div>
-      <h2>бриф <em>собран</em></h2>
-      <p class="step-hint" style="margin-bottom: 0; max-width: 520px; margin-left: auto; margin-right: auto;">нажмите «отправить в telegram» — откроется чат с нами с готовым сообщением. вам останется только нажать «отправить»</p>
+      <div class="kicker" data-i18n="done.kicker">готово · ваш бриф</div>
+      <h2 data-i18n-html="done.h2">бриф <em>собран</em></h2>
+      <p class="step-hint" style="margin-bottom: 0; max-width: 520px; margin-left: auto; margin-right: auto;" data-i18n="done.hint">нажмите «отправить в telegram» — откроется чат с нами с готовым сообщением. вам останется только нажать «отправить»</p>
     </div>
 
     <div class="summary" id="summary"></div>
@@ -588,10 +627,10 @@
         <span class="tg-ic">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M23.1 3.3 19.7 20.5c-.3 1.2-1 1.5-2 1l-5.4-4-2.6 2.5c-.3.3-.5.5-1 .5l.4-5.3 9.9-8.9c.4-.4-.1-.6-.6-.2L6.1 13.7.8 12c-1.1-.4-1.1-1.2.2-1.7L21.8 1.8c1-.4 1.8.2 1.3 1.5z"/></svg>
         </span>
-        <span>отправить в telegram</span>
+        <span data-i18n="done.send">отправить в telegram</span>
       </a>
-      <button class="btn btn-secondary" id="btn-copy" style="justify-content: center;">скопировать текст брифа</button>
-      <div class="copy-feedback" id="copy-feedback">✓ скопировано в буфер</div>
+      <button class="btn btn-secondary" id="btn-copy" style="justify-content: center;" data-i18n="done.copy">скопировать текст брифа</button>
+      <div class="copy-feedback" id="copy-feedback" data-i18n="done.copied">✓ скопировано в буфер</div>
     </div>
   </div>
 </main>
@@ -601,8 +640,220 @@
 </footer>
 
 <script>
-  document.getElementById('year').textContent = new Date().getFullYear();
   const TG_USERNAME = 'sntqnbuy';
+
+  // ===== i18n =====
+  const I18N = {
+    ru: {
+      'nav.back': 'на главную',
+      'prog.step': 'шаг',
+      'intro.badge': 'первый контакт · 5 вопросов',
+      'intro.text': 'это короткий опросник, чтобы мы поняли, что за проект. <strong>5 простых вопросов — 2 минуты.</strong> детали и точный расчёт — на созвоне после того, как прочитаем.',
+
+      's1.kicker': '01 · о проекте',
+      's1.h2': 'расскажите про ваш <em>бизнес</em>',
+      's1.hint': 'коротко: что за продукт/услуга, на какую аудиторию, что уже работает',
+      's1.placeholder': 'например: онлайн-школа английского для взрослых, работаем 3 года, 500+ студентов, ищем способы масштабировать лидген…',
+
+      's2.kicker': '02 · ниша',
+      's2.h2': 'к какой сфере относитесь',
+      's2.hint': 'выберите что ближе всего',
+      'opt.niche.e-com': 'e-commerce',
+      'opt.niche.services': 'услуги',
+      'opt.niche.saas': 'SaaS / сервисы',
+      'opt.niche.infobiz': 'инфобиз / онлайн-школы',
+      'opt.niche.franchise': 'франшиза / офлайн-сеть',
+      'opt.niche.other': 'другое',
+
+      's3.kicker': '03 · бюджет и площадки',
+      's3.h2': 'где и за сколько',
+      's3.hint': 'можно выбрать несколько площадок',
+      's3.platforms_label': 'площадки',
+      's3.budget_label': 'месячный бюджет на рекламу',
+      'opt.platforms.vk': 'VK Ads',
+      'opt.platforms.ya': 'Яндекс Директ',
+      'opt.platforms.tg': 'Telegram Ads',
+      'opt.platforms.g': 'Google Ads',
+      'opt.platforms.meta': 'Meta Ads',
+      'opt.platforms.unknown': 'пока не знаю',
+      'opt.budget.lt100k': 'до 100 000 ₽',
+      'opt.budget.100to500k': '100 000 — 500 000 ₽',
+      'opt.budget.500to1m': '500 000 — 1 000 000 ₽',
+      'opt.budget.gt1m': 'более 1 000 000 ₽',
+      'opt.budget.thinking': 'пока думаем',
+
+      's4.kicker': '04 · опыт и сроки',
+      's4.h2': 'что уже <em>пробовали</em>',
+      's4.hint': 'и как быстро хотите стартовать',
+      's4.stage_label': 'текущий этап',
+      's4.timing_label': 'сроки',
+      'opt.stage.not_started': 'ещё не запускали рекламу',
+      'opt.stage.own_experience': 'есть свой опыт, хочу подключить профессионалов',
+      'opt.stage.switching': 'работаем с подрядчиком, ищу замену',
+      'opt.timing.now': 'готов стартовать сейчас',
+      'opt.timing.month': 'в течение месяца',
+      'opt.timing.exploring': 'пока просто изучаю',
+
+      's5.kicker': '05 · контакт',
+      's5.h2': 'как с вами <em>связаться</em>',
+      's5.hint': 'мы отправим обратно план и расчёт в течение рабочего дня',
+      's5.name_ph': 'ваше имя',
+      's5.contact_ph': '@telegram, email или телефон',
+
+      'btn.next': 'далее',
+      'btn.prev': '← назад',
+      'btn.finish': 'собрать бриф',
+
+      'done.kicker': 'готово · ваш бриф',
+      'done.h2': 'бриф <em>собран</em>',
+      'done.hint': 'нажмите «отправить в telegram» — откроется чат с нами с готовым сообщением. вам останется только нажать «отправить»',
+      'done.send': 'отправить в telegram',
+      'done.copy': 'скопировать текст брифа',
+      'done.copied': '✓ скопировано в буфер',
+
+      'sum.about': 'о проекте',
+      'sum.niche': 'ниша',
+      'sum.platforms': 'площадки',
+      'sum.budget': 'бюджет',
+      'sum.stage': 'этап',
+      'sum.timing': 'сроки',
+      'sum.name': 'имя',
+      'sum.contact': 'контакт',
+      'sum.empty': 'не указано',
+
+      'tg.greeting': 'Привет! Заполнил бриф на сайте romashovi.pages.dev',
+      'tg.about': 'О проекте',
+      'tg.niche': 'Ниша',
+      'tg.platforms': 'Площадки',
+      'tg.budget': 'Бюджет',
+      'tg.stage': 'Этап',
+      'tg.timing': 'Сроки',
+      'tg.name': 'Имя',
+      'tg.contact': 'Контакт',
+    },
+    en: {
+      'nav.back': 'to main',
+      'prog.step': 'step',
+      'intro.badge': 'first contact · 5 questions',
+      'intro.text': "a short form so we understand what the project is. <strong>5 simple questions — 2 minutes.</strong> details and exact scoping — on a call after we read it.",
+
+      's1.kicker': '01 · project',
+      's1.h2': "tell us about your <em>business</em>",
+      's1.hint': "briefly: what product/service, for whom, what's already working",
+      's1.placeholder': "e.g.: online english school for adults, running 3 years, 500+ students, looking to scale lead-gen…",
+
+      's2.kicker': '02 · niche',
+      's2.h2': 'which industry are you in',
+      's2.hint': 'pick whatever is closest',
+      'opt.niche.e-com': 'e-commerce',
+      'opt.niche.services': 'services',
+      'opt.niche.saas': 'SaaS',
+      'opt.niche.infobiz': 'online schools / info-biz',
+      'opt.niche.franchise': 'franchise / offline network',
+      'opt.niche.other': 'other',
+
+      's3.kicker': '03 · budget & platforms',
+      's3.h2': 'where and for how much',
+      's3.hint': 'you can pick several platforms',
+      's3.platforms_label': 'platforms',
+      's3.budget_label': 'monthly ad budget',
+      'opt.platforms.vk': 'VK Ads',
+      'opt.platforms.ya': 'Yandex Direct',
+      'opt.platforms.tg': 'Telegram Ads',
+      'opt.platforms.g': 'Google Ads',
+      'opt.platforms.meta': 'Meta Ads',
+      'opt.platforms.unknown': "don't know yet",
+      'opt.budget.lt100k': 'under $1k',
+      'opt.budget.100to500k': '$1k — $5k',
+      'opt.budget.500to1m': '$5k — $10k',
+      'opt.budget.gt1m': 'over $10k',
+      'opt.budget.thinking': 'still thinking',
+
+      's4.kicker': '04 · experience & timing',
+      's4.h2': "what have you <em>tried</em>",
+      's4.hint': 'and how quickly you want to start',
+      's4.stage_label': 'current stage',
+      's4.timing_label': 'timing',
+      'opt.stage.not_started': "haven't launched ads yet",
+      'opt.stage.own_experience': 'have own experience, want to add pros',
+      'opt.stage.switching': 'working with a contractor, looking to switch',
+      'opt.timing.now': 'ready to start now',
+      'opt.timing.month': 'within a month',
+      'opt.timing.exploring': 'just exploring',
+
+      's5.kicker': '05 · contact',
+      's5.h2': "how can we <em>reach you</em>",
+      's5.hint': "we'll come back with a plan and estimate within a business day",
+      's5.name_ph': 'your name',
+      's5.contact_ph': '@telegram, email or phone',
+
+      'btn.next': 'next',
+      'btn.prev': '← back',
+      'btn.finish': 'build the brief',
+
+      'done.kicker': 'done · your brief',
+      'done.h2': 'brief <em>ready</em>',
+      'done.hint': 'hit «send to telegram» — chat with us opens with a pre-filled message. you just need to press send',
+      'done.send': 'send to telegram',
+      'done.copy': 'copy brief text',
+      'done.copied': '✓ copied to clipboard',
+
+      'sum.about': 'about',
+      'sum.niche': 'niche',
+      'sum.platforms': 'platforms',
+      'sum.budget': 'budget',
+      'sum.stage': 'stage',
+      'sum.timing': 'timing',
+      'sum.name': 'name',
+      'sum.contact': 'contact',
+      'sum.empty': 'not specified',
+
+      'tg.greeting': 'Hi! I filled out the brief on romashovi.pages.dev',
+      'tg.about': 'About',
+      'tg.niche': 'Niche',
+      'tg.platforms': 'Platforms',
+      'tg.budget': 'Budget',
+      'tg.stage': 'Stage',
+      'tg.timing': 'Timing',
+      'tg.name': 'Name',
+      'tg.contact': 'Contact',
+    },
+  };
+
+  let currentLang = localStorage.getItem('lang') ||
+    (navigator.language && navigator.language.toLowerCase().startsWith('ru') ? 'ru' : 'en');
+
+  function t(key) { return (I18N[currentLang] && I18N[currentLang][key]) || I18N.ru[key] || key; }
+
+  function applyI18n(lang) {
+    if (!I18N[lang]) return;
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    localStorage.setItem('lang', lang);
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const k = el.dataset.i18n;
+      if (I18N[lang][k] !== undefined) el.textContent = I18N[lang][k];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const k = el.dataset.i18nHtml;
+      if (I18N[lang][k] !== undefined) el.innerHTML = I18N[lang][k];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const k = el.dataset.i18nPlaceholder;
+      if (I18N[lang][k] !== undefined) el.setAttribute('placeholder', I18N[lang][k]);
+    });
+    document.querySelectorAll('.lang-switch button').forEach(b => {
+      b.classList.toggle('active', b.dataset.lang === lang);
+    });
+    // refresh dynamic texts
+    updateProgress();
+    if (document.querySelector('.step[data-step="done"].active')) renderSummary();
+  }
+  document.querySelectorAll('.lang-switch button').forEach(btn => {
+    btn.addEventListener('click', () => applyI18n(btn.dataset.lang));
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
 
   const state = {
     step: 1,
@@ -667,7 +918,6 @@
   document.getElementById('btn-finish').addEventListener('click', () => goto('done'));
 
   function goto(stepId) {
-    // validate current step
     if (typeof stepId === 'number' && stepId > state.step) {
       if (!canAdvance()) return;
     }
@@ -692,7 +942,6 @@
   }
 
   function updateNavState() {
-    // enable/disable next buttons based on validation
     const active = document.querySelector('.step.active');
     if (!active) return;
     const nextBtn = active.querySelector('[data-next], #btn-finish');
@@ -703,24 +952,34 @@
     const pct = (state.step / state.total) * 100;
     document.getElementById('prog-fill').style.width = pct + '%';
     document.getElementById('prog-cur').textContent = state.step;
-    document.getElementById('prog-label').textContent = `шаг ${state.step}`;
+    document.getElementById('prog-label').textContent = `${t('prog.step')} ${state.step}`;
+  }
+
+  // ===== translate values via dict (e.g. "infobiz" → "инфобиз / онлайн-школы") =====
+  function translateVal(group, v) {
+    if (!v) return '';
+    return t(`opt.${group}.${v}`) || v;
+  }
+  function translatePlatforms(arr) {
+    return (arr || []).map(v => translateVal('platforms', v)).join(', ');
   }
 
   // ===== final summary =====
   function renderSummary() {
     const d = state.data;
     const rows = [
-      ['о проекте', d.about],
-      ['ниша', d.niche],
-      ['площадки', d.platforms.join(', ')],
-      ['бюджет', d.budget],
-      ['этап', d.stage],
-      ['сроки', d.timing],
-      ['имя', d.name],
-      ['контакт', d.contact],
+      ['sum.about', d.about],
+      ['sum.niche', translateVal('niche', d.niche)],
+      ['sum.platforms', translatePlatforms(d.platforms)],
+      ['sum.budget', translateVal('budget', d.budget)],
+      ['sum.stage', translateVal('stage', d.stage)],
+      ['sum.timing', translateVal('timing', d.timing)],
+      ['sum.name', d.name],
+      ['sum.contact', d.contact],
     ];
+    const empty = t('sum.empty');
     document.getElementById('summary').innerHTML = rows.map(([k, v]) =>
-      `<div class="summary-row"><span class="k">${k}</span><span class="v">${v ? escapeHtml(v) : '<em>не указано</em>'}</span></div>`
+      `<div class="summary-row"><span class="k">${t(k)}</span><span class="v">${v ? escapeHtml(v) : `<em>${empty}</em>`}</span></div>`
     ).join('');
 
     const text = buildBriefText();
@@ -729,20 +988,20 @@
 
   function buildBriefText() {
     const d = state.data;
-    return `Привет! Заполнил бриф на сайте romashovi.pages.dev
+    return `${t('tg.greeting')}
 
 ━━━━━━━━━━━━━━━━━━━━
-О проекте:
+${t('tg.about')}:
 ${d.about}
 
-Ниша: ${d.niche}
-Площадки: ${d.platforms.join(', ')}
-Бюджет: ${d.budget}
-Этап: ${d.stage}
-Сроки: ${d.timing}
+${t('tg.niche')}: ${translateVal('niche', d.niche)}
+${t('tg.platforms')}: ${translatePlatforms(d.platforms)}
+${t('tg.budget')}: ${translateVal('budget', d.budget)}
+${t('tg.stage')}: ${translateVal('stage', d.stage)}
+${t('tg.timing')}: ${translateVal('timing', d.timing)}
 
-Имя: ${d.name}
-Контакт: ${d.contact}
+${t('tg.name')}: ${d.name}
+${t('tg.contact')}: ${d.contact}
 ━━━━━━━━━━━━━━━━━━━━`;
   }
 
@@ -758,10 +1017,13 @@ ${d.about}
       fb.classList.add('show');
       setTimeout(() => fb.classList.remove('show'), 2400);
     } catch (e) {
-      alert('не удалось скопировать — выделите текст вручную в блоке выше');
+      alert(currentLang === 'en'
+        ? "couldn't copy — please select the text above manually"
+        : 'не удалось скопировать — выделите текст вручную в блоке выше');
     }
   });
 
+  applyI18n(currentLang);
   updateProgress();
   updateNavState();
 </script>
