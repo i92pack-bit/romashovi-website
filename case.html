@@ -680,10 +680,7 @@
       return `<span class="case-chip ${key}">${escapeHtml(p)}</span>`;
     }).join('');
 
-    const topBar = [
-      platforms ? `<span class="case-platforms-top">${platforms}</span>` : '',
-      m.period ? `<span class="case-period-top">${escapeHtml(m.period)}</span>` : '',
-    ].filter(Boolean).join('<span class="sep">·</span>');
+    const topBar = platforms ? `<span class="case-platforms-top">${platforms}</span>` : '';
 
     const heroHtml = `
       <section class="case-hero">
