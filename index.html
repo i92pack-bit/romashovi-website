@@ -2273,6 +2273,13 @@
     budgetNum.textContent = BUDGET_TARGET;
   }
 
+  // auto-count screenshots per tab
+  document.querySelectorAll('.shots-pane').forEach(pane => {
+    const n = pane.querySelectorAll('.sg').length;
+    const badge = document.querySelector(`.stab[data-tab="${pane.dataset.pane}"] .count`);
+    if (badge) badge.textContent = String(n).padStart(2, '0');
+  });
+
   // lightbox for screenshots
   const lb = document.getElementById('lightbox');
   const lbImg = document.getElementById('lb-img');
