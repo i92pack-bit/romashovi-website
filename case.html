@@ -505,7 +505,10 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  const slug = new URL(location.href).searchParams.get('slug') || '';
+  // читаем slug из ?slug=xxx или из pathname /cases/xxx
+  const _url = new URL(location.href);
+  const _pathMatch = _url.pathname.match(/^\/cases\/([^\/]+)\/?$/);
+  const slug = _url.searchParams.get('slug') || (_pathMatch ? decodeURIComponent(_pathMatch[1]) : '');
   const root = document.getElementById('case-root');
 
   async function load() {
