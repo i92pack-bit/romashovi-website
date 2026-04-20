@@ -153,6 +153,35 @@
   .nav-right { display: flex; align-items: center; gap: 26px; }
   .nav-link { font-size: 14px; color: var(--ink-soft); }
   .nav-link:hover { color: var(--ink); }
+  /* language switcher */
+  .lang-switch {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    gap: 2px;
+  }
+  .lang-switch button {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    background: transparent;
+    cursor: pointer;
+    border: none;
+    letter-spacing: 0.06em;
+    transition: all .25s ease;
+  }
+  .lang-switch button:hover { color: var(--ink); }
+  .lang-switch button.active {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
   .nav-contact {
     display: inline-flex; align-items: center; gap: 10px;
     color: var(--ink);
@@ -2026,9 +2055,13 @@
         </span>
       </a>
       <div class="nav-right">
-        <a href="#services" class="nav-link">что делаем</a>
-        <a href="#cases" class="nav-link">кейсы</a>
-        <a href="#shots" class="nav-link">кабинеты</a>
+        <a href="#services" class="nav-link" data-i18n="nav.services">что делаем</a>
+        <a href="#cases" class="nav-link" data-i18n="nav.cases">кейсы</a>
+        <a href="#shots" class="nav-link" data-i18n="nav.shots">кабинеты</a>
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button type="button" data-lang="ru">RU</button>
+          <button type="button" data-lang="en">EN</button>
+        </div>
         <a href="#contact" class="nav-contact" aria-label="Написать нам">
           <span class="nav-avatar" role="img" aria-label="Юля и Илья">
             <span class="status-dot" aria-hidden="true"></span>
