@@ -2460,6 +2460,167 @@
   </div>
 
 <script>
+  // ===== i18n =====
+  const I18N = {
+    ru: {
+      'nav.services': 'что делаем',
+      'nav.cases': 'кейсы',
+      'nav.shots': 'кабинеты',
+      'brand.main': 'ромашовы',
+      'hero.kicker': 'открыты к сотрудничеству на апрель–май',
+      'hero.hello': 'привет<em>.</em><span class="wave">✿</span>',
+      'hero.intro': 'мы — <strong>Юля и Илья Ромашовы.</strong><br>маленькая перформанс-команда <span class="h">с большими профессионалами</span> — делаем трафик, который окупается.',
+      'hero.cta': 'обсудить проект',
+      'hero.spare': 'отвечаем в течение дня, честно скажем — подходим ли.',
+      'hero.aichip': '+ свои ai-агенты в стеке',
+      'hero.scroll': 'что умеем',
+      'role.ilya': 'илья · трафик',
+      'role.yulia': 'юля · стратегия',
+      'stat.years': 'лет <b>вместе как пара</b> — и столько же в перформанс-маркетинге',
+      'stat.projects': 'проектов за плечами — от локальных услуг до федеральных e-com и SaaS',
+      'stat.duration': 'года медианная длительность работы с клиентом — играем в долгую, а не на месяц',
+      'stat.budget': '<b>реализованного бюджета</b> — за годы работы с клиентами в кабинетах',
+      'services.h2': 'что <em>делаем</em>',
+      'services.sub': 'только то, что умеем глубоко — без лишних услуг в портфеле.',
+      'serv1.h3': 'трафик, который <em>окупается</em>',
+      'serv1.p': 'настраиваем и ведём рекламные кампании в российских и зарубежных системах. сами считаем экономику — не передаём клиенту «крутые отчёты из кабинета».',
+      'serv2.h3': 'сквозная аналитика',
+      'serv2.p': 'понятные дашборды, настройка целей и событий, честная атрибуция.',
+      'serv3.h3': 'посадочные, которые <em>конвертят</em>',
+      'serv3.p': 'быстрые лендинги на Tilda или кастомные. продумываем путь пользователя, а не «красим красиво». под каждую кампанию — свой оффер и воронка.',
+      'proc.h2': 'как <em>работаем</em>',
+      'proc.sub': 'прозрачно, без агентских «а давайте ещё встречку». от знакомства до запуска — 3–5 дней в среднем.',
+      'proc.meta': '4 этапа · <b>3–5 дней</b> до запуска',
+      'step1.t': 'знакомство',
+      'step1.d': '30-минутный созвон: слушаем задачу, задаём вопросы, честно говорим — сможем ли быть полезны и на каких условиях.',
+      'step1.w': 'бесплатно · 1 день',
+      'step2.t': 'аудит и <em>стратегия</em>',
+      'step2.d': 'разбираем нишу, конкурентов, текущие кампании. собираем стратегию: каналы, связки, бюджеты, метрики. всё письменно.',
+      'step3.t': 'запуск',
+      'step3.d': 'настраиваем кабинеты и аналитику, согласовываем креативы, запускаем первые кампании. ai-агенты ускоряют рутину.',
+      'step4.t': 'ведение <em>и рост</em>',
+      'step4.d': 'ежедневно следим за метриками, тестируем гипотезы, оптимизируем. раз в неделю — короткий отчёт без «воды».',
+      'step4.w': 'постоянно · играем в долгую',
+      'step.d12': '1–2 дня',
+      'ai.kicker': 'свои ai агенты',
+      'ai.h2': 'мир ускорился — <em>мы тоже</em>. и привезли своё.',
+      'ai.lead': 'пока одни агентства спорят, пускать ли нейросети в кабинеты, мы собрали свои инструменты — они помогают настраивать, запускать и оптимизировать рекламу в разы быстрее. и точнее.',
+      'ai.feat1': '<b>генератор гипотез и связок.</b> <span>анализирует нишу, конкурентов и историю — выдаёт связки «аудитория × оффер × креатив», с которых не стыдно стартовать.</span>',
+      'ai.feat2': '<b>автогенерация креативов.</b> <span>десятки текстов и заголовков под каждую аудиторию за минуты — человек только правит и утверждает.</span>',
+      'ai.feat3': '<b>аналитик кампаний.</b> <span>читает отчёты кабинетов и подсвечивает, что оптимизировать именно сейчас. не «что-то не работает» — а конкретные действия.</span>',
+      'viz.creatives': 'креативов',
+      'viz.cpu': 'cpu',
+      'viz.queue': 'очередь',
+      'viz.uptime': 'uptime',
+      'cases.h2': 'наши <em>кейсы</em>',
+      'cases.sub': 'несколько проектов, где мы были нужны — и остались надолго.',
+      'shots.h2': 'из наших <em>кабинетов</em>',
+      'shots.sub': 'скрины живых кампаний — переключайте площадки.',
+      'tab.vk': 'VK Реклама',
+      'tab.ya': 'Яндекс Директ',
+      'cta.h2': 'начнём <em>совместный</em> проект?',
+      'cta.p': 'пишите в телеграм — отвечаем в течение рабочего дня. задаём вопросы и честно скажем, сможем ли быть полезны.',
+      'cta.m1': 'открыты на апрель–май',
+      'cta.m2': 'ответ в течение дня',
+      'cta.m3': '30-минутный созвон бесплатно',
+      'cta.btn': 'написать в telegram',
+      'foot.slogan': 'сделано тёплыми руками',
+      'foot.privacy': 'Политика конфиденциальности',
+      'foot.cookies': 'Политика cookie',
+      'cookie.msg': 'Мы собираем <a href="/cookies/policy">Cookie</a>, чтобы улучшить работу сайта.',
+    },
+    en: {
+      'nav.services': 'what we do',
+      'nav.cases': 'cases',
+      'nav.shots': 'screens',
+      'brand.main': 'romashovy',
+      'hero.kicker': 'open for collaboration · April–May',
+      'hero.hello': 'hi<em>.</em><span class="wave">✿</span>',
+      'hero.intro': "we are <strong>Yulia &amp; Ilya Romashov.</strong><br>a small performance team <span class=\"h\">of big pros</span> — we make traffic that actually pays off.",
+      'hero.cta': 'discuss a project',
+      'hero.spare': "we reply within a day and are honest about whether we're a good fit.",
+      'hero.aichip': '+ our own AI agents in the stack',
+      'hero.scroll': 'what we do',
+      'role.ilya': 'ilya · traffic',
+      'role.yulia': 'yulia · strategy',
+      'stat.years': 'years <b>together as a couple</b> — and the same in performance marketing',
+      'stat.projects': 'projects done — from local services to federal e-com and SaaS',
+      'stat.duration': 'years median engagement with a client — we play the long game',
+      'stat.budget': '<b>in ad budget managed</b> — across years of hands-on campaigns',
+      'services.h2': 'what <em>we do</em>',
+      'services.sub': 'only things we really master — no bloated service menu.',
+      'serv1.h3': 'traffic that <em>pays off</em>',
+      'serv1.p': 'we set up and run ads in Russian and global systems. we count economics ourselves — no "pretty cabinet reports" instead of real numbers.',
+      'serv2.h3': 'end-to-end analytics',
+      'serv2.p': 'clear dashboards, goal and event tracking, honest attribution.',
+      'serv3.h3': 'landings that <em>convert</em>',
+      'serv3.p': "fast landings on Tilda or custom. we think the user journey through, not just make it pretty. every campaign gets its own offer and funnel.",
+      'proc.h2': 'how <em>we work</em>',
+      'proc.sub': "transparent, no agency-style meeting bloat. from intro to launch — 3–5 days on average.",
+      'proc.meta': '4 stages · <b>3–5 days</b> to launch',
+      'step1.t': 'intro call',
+      'step1.d': '30-minute call: we listen to the task, ask questions, and honestly say whether we can help and on what terms.',
+      'step1.w': 'free · 1 day',
+      'step2.t': 'audit and <em>strategy</em>',
+      'step2.d': 'we break down the niche, competitors, current campaigns. build strategy: channels, combos, budgets, metrics — all written.',
+      'step3.t': 'launch',
+      'step3.d': 'configure cabinets and analytics, agree on creatives, launch first campaigns. AI agents speed up the routine.',
+      'step4.t': 'ops <em>and growth</em>',
+      'step4.d': 'we watch metrics daily, test hypotheses, optimize. a short weekly report — no filler.',
+      'step4.w': 'continuous · the long game',
+      'step.d12': '1–2 days',
+      'ai.kicker': 'our own AI agents',
+      'ai.h2': 'the world got faster — <em>we did too</em>. and brought our own.',
+      'ai.lead': "while other agencies argue whether to let neural nets near ad cabinets, we built our own tools — they help set up, launch and optimize ads many times faster. and more precisely.",
+      'ai.feat1': '<b>hypothesis and combo generator.</b> <span>analyzes the niche, competitors and history — outputs "audience × offer × creative" combos you can confidently start with.</span>',
+      'ai.feat2': '<b>creatives autogen.</b> <span>dozens of texts and headlines per audience in minutes — humans just polish and approve.</span>',
+      'ai.feat3': '<b>campaign analyst.</b> <span>reads cabinet reports and highlights exactly what to optimize right now. not "something is off" — but concrete actions.</span>',
+      'viz.creatives': 'creatives',
+      'viz.cpu': 'cpu',
+      'viz.queue': 'queue',
+      'viz.uptime': 'uptime',
+      'cases.h2': 'our <em>cases</em>',
+      'cases.sub': 'a few projects where we were needed — and stayed for a long while.',
+      'shots.h2': 'from our <em>cabinets</em>',
+      'shots.sub': 'screenshots of live campaigns — switch the platforms.',
+      'tab.vk': 'VK Ads',
+      'tab.ya': 'Yandex Direct',
+      'cta.h2': "let's start a <em>shared</em> project?",
+      'cta.p': "ping us on telegram — we reply within a business day. we'll ask questions and say honestly whether we can help.",
+      'cta.m1': 'open in April–May',
+      'cta.m2': 'reply within a day',
+      'cta.m3': 'free 30-minute call',
+      'cta.btn': 'message on telegram',
+      'foot.slogan': 'made with warm hands',
+      'foot.privacy': 'Privacy Policy',
+      'foot.cookies': 'Cookie Policy',
+      'cookie.msg': 'We use <a href="/cookies/policy">Cookies</a> to improve your experience.',
+    }
+  };
+  let currentLang = localStorage.getItem('lang') ||
+    (navigator.language && navigator.language.toLowerCase().startsWith('ru') ? 'ru' : 'en');
+  function applyI18n(lang) {
+    const dict = I18N[lang] || I18N.ru;
+    document.documentElement.lang = lang;
+    localStorage.setItem('lang', lang);
+    currentLang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const v = dict[el.dataset.i18n];
+      if (v !== undefined) el.textContent = v;
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const v = dict[el.dataset.i18nHtml];
+      if (v !== undefined) el.innerHTML = v;
+    });
+    document.querySelectorAll('.lang-switch button').forEach(b => {
+      b.classList.toggle('active', b.dataset.lang === lang);
+    });
+  }
+  document.querySelectorAll('.lang-switch button').forEach(btn => {
+    btn.addEventListener('click', () => applyI18n(btn.dataset.lang));
+  });
+  applyI18n(currentLang);
+
   document.getElementById('cp').textContent = '© ромашовы · ' + new Date().getFullYear();
 
   // cookie toast — показываем до первого закрытия
