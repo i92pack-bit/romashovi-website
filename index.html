@@ -879,58 +879,150 @@
   .ai-viz .viz-head .dots { display: inline-flex; gap: 5px; }
   .ai-viz .viz-head .dots span { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.1); }
   .ai-viz .viz-head .dots span:first-child { background: #c8ff2b; box-shadow: 0 0 8px #c8ff2b; }
-  .ai-viz .stream {
-    margin-top: 16px;
-    display: flex; flex-direction: column; gap: 9px;
+  /* top metrics grid */
+  .viz-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    padding: 14px 0 14px;
     position: relative; z-index: 1;
   }
+  .viz-metric {
+    padding: 7px 9px 8px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 6px;
+    display: flex; flex-direction: column; gap: 3px;
+    min-width: 0;
+  }
+  .viz-metric .lbl {
+    font-size: 9px;
+    color: rgba(255,255,255,0.38);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .viz-metric .val {
+    font-size: 14px;
+    color: #c8ff2b;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1;
+    transition: text-shadow .3s ease;
+  }
+  .viz-metric .val.pulse { animation: v-pulse .55s ease; }
+  @keyframes v-pulse {
+    0% { text-shadow: 0 0 10px rgba(200,255,43,0.8); color: #fff; }
+    100% { text-shadow: none; color: #c8ff2b; }
+  }
+
+  /* log stream */
+  .ai-viz .stream {
+    flex: 1;
+    display: flex; flex-direction: column; gap: 6px;
+    position: relative; z-index: 1;
+    padding: 12px 0 6px;
+    border-top: 1px dashed rgba(200,255,43,0.15);
+    overflow: hidden;
+    min-height: 120px;
+  }
   .ai-line {
-    font-size: 12px;
-    line-height: 1.4;
-    color: rgba(255,255,255,0.6);
-    opacity: 0;
-    animation: fadein 0.5s forwards;
+    font-size: 11.5px;
+    line-height: 1.35;
+    color: rgba(255,255,255,0.75);
     display: flex; align-items: baseline; gap: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: line-in 0.35s cubic-bezier(.2,.8,.2,1);
   }
-  .ai-line:nth-child(1) { animation-delay: 0.2s; }
-  .ai-line:nth-child(2) { animation-delay: 0.9s; }
-  .ai-line:nth-child(3) { animation-delay: 1.6s; }
-  .ai-line:nth-child(4) { animation-delay: 2.3s; }
-  .ai-line:nth-child(5) { animation-delay: 3.0s; }
-  .ai-line:nth-child(6) { animation-delay: 3.7s; }
-  .ai-line .t { color: #c8ff2b; font-weight: 500; }
-  .ai-line .k { color: rgba(255,255,255,0.88); }
-  .ai-line .k b { color: #c8ff2b; font-weight: 500; }
-  .ai-line .ok { color: #c8ff2b; }
-  .ai-line .warn { color: #ff8a3a; }
-  @keyframes fadein {
-    from { opacity: 0; transform: translateY(4px); }
-    to { opacity: 1; transform: translateY(0); }
+  .ai-line.fade-out {
+    animation: line-out 0.35s ease forwards;
   }
+  @keyframes line-in {
+    from { opacity: 0; transform: translateY(3px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes line-out {
+    to { opacity: 0; transform: translateY(-3px); max-height: 0; margin: 0; }
+  }
+  .ai-line .ts { color: rgba(255,255,255,0.28); font-size: 10.5px; flex-shrink: 0; }
+  .ai-line .ar { color: #c8ff2b; font-weight: 500; flex-shrink: 0; }
+  .ai-line .msg { color: rgba(255,255,255,0.88); overflow: hidden; text-overflow: ellipsis; }
+  .ai-line .msg b { color: #c8ff2b; font-weight: 500; }
+  .ai-line.type-ok .ar { color: #c8ff2b; }
+  .ai-line.type-ok .msg { color: #c8ff2b; }
+  .ai-line.type-warn .ar { color: #ff8a3a; }
+  .ai-line.type-warn .msg { color: #ff8a3a; }
   .ai-line .caret {
     display: inline-block;
-    width: 7px; height: 13px;
+    width: 6px; height: 11px;
     background: #c8ff2b;
-    animation: caret 1s steps(2) infinite;
+    animation: caret 0.75s steps(2) infinite;
     vertical-align: middle;
-    box-shadow: 0 0 6px #c8ff2b;
+    margin-left: 2px;
+    box-shadow: 0 0 5px #c8ff2b;
   }
   @keyframes caret { 50% { opacity: 0; } }
 
-  /* viz bottom stat strip */
-  .ai-viz .stat-strip {
-    position: absolute;
-    left: 20px; right: 20px; bottom: 16px;
-    display: flex; justify-content: space-between;
-    font-size: 10px;
-    color: rgba(255,255,255,0.4);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding-top: 10px;
+  /* task queue */
+  .viz-tasks {
+    padding-top: 12px;
     border-top: 1px dashed rgba(200,255,43,0.15);
-    z-index: 1;
+    display: flex; flex-direction: column; gap: 7px;
+    position: relative; z-index: 1;
   }
-  .ai-viz .stat-strip b { color: #c8ff2b; font-weight: 500; }
+  .task {
+    display: grid;
+    grid-template-columns: 1fr 60px 30px;
+    align-items: center;
+    gap: 10px;
+    font-size: 10.5px;
+    animation: line-in 0.35s cubic-bezier(.2,.8,.2,1);
+  }
+  .task.fade-out { animation: line-out 0.4s ease forwards; }
+  .task-label {
+    color: rgba(255,255,255,0.72);
+    display: flex; align-items: center; gap: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .task-label::before {
+    content: '▸';
+    color: #c8ff2b;
+    font-size: 9px;
+    flex-shrink: 0;
+  }
+  .task.done .task-label { color: #c8ff2b; }
+  .task.done .task-label::before { content: '✓'; }
+  .task-bar {
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+  .task-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0%;
+    background: linear-gradient(90deg, #c8ff2b, #ff8a3a);
+    border-radius: 2px;
+    transition: width 0.35s linear;
+  }
+  .task.done .task-fill { background: #c8ff2b; box-shadow: 0 0 6px rgba(200,255,43,0.6); }
+  .task-pct {
+    font-size: 9.5px;
+    color: rgba(255,255,255,0.45);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .task.done .task-pct { color: #c8ff2b; }
 
   /* PROCESS */
   .process {
@@ -2004,24 +2096,22 @@
             </div>
           </div>
 
-          <div class="ai-viz">
+          <div class="ai-viz" id="ai-viz">
             <div class="viz-head">
               <span class="grp"><span class="tag">● ai-engine</span> <span>/ live</span></span>
               <span class="dots"><span></span><span></span><span></span></span>
             </div>
-            <div class="stream">
-              <div class="ai-line"><span class="t">→</span> <span class="k">init · сканирую нишу и 28 конкурентов</span></div>
-              <div class="ai-line"><span class="t">→</span> <span class="k">найдено <b>14</b> неочевидных связок</span></div>
-              <div class="ai-line"><span class="t">→</span> <span class="k">генерация <b>42</b> вариантов креативов</span></div>
-              <div class="ai-line"><span class="t">→</span> <span class="ok">✓ группы подготовлены к запуску</span></div>
-              <div class="ai-line"><span class="t">→</span> <span class="warn">◆ обнаружен слив в кампании #3</span></div>
-              <div class="ai-line"><span class="t">→</span> <span class="k">рекомендовано 4 действия <span class="caret"></span></span></div>
+
+            <div class="viz-metrics">
+              <div class="viz-metric"><span class="lbl">креативов</span><span class="val" id="m-creatives">0</span></div>
+              <div class="viz-metric"><span class="lbl">cpu</span><span class="val" id="m-cpu">—</span></div>
+              <div class="viz-metric"><span class="lbl">очередь</span><span class="val" id="m-queue">—</span></div>
+              <div class="viz-metric"><span class="lbl">uptime</span><span class="val" id="m-uptime">—</span></div>
             </div>
-            <div class="stat-strip">
-              <span>cpu · <b>0.8</b></span>
-              <span>tasks · <b>14</b></span>
-              <span>uptime · <b>14d</b></span>
-            </div>
+
+            <div class="stream" id="ai-stream"></div>
+
+            <div class="viz-tasks" id="ai-tasks"></div>
           </div>
         </div>
       </div>
