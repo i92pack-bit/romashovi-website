@@ -2232,6 +2232,18 @@
       </div>
     </footer>
   </div>
+
+  <!-- lightbox for screenshots -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Просмотр скриншота" hidden>
+    <button class="lb-btn lb-close" id="lb-close" aria-label="Закрыть (Esc)">×</button>
+    <button class="lb-btn lb-prev" id="lb-prev" aria-label="Предыдущий (←)">←</button>
+    <button class="lb-btn lb-next" id="lb-next" aria-label="Следующий (→)">→</button>
+    <div class="lb-stage">
+      <img class="lb-img" id="lb-img" src="" alt="Скриншот кампании" />
+    </div>
+    <div class="lb-counter"><b id="lb-index">1</b> / <span id="lb-total">1</span></div>
+  </div>
+
 <script>
   document.getElementById('cp').textContent = '© ромашовы · ' + new Date().getFullYear();
 
@@ -2266,6 +2278,71 @@
   } else if (budgetNum) {
     budgetNum.textContent = BUDGET_TARGET;
   }
+
+  // lightbox for screenshots
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  const lbIndex = document.getElementById('lb-index');
+  const lbTotal = document.getElementById('lb-total');
+  let lbSet = [];
+  let lbCur = 0;
+
+  function lbShow(i) {
+    lbCur = (i + lbSet.length) % lbSet.length;
+    lbImg.src = lbSet[lbCur];
+    lbIndex.textContent = lbCur + 1;
+  }
+  function lbOpen(set, startIdx) {
+    if (!set.length) return;
+    lbSet = set;
+    lbTotal.textContent = set.length;
+    lbShow(startIdx);
+    lb.hidden = false;
+    document.body.classList.add('lb-open');
+    document.getElementById('lb-close').focus();
+  }
+  function lbClose() {
+    lb.hidden = true;
+    document.body.classList.remove('lb-open');
+    lbImg.src = '';
+    lbSet = [];
+  }
+  document.getElementById('lb-close').addEventListener('click', lbClose);
+  document.getElementById('lb-prev').addEventListener('click', () => lbShow(lbCur - 1));
+  document.getElementById('lb-next').addEventListener('click', () => lbShow(lbCur + 1));
+  lb.addEventListener('click', (e) => { if (e.target === lb) lbClose(); });
+
+  // basic swipe on touch
+  let touchX = null;
+  lb.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 40) lbShow(lbCur + (dx < 0 ? 1 : -1));
+    touchX = null;
+  });
+
+  document.addEventListener('keydown', e => {
+    if (lb.hidden) return;
+    if (e.key === 'Escape') lbClose();
+    else if (e.key === 'ArrowLeft') lbShow(lbCur - 1);
+    else if (e.key === 'ArrowRight') lbShow(lbCur + 1);
+  });
+
+  // wire up clicks on .sg cards — only when image loaded
+  document.querySelectorAll('.shots-pane').forEach(pane => {
+    pane.querySelectorAll('.sg').forEach(sg => {
+      sg.addEventListener('click', () => {
+        // collect all currently-loaded images in this pane (img still in DOM = not failed)
+        const imgs = Array.from(pane.querySelectorAll('.sg-frame img'));
+        if (!imgs.length) return;
+        const myImg = sg.querySelector('.sg-frame img');
+        if (!myImg) return;
+        const startIdx = imgs.indexOf(myImg);
+        lbOpen(imgs.map(i => i.src), startIdx);
+      });
+    });
+  });
 
   // tabs with aria + keyboard (←/→/Home/End)
   const tabs = Array.from(document.querySelectorAll('.stab'));
