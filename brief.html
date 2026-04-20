@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#fbfaf7" />
+
+<title>Бриф · Ромашовы-в-диджитал</title>
+<meta name="description" content="Расскажите про ваш проект за 2 минуты — мы прочитаем и вернёмся с планом работы." />
+<meta name="robots" content="noindex, follow" />
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Cg fill='%23ff5c3e'%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5'/%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5' transform='rotate(72 14 14)'/%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5' transform='rotate(144 14 14)'/%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5' transform='rotate(216 14 14)'/%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5' transform='rotate(288 14 14)'/%3E%3C/g%3E%3Ccircle cx='14' cy='14' r='3.2' fill='%231a1a17'/%3E%3C/svg%3E" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --surface: #f3f1ea;
+    --ink: #1a1a17;
+    --ink-soft: #3d3d38;
+    --muted: #7a7870;
+    --faint: #b5b3aa;
+    --line: rgba(26,26,23,0.10);
+    --accent: #ff5c3e;
+    --accent-soft: #ffe8e0;
+    --butter: #f4d67a;
+    --butter-soft: #fbeab5;
+    --sage: #8ba888;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; border: none; background: none; cursor: pointer; color: inherit; }
+  body {
+    font-family: 'Geist', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: 'ss01';
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+  }
+  .wrap-wide { max-width: 1180px; margin: 0 auto; padding: 0 32px; width: 100%; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 32px; width: 100%; }
+
+  /* header */
+  .site-header {
+    border-bottom: 1px solid var(--line);
+  }
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0;
+  }
+  .nav-logo {
+    display: inline-flex; align-items: center; gap: 10px;
+    color: var(--ink);
+  }
+  .nav-logo .logo-mark { width: 28px; height: 28px; }
+  .nav-logo .logo-mark svg { width: 100%; height: 100%; transition: transform .7s cubic-bezier(.2,.8,.2,1); }
+  .nav-logo:hover .logo-mark svg { transform: rotate(72deg); }
+  .nav-logo .logo-mark .center { transition: fill .3s ease; }
+  .nav-logo:hover .logo-mark .center { fill: var(--accent); }
+  .nav-logo .brand-text { display: inline-flex; flex-direction: column; line-height: 1; gap: 2px; }
+  .nav-logo .brand-text .main { font-weight: 500; font-size: 15px; letter-spacing: -0.02em; }
+  .nav-logo .brand-text em {
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 14px; color: var(--accent);
+    font-variation-settings: 'SOFT' 100, 'opsz' 120;
+  }
+  .nav-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 14px; color: var(--ink-soft);
+    padding: 8px 14px; border-radius: 999px; transition: all .25s ease;
+  }
+  .nav-back:hover { color: var(--ink); background: var(--surface); }
+  .nav-back .ar {
+    display: inline-grid; place-items: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--ink); color: var(--bg); font-size: 11px;
+  }
+
+  /* progress bar */
+  .progress {
+    padding: 16px 0 14px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+    position: sticky; top: 0; z-index: 40;
+  }
+  .progress-inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 18px;
+    align-items: center;
+  }
+  .progress-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .progress-bar {
+    height: 3px;
+    background: var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent) 0%, #ff8a3a 100%);
+    border-radius: 999px;
+    box-shadow: 0 0 10px rgba(255,92,62,0.4);
+    transition: width 0.5s cubic-bezier(.2,.8,.2,1);
+  }
+  .progress-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--ink);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* main content */
+  main {
+    flex: 1;
+    padding: 50px 0 60px;
+  }
+
+  .step {
+    display: none;
+    animation: step-in .35s cubic-bezier(.2,.8,.2,1);
+  }
+  .step.active { display: block; }
+  @keyframes step-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .step h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(30px, 4.5vw, 44px);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    font-variation-settings: 'SOFT' 70, 'opsz' 144;
+    margin-bottom: 10px;
+    text-transform: lowercase;
+  }
+  .step h2 em { font-style: italic; color: var(--accent); font-variation-settings: 'SOFT' 100; }
+  .step-hint {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 30px;
+    max-width: 540px;
+  }
+
+  /* inputs */
+  .field textarea, .field input[type="text"], .field input[type="email"] {
+    width: 100%;
+    padding: 16px 18px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+    font-family: 'Geist', sans-serif;
+    font-size: 16px;
+    color: var(--ink);
+    transition: border-color .25s ease, box-shadow .25s ease;
+    resize: vertical;
+  }
+  .field textarea { min-height: 140px; line-height: 1.5; }
+  .field textarea:focus, .field input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(255,92,62,0.1);
+  }
+  .field textarea::placeholder, .field input::placeholder { color: var(--faint); }
+
+  /* radio/checkbox card grid */
+  .options {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  .options.wide {
+    grid-template-columns: 1fr 1fr;
+  }
+  .options.full {
+    grid-template-columns: 1fr;
+  }
+
+  .opt {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 18px;
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all .25s cubic-bezier(.2,.8,.2,1);
+    font-size: 15px;
+    user-select: none;
+  }
+  .opt:hover { border-color: rgba(255,92,62,0.4); background: #fffaf8; }
+  .opt.checked {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--ink);
+  }
+  .opt .mark {
+    flex-shrink: 0;
+    width: 20px; height: 20px;
+    border: 1.5px solid var(--line);
+    border-radius: 50%;
+    position: relative;
+    transition: all .2s ease;
+  }
+  .opt[data-type="checkbox"] .mark { border-radius: 6px; }
+  .opt.checked .mark {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+  .opt.checked .mark::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8l3 3 7-7'/%3E%3C/svg%3E") center / 14px no-repeat;
+  }
+
+  /* footer nav */
+  .step-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 34px;
+    gap: 16px;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 22px;
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    transition: all .25s cubic-bezier(.2,.8,.2,1);
+    border: 1px solid transparent;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--accent);
+    transform: translateY(-1px);
+  }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-primary .arr {
+    display: inline-grid; place-items: center;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--bg); color: var(--ink);
+    font-size: 12px;
+    transition: transform .25s ease;
+  }
+  .btn-primary:hover:not(:disabled) .arr { background: #fff; color: var(--accent); transform: rotate(-45deg); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--muted);
+    border-color: var(--line);
+  }
+  .btn-secondary:hover {
+    color: var(--ink);
+    border-color: var(--ink);
+    background: var(--surface);
+  }
+  .btn-tg {
+    background: linear-gradient(135deg, #2aa9e0, #1e8cbf);
+    color: #fff;
+    box-shadow: 0 12px 30px -12px rgba(42,169,224,0.5);
+  }
+  .btn-tg:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -12px rgba(42,169,224,0.7); }
+  .btn-tg .tg-ic {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: #fff; color: #1e8cbf;
+    display: inline-grid; place-items: center;
+  }
+
+  /* final summary */
+  .summary {
+    background: var(--surface);
+    border-radius: 18px;
+    padding: 28px 30px;
+    margin-top: 22px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .summary-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-row .k {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding-top: 3px;
+  }
+  .summary-row .v { color: var(--ink); word-wrap: break-word; }
+  .summary-row .v em { font-family: 'Fraunces', serif; font-style: italic; color: var(--muted); }
+
+  .done-head {
+    text-align: center;
+    padding: 20px 0 28px;
+  }
+  .done-head .check {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #ff8a3a);
+    display: inline-grid; place-items: center;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px -10px rgba(255,92,62,0.5);
+    animation: check-pop .6s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes check-pop {
+    0% { transform: scale(0.5); opacity: 0; }
+    60% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .done-head .check svg { width: 28px; height: 28px; color: #fff; }
+
+  .send-actions {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-top: 24px;
+  }
+  .copy-feedback {
+    font-size: 13px;
+    color: var(--sage);
+    font-family: 'JetBrains Mono', monospace;
+    opacity: 0;
+    transition: opacity .3s ease;
+    text-align: center;
+    padding: 4px;
+  }
+  .copy-feedback.show { opacity: 1; }
+
+  footer {
+    padding: 30px 0 36px;
+    color: var(--faint);
+    font-size: 11px;
+    line-height: 1.5;
+    border-top: 1px solid var(--line);
+    text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .wrap, .wrap-wide { padding: 0 18px; }
+    main { padding: 30px 0 40px; }
+    .step h2 { font-size: 26px; }
+    .step-hint { font-size: 13px; margin-bottom: 22px; }
+    .options.wide { grid-template-columns: 1fr; }
+    .summary-row { grid-template-columns: 1fr; gap: 2px; }
+    .summary-row .k { padding-top: 0; }
+    .step-nav { flex-direction: column-reverse; }
+    .step-nav .btn { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap-wide">
+    <nav class="nav">
+      <a href="/" class="nav-logo">
+        <span class="logo-mark">
+          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g><ellipse cx="14" cy="5" rx="2.7" ry="5" fill="#ff5c3e"/><ellipse cx="14" cy="5" rx="2.7" ry="5" fill="#ff5c3e" transform="rotate(72 14 14)"/><ellipse cx="14" cy="5" rx="2.7" ry="5" fill="#ff5c3e" transform="rotate(144 14 14)"/><ellipse cx="14" cy="5" rx="2.7" ry="5" fill="#ff5c3e" transform="rotate(216 14 14)"/><ellipse cx="14" cy="5" rx="2.7" ry="5" fill="#ff5c3e" transform="rotate(288 14 14)"/></g>
+            <circle class="center" cx="14" cy="14" r="3.2" fill="#1a1a17"/>
+          </svg>
+        </span>
+        <span class="brand-text">
+          <span class="main">ромашовы</span>
+          <em>в диджитал</em>
+        </span>
+      </a>
+      <a href="/" class="nav-back">
+        <span class="ar">←</span>
+        <span>на главную</span>
+      </a>
+    </nav>
+  </div>
+</header>
+
+<div class="progress">
+  <div class="wrap progress-inner">
+    <span class="progress-label" id="prog-label">шаг 1</span>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+    <span class="progress-count"><span id="prog-cur">1</span> / <span id="prog-total">5</span></span>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- Step 1: project -->
+  <div class="step active" data-step="1">
+    <div class="kicker">01 · о проекте</div>
+    <h2>расскажите про ваш <em>бизнес</em></h2>
+    <p class="step-hint">коротко: что за продукт/услуга, на какую аудиторию, что уже работает</p>
+    <div class="field">
+      <textarea id="q-about" placeholder="например: онлайн-школа английского для взрослых, работаем 3 года, 500+ студентов, ищем способы масштабировать лидген…"></textarea>
+    </div>
+    <div class="step-nav">
+      <div></div>
+      <button class="btn btn-primary" data-next>далее <span class="arr">→</span></button>
+    </div>
+  </div>
+
+  <!-- Step 2: niche -->
+  <div class="step" data-step="2">
+    <div class="kicker">02 · ниша</div>
+    <h2>к какой сфере относитесь</h2>
+    <p class="step-hint">выберите что ближе всего</p>
+    <div class="options wide" data-group="niche" data-type="radio">
+      <label class="opt" data-type="radio"><span class="mark"></span><span>e-commerce</span><input type="radio" name="niche" value="e-com" hidden></label>
+      <label class="opt" data-type="radio"><span class="mark"></span><span>услуги</span><input type="radio" name="niche" value="услуги" hidden></label>
+      <label class="opt" data-type="radio"><span class="mark"></span><span>SaaS / сервисы</span><input type="radio" name="niche" value="SaaS" hidden></label>
+      <label class="opt" data-type="radio"><span class="mark"></span><span>инфобиз / онлайн-школы</span><input type="radio" name="niche" value="инфобиз" hidden></label>
+      <label class="opt" data-type="radio"><span class="mark"></span><span>франшиза / офлайн-сеть</span><input type="radio" name="niche" value="франшиза" hidden></label>
+      <label class="opt" data-type="radio"><span class="mark"></span><span>другое</span><input type="radio" name="niche" value="другое" hidden></label>
+    </div>
+    <div class="step-nav">
+      <button class="btn btn-secondary" data-prev>← назад</button>
+      <button class="btn btn-primary" data-next>далее <span class="arr">→</span></button>
+    </div>
+  </div>
+
+  <!-- Step 3: platforms + budget -->
+  <div class="step" data-step="3">
+    <div class="kicker">03 · бюджет и площадки</div>
+    <h2>где и за сколько</h2>
+    <p class="step-hint">можно выбрать несколько площадок</p>
+
+    <div style="margin-bottom: 22px;">
+      <div style="font-size: 13px; color: var(--muted); margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase;">площадки</div>
+      <div class="options wide" data-group="platforms" data-type="checkbox">
+        <label class="opt" data-type="checkbox"><span class="mark"></span><span>VK Ads</span><input type="checkbox" name="platforms" value="VK Ads" hidden></label>
+        <label class="opt" data-type="checkbox"><span class="mark"></span><span>Яндекс Директ</span><input type="checkbox" name="platforms" value="Яндекс Директ" hidden></label>
+        <label class="opt" data-type="checkbox"><span class="mark"></span><span>Telegram Ads</span><input type="checkbox" name="platforms" value="Telegram Ads" hidden></label>
+        <label class="opt" data-type="checkbox"><span class="mark"></span><span>Google Ads</span><input type="checkbox" name="platforms" value="Google Ads" hidden></label>
+        <label class="opt" data-type="checkbox"><span class="mark"></span><span>Meta Ads</span><input type="checkbox" name="platforms" value="Meta Ads" hidden></label>
+        <label class="opt" data-type="checkbox"><span class="mark"></span><span>пока не знаю</span><input type="checkbox" name="platforms" value="не знаю" hidden></label>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size: 13px; color: var(--muted); margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase;">месячный бюджет на рекламу</div>
+      <div class="options wide" data-group="budget" data-type="radio">
+        <label class="opt" data-type="radio"><span class="mark"></span><span>до 100 000 ₽</span><input type="radio" name="budget" value="до 100k ₽" hidden></label>
+        <label class="opt" data-type="radio"><span class="mark"></span><span>100 000 — 500 000 ₽</span><input type="radio" name="budget" value="100k–500k ₽" hidden></label>
+        <label class="opt" data-type="radio"><span class="mark"></span><span>500 000 — 1 000 000 ₽</span><input type="radio" name="budget" value="500k–1M ₽" hidden></label>
+        <label class="opt" data-type="radio"><span class="mark"></span><span>более 1 000 000 ₽</span><input type="radio" name="budget" value="1M+ ₽" hidden></label>
+        <label class="opt" data-type="radio"><span class="mark"></span><span>пока думаем</span><input type="radio" name="budget" value="пока думаем" hidden></label>
+      </div>
+    </div>
+
+    <div class="step-nav">
+      <button class="btn btn-secondary" data-prev>← назад</button>
+      <button class="btn btn-primary" data-next>далее <span class="arr">→</span></button>
+    </div>
+  </div>
+
+  <!-- Step 4: experience + timing -->
+  <div class="step" data-step="4">
+    <div class="kicker">04 · опыт и сроки</div>
+    <h2>что уже <em>пробовали</em></h2>
+    <p class="step-hint">и как быстро хотите стартовать</p>
+
+    <div style="margin-bottom: 22px;">
+      <div style="font-size: 13px; color: var(--muted); margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase;">текущий этап</div>
+      <div class="options full" data-group="stage" data-type="radio">
+        <label class="opt" data-type="radio"><span class="mark"></span><span>ещё не запускали рекламу</span><input type="radio" name="stage" value="не запускали" hidden></label>
+        <label class="opt" data-type="radio"><span class="mark"></span><span>есть свой опыт, хочу подключить профессионалов</span><input type="radio" name="stage" value="свой опыт" hidden></label>
+        <label class="opt" data-type="radio"><span class="mark"></span><span>работаем с подрядчиком, ищу замену</span><input type="radio" name="stage" value="смена подрядчика" hidden></label>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size: 13px; color: var(--muted); margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase;">сроки</div>
+      <div class="options wide" data-group="timing" data-type="radio">
+        <label class="opt" data-type="radio"><span class="mark"></span><span>готов стартовать сейчас</span><input type="radio" name="timing" value="сейчас" hidden></label>
+        <label class="opt" data-type="radio"><span class="mark"></span><span>в течение месяца</span><input type="radio" name="timing" value="в течение месяца" hidden></label>
+        <label class="opt" data-type="radio"><span class="mark"></span><span>пока просто изучаю</span><input type="radio" name="timing" value="изучаю" hidden></label>
+      </div>
+    </div>
+
+    <div class="step-nav">
+      <button class="btn btn-secondary" data-prev>← назад</button>
+      <button class="btn btn-primary" data-next>далее <span class="arr">→</span></button>
+    </div>
+  </div>
+
+  <!-- Step 5: contact -->
+  <div class="step" data-step="5">
+    <div class="kicker">05 · контакт</div>
+    <h2>как с вами <em>связаться</em></h2>
+    <p class="step-hint">мы отправим обратно план и расчёт в течение рабочего дня</p>
+
+    <div class="field" style="margin-bottom: 14px;">
+      <input type="text" id="q-name" placeholder="ваше имя" />
+    </div>
+    <div class="field">
+      <input type="text" id="q-contact" placeholder="@telegram, email или телефон" />
+    </div>
+
+    <div class="step-nav">
+      <button class="btn btn-secondary" data-prev>← назад</button>
+      <button class="btn btn-primary" id="btn-finish" disabled>собрать бриф <span class="arr">→</span></button>
+    </div>
+  </div>
+
+  <!-- Final screen -->
+  <div class="step" data-step="done">
+    <div class="done-head">
+      <div class="check">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4 10-10"/></svg>
+      </div>
+      <div class="kicker">готово · ваш бриф</div>
+      <h2>бриф <em>собран</em></h2>
+      <p class="step-hint" style="margin-bottom: 0; max-width: 520px; margin-left: auto; margin-right: auto;">нажмите «отправить в telegram» — откроется чат с нами с готовым сообщением. вам останется только нажать «отправить»</p>
+    </div>
+
+    <div class="summary" id="summary"></div>
+
+    <div class="send-actions">
+      <a href="#" id="send-tg" class="btn btn-tg" style="justify-content: center;">
+        <span class="tg-ic">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M23.1 3.3 19.7 20.5c-.3 1.2-1 1.5-2 1l-5.4-4-2.6 2.5c-.3.3-.5.5-1 .5l.4-5.3 9.9-8.9c.4-.4-.1-.6-.6-.2L6.1 13.7.8 12c-1.1-.4-1.1-1.2.2-1.7L21.8 1.8c1-.4 1.8.2 1.3 1.5z"/></svg>
+        </span>
+        <span>отправить в telegram</span>
+      </a>
+      <button class="btn btn-secondary" id="btn-copy" style="justify-content: center;">скопировать текст брифа</button>
+      <div class="copy-feedback" id="copy-feedback">✓ скопировано в буфер</div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  © ромашовы в диджитал · <span id="year"></span>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const TG_USERNAME = 'sntqnbuy';
+
+  const state = {
+    step: 1,
+    total: 5,
+    data: {
+      about: '', niche: '', platforms: [], budget: '',
+      stage: '', timing: '', name: '', contact: '',
+    },
+  };
+
+  // ===== option clicks =====
+  document.querySelectorAll('.options').forEach(group => {
+    const type = group.dataset.type;
+    const name = group.dataset.group;
+    group.querySelectorAll('.opt').forEach(opt => {
+      const input = opt.querySelector('input');
+      opt.addEventListener('click', () => {
+        if (type === 'radio') {
+          group.querySelectorAll('.opt').forEach(o => o.classList.remove('checked'));
+          opt.classList.add('checked');
+          state.data[name] = input.value;
+        } else {
+          opt.classList.toggle('checked');
+          const checked = Array.from(group.querySelectorAll('.opt.checked'))
+            .map(o => o.querySelector('input').value);
+          state.data[name] = checked;
+        }
+        updateNavState();
+      });
+    });
+  });
+
+  // ===== text inputs =====
+  document.getElementById('q-about').addEventListener('input', e => {
+    state.data.about = e.target.value.trim();
+    updateNavState();
+  });
+  document.getElementById('q-name').addEventListener('input', e => {
+    state.data.name = e.target.value.trim();
+    updateNavState();
+  });
+  document.getElementById('q-contact').addEventListener('input', e => {
+    state.data.contact = e.target.value.trim();
+    updateNavState();
+  });
+
+  // ===== navigation =====
+  document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => goto(state.step + 1)));
+  document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => goto(state.step - 1)));
+  document.getElementById('btn-finish').addEventListener('click', () => goto('done'));
+
+  function goto(stepId) {
+    // validate current step
+    if (typeof stepId === 'number' && stepId > state.step) {
+      if (!canAdvance()) return;
+    }
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    const target = document.querySelector(`.step[data-step="${stepId}"]`);
+    if (!target) return;
+    target.classList.add('active');
+    if (stepId !== 'done') state.step = stepId;
+    else state.step = state.total;
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (stepId === 'done') renderSummary();
+  }
+
+  function canAdvance() {
+    if (state.step === 1) return state.data.about.length >= 10;
+    if (state.step === 2) return !!state.data.niche;
+    if (state.step === 3) return state.data.platforms.length > 0 && !!state.data.budget;
+    if (state.step === 4) return !!state.data.stage && !!state.data.timing;
+    if (state.step === 5) return state.data.name.length >= 2 && state.data.contact.length >= 3;
+    return true;
+  }
+
+  function updateNavState() {
+    // enable/disable next buttons based on validation
+    const active = document.querySelector('.step.active');
+    if (!active) return;
+    const nextBtn = active.querySelector('[data-next], #btn-finish');
+    if (nextBtn) nextBtn.disabled = !canAdvance();
+  }
+
+  function updateProgress() {
+    const pct = (state.step / state.total) * 100;
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-cur').textContent = state.step;
+    document.getElementById('prog-label').textContent = `шаг ${state.step}`;
+  }
+
+  // ===== final summary =====
+  function renderSummary() {
+    const d = state.data;
+    const rows = [
+      ['о проекте', d.about],
+      ['ниша', d.niche],
+      ['площадки', d.platforms.join(', ')],
+      ['бюджет', d.budget],
+      ['этап', d.stage],
+      ['сроки', d.timing],
+      ['имя', d.name],
+      ['контакт', d.contact],
+    ];
+    document.getElementById('summary').innerHTML = rows.map(([k, v]) =>
+      `<div class="summary-row"><span class="k">${k}</span><span class="v">${v ? escapeHtml(v) : '<em>не указано</em>'}</span></div>`
+    ).join('');
+
+    const text = buildBriefText();
+    document.getElementById('send-tg').href = `https://t.me/${TG_USERNAME}?text=${encodeURIComponent(text)}`;
+  }
+
+  function buildBriefText() {
+    const d = state.data;
+    return `Привет! Заполнил бриф на сайте romashovi.pages.dev
+
+━━━━━━━━━━━━━━━━━━━━
+О проекте:
+${d.about}
+
+Ниша: ${d.niche}
+Площадки: ${d.platforms.join(', ')}
+Бюджет: ${d.budget}
+Этап: ${d.stage}
+Сроки: ${d.timing}
+
+Имя: ${d.name}
+Контакт: ${d.contact}
+━━━━━━━━━━━━━━━━━━━━`;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // ===== copy to clipboard =====
+  document.getElementById('btn-copy').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(buildBriefText());
+      const fb = document.getElementById('copy-feedback');
+      fb.classList.add('show');
+      setTimeout(() => fb.classList.remove('show'), 2400);
+    } catch (e) {
+      alert('не удалось скопировать — выделите текст вручную в блоке выше');
+    }
+  });
+
+  updateProgress();
+  updateNavState();
+</script>
+</body>
+</html>
