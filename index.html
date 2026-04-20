@@ -1730,6 +1730,169 @@
     .sg:has(.sg-frame img) .sg-frame::after { width: 32px; height: 32px; top: 8px; right: 8px; background-size: 14px; }
   }
 
+  /* brief banner (CTA to /brief quiz page) */
+  .brief-banner {
+    margin: 80px 0 20px;
+  }
+  .bb-inner {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 40px;
+    align-items: center;
+    padding: 54px 56px;
+    background:
+      radial-gradient(circle at 85% 20%, rgba(255,255,255,0.4) 0%, transparent 50%),
+      linear-gradient(135deg, var(--butter) 0%, #ffd066 50%, #ffb855 100%);
+    color: var(--ink);
+    border-radius: 28px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s ease;
+    box-shadow: 0 20px 50px -20px rgba(255, 184, 85, 0.45);
+    text-decoration: none;
+  }
+  .bb-inner:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 30px 70px -20px rgba(255, 184, 85, 0.6);
+  }
+  /* decorative shapes */
+  .bb-inner::before, .bb-inner::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    pointer-events: none;
+  }
+  .bb-inner::before {
+    width: 260px; height: 260px;
+    background: var(--accent);
+    left: -60px; bottom: -80px;
+    opacity: 0.4;
+  }
+  .bb-inner::after {
+    width: 200px; height: 200px;
+    background: #fff;
+    right: -50px; top: -60px;
+    opacity: 0.5;
+  }
+  .bb-left, .bb-right { position: relative; z-index: 2; }
+
+  .bb-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(26,26,23,0.7);
+    margin-bottom: 16px;
+    display: inline-block;
+    padding: 6px 12px;
+    background: rgba(26,26,23,0.08);
+    border-radius: 999px;
+  }
+  .bb-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 4.8vw, 56px);
+    font-weight: 400;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    font-variation-settings: 'SOFT' 70, 'opsz' 144;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  .bb-title em {
+    font-style: italic;
+    color: var(--accent);
+    font-variation-settings: 'SOFT' 100;
+  }
+  .bb-sub {
+    font-size: 16px;
+    line-height: 1.5;
+    color: rgba(26,26,23,0.75);
+    max-width: 480px;
+    margin-bottom: 28px;
+  }
+  .bb-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 24px 18px 28px;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: -0.005em;
+    transition: all .3s ease;
+  }
+  .bb-inner:hover .bb-cta {
+    background: var(--accent);
+    color: #fff;
+  }
+  .bb-cta .arr {
+    display: inline-grid;
+    place-items: center;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 13px;
+    transition: transform .3s ease, background .3s ease, color .3s ease;
+  }
+  .bb-inner:hover .bb-cta .arr {
+    background: #fff; color: var(--accent);
+    transform: translateX(3px);
+  }
+
+  /* right side — step list preview */
+  .bb-right {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .bb-step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.45);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.7);
+    border-radius: 12px;
+    font-size: 14px;
+    color: var(--ink);
+    transition: transform .3s ease, background .3s ease;
+  }
+  .bb-inner:hover .bb-step { background: rgba(255,255,255,0.65); }
+  .bb-inner:hover .bb-step:nth-child(1) { transform: translateX(4px); }
+  .bb-inner:hover .bb-step:nth-child(2) { transform: translateX(6px); }
+  .bb-inner:hover .bb-step:nth-child(3) { transform: translateX(8px); }
+  .bb-inner:hover .bb-step:nth-child(4) { transform: translateX(6px); }
+  .bb-inner:hover .bb-step:nth-child(5) { transform: translateX(4px); }
+  .bb-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    min-width: 24px;
+  }
+  .bb-lbl {
+    letter-spacing: -0.005em;
+  }
+
+  @media (max-width: 880px) {
+    .bb-inner { grid-template-columns: 1fr; gap: 30px; padding: 40px 30px; }
+    .bb-right { gap: 8px; }
+    .bb-step { padding: 10px 14px; font-size: 13px; }
+  }
+  @media (max-width: 640px) {
+    .brief-banner { margin: 50px 0 20px; }
+    .bb-inner { padding: 32px 22px; border-radius: 22px; }
+    .bb-title { font-size: 28px; }
+    .bb-sub { font-size: 14px; }
+    .bb-cta { padding: 14px 18px 14px 22px; font-size: 14px; width: 100%; justify-content: space-between; }
+  }
+
   /* reviews ticker */
   .reviews {
     padding: 80px 0 40px;
@@ -2501,6 +2664,24 @@
       </div>
     </section>
 
+    <section class="brief-banner reveal" id="brief-teaser">
+      <a href="/brief" class="bb-inner">
+        <div class="bb-left">
+          <div class="bb-kicker" data-i18n="brief.kicker">бриф · 5 шагов · 2 минуты</div>
+          <h2 class="bb-title" data-i18n-html="brief.h2">расскажите про проект — <em>мы подумаем</em></h2>
+          <p class="bb-sub" data-i18n="brief.sub">за 2 минуты соберёте структурированный бриф, мы прочитаем и вернёмся с планом работы</p>
+          <span class="bb-cta" data-i18n-html="brief.cta">заполнить бриф <span class="arr">→</span></span>
+        </div>
+        <div class="bb-right" aria-hidden="true">
+          <div class="bb-step"><span class="bb-num">01</span><span class="bb-lbl" data-i18n="brief.s1">что за проект</span></div>
+          <div class="bb-step"><span class="bb-num">02</span><span class="bb-lbl" data-i18n="brief.s2">кто ваш клиент</span></div>
+          <div class="bb-step"><span class="bb-num">03</span><span class="bb-lbl" data-i18n="brief.s3">бюджет и сроки</span></div>
+          <div class="bb-step"><span class="bb-num">04</span><span class="bb-lbl" data-i18n="brief.s4">что уже пробовали</span></div>
+          <div class="bb-step"><span class="bb-num">05</span><span class="bb-lbl" data-i18n="brief.s5">как с вами связаться</span></div>
+        </div>
+      </a>
+    </section>
+
     <section class="reviews reveal" id="reviews">
       <div class="reviews-head">
         <h2 data-i18n-html="reviews.h2">что говорят <em>клиенты</em></h2>
@@ -2633,6 +2814,15 @@
       'reviews.h2': 'что говорят <em>клиенты</em>',
       'reviews.sub': 'несколько скринов из личной переписки — так привычнее',
       'reviews.empty': 'отзывы скоро появятся',
+      'brief.kicker': 'бриф · 5 шагов · 2 минуты',
+      'brief.h2': 'расскажите про проект — <em>мы подумаем</em>',
+      'brief.sub': 'за 2 минуты соберёте структурированный бриф, мы прочитаем и вернёмся с планом работы',
+      'brief.cta': 'заполнить бриф <span class="arr">→</span>',
+      'brief.s1': 'что за проект',
+      'brief.s2': 'кто ваш клиент',
+      'brief.s3': 'бюджет и сроки',
+      'brief.s4': 'что уже пробовали',
+      'brief.s5': 'как с вами связаться',
       'cta.h2': 'начнём <em>совместный</em> проект?',
       'cta.p': 'пишите в телеграм — отвечаем в течение рабочего дня. задаём вопросы и честно скажем, сможем ли быть полезны.',
       'cta.m1': 'открыты на апрель–май',
@@ -2711,6 +2901,15 @@
       'reviews.h2': "what clients <em>say</em>",
       'reviews.sub': "a few screenshots from private chats — that's how it actually happens",
       'reviews.empty': 'reviews will appear soon',
+      'brief.kicker': 'brief · 5 steps · 2 min',
+      'brief.h2': "tell us about your project — <em>we'll think it through</em>",
+      'brief.sub': "in 2 minutes you build a structured brief, we read it and come back with a plan",
+      'brief.cta': 'fill the brief <span class="arr">→</span>',
+      'brief.s1': 'about the project',
+      'brief.s2': 'who your client is',
+      'brief.s3': 'budget and timeline',
+      'brief.s4': "what you've tried before",
+      'brief.s5': 'how to reach you',
       'cta.h2': "let's start a <em>shared</em> project?",
       'cta.p': "ping us on telegram — we reply within a business day. we'll ask questions and say honestly whether we can help.",
       'cta.m1': 'open in April–May',
