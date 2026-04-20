@@ -1730,16 +1730,14 @@
     .sg:has(.sg-frame img) .sg-frame::after { width: 32px; height: 32px; top: 8px; right: 8px; background-size: 14px; }
   }
 
-  /* reviews carousel */
+  /* reviews live feed */
   .reviews {
     padding: 80px 0 40px;
   }
   .reviews-head {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 40px;
-    align-items: end;
-    margin-bottom: 28px;
+    max-width: 720px;
+    margin: 0 auto 44px;
+    text-align: center;
   }
   .reviews h2 {
     font-family: 'Fraunces', serif;
@@ -1748,82 +1746,92 @@
     letter-spacing: -0.035em;
     line-height: 0.98;
     font-variation-settings: 'SOFT' 60, 'opsz' 144;
+    margin-bottom: 12px;
   }
   .reviews h2 em { font-style: italic; color: var(--muted); font-variation-settings: 'SOFT' 100; }
-  .reviews-sub { max-width: 360px; font-size: 15px; color: var(--ink-soft); padding-bottom: 14px; }
-  .reviews-nav { display: inline-flex; gap: 8px; padding-bottom: 14px; }
-  .reviews-nav button {
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    border: 1px solid var(--line);
-    background: #fff;
-    color: var(--ink);
-    cursor: pointer;
-    display: grid; place-items: center;
-    font-size: 17px;
-    transition: all .25s cubic-bezier(.2,.8,.2,1);
+  .reviews-sub {
+    max-width: 480px;
+    margin: 0 auto;
+    font-size: 15px;
+    color: var(--ink-soft);
   }
-  .reviews-nav button:hover:not(:disabled) {
-    background: var(--ink);
-    color: var(--bg);
-    border-color: var(--ink);
-    transform: translateY(-2px);
-  }
-  .reviews-nav button:disabled { opacity: 0.35; cursor: default; }
 
-  .reviews-track {
+  .reviews-feed {
+    max-width: 640px;
+    margin: 0 auto;
     display: flex;
-    gap: 16px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    padding: 4px 0 20px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
   }
-  .reviews-track::-webkit-scrollbar { display: none; }
 
-  .rv-card {
-    flex: 0 0 auto;
-    width: 400px;
+  .rv-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 90%;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity .6s cubic-bezier(.2,.8,.2,1), transform .6s cubic-bezier(.2,.8,.2,1);
+  }
+  .rv-msg.right {
+    align-items: flex-end;
+    align-self: flex-end;
+  }
+  .rv-msg.in {
+    opacity: 1;
+    transform: none;
+  }
+
+  .rv-ts {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--faint);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 6px 6px;
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  .rv-ts .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #2ecc71;
+    box-shadow: 0 0 0 1px rgba(46,204,113,0.2);
+    animation: rv-pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes rv-pulse {
+    0%, 100% { box-shadow: 0 0 0 1px rgba(46,204,113,0.2); }
+    50% { box-shadow: 0 0 0 4px rgba(46,204,113,0); }
+  }
+
+  .rv-bubble {
+    width: 420px;
+    max-width: 100%;
     aspect-ratio: 16/9;
     border-radius: 18px;
     overflow: hidden;
     background: var(--surface);
-    box-shadow: 0 6px 20px -6px rgba(0,0,0,0.10);
-    scroll-snap-align: start;
+    box-shadow: 0 10px 30px -12px rgba(0,0,0,0.15);
     cursor: zoom-in;
-    transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease;
+    transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
     position: relative;
   }
-  .rv-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -16px rgba(0,0,0,0.2); }
-  .rv-card img {
+  .rv-bubble:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 22px 45px -16px rgba(0,0,0,0.22);
+  }
+  .rv-bubble img {
     width: 100%; height: 100%;
     object-fit: cover;
     object-position: top center;
     display: block;
   }
-
-  .reviews-dots {
-    display: flex; justify-content: center;
-    gap: 6px;
-    margin-top: 8px;
-  }
-  .rv-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--line);
-    transition: all .25s ease;
-  }
-  .rv-dot.active {
-    width: 22px;
-    border-radius: 3px;
-    background: var(--ink);
-  }
+  /* chat-bubble corner style */
+  .rv-msg:not(.right) .rv-bubble { border-top-left-radius: 6px; }
+  .rv-msg.right .rv-bubble { border-top-right-radius: 6px; }
 
   .rv-empty {
-    flex: 1;
-    padding: 60px 24px;
+    padding: 50px 24px;
     text-align: center;
     background: linear-gradient(135deg, var(--surface) 0%, #fff 100%);
     border: 1px dashed rgba(26,26,23,0.18);
@@ -1834,10 +1842,9 @@
     letter-spacing: 0.06em;
   }
 
-  @media (max-width: 720px) {
-    .reviews-head { grid-template-columns: 1fr; gap: 16px; }
-    .reviews-nav { padding-bottom: 0; }
-    .rv-card { width: 300px; }
+  @media (max-width: 640px) {
+    .rv-bubble { width: 100%; }
+    .rv-msg { max-width: 100%; }
   }
 
   /* about strip */
@@ -2520,13 +2527,8 @@
       <div class="reviews-head">
         <h2 data-i18n-html="reviews.h2">что говорят <em>клиенты</em></h2>
         <div class="reviews-sub" data-i18n="reviews.sub">несколько скринов из личной переписки — так привычнее</div>
-        <div class="reviews-nav">
-          <button type="button" id="rv-prev" aria-label="Предыдущий">←</button>
-          <button type="button" id="rv-next" aria-label="Следующий">→</button>
-        </div>
       </div>
-      <div class="reviews-track" id="reviews-track"></div>
-      <div class="reviews-dots" id="reviews-dots"></div>
+      <div class="reviews-feed" id="reviews-feed"></div>
     </section>
 
     <section class="strip reveal" id="contact">
