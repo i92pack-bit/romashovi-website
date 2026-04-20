@@ -94,8 +94,7 @@
 
   /* hero */
   .case-hero {
-    padding: 60px 0 40px;
-    border-bottom: 1px solid var(--line);
+    padding: 60px 0 30px;
   }
   .case-top-bar {
     display: inline-flex;
@@ -134,9 +133,8 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
-    padding-top: 24px;
-    border-top: 1px solid var(--line);
   }
+  .case-meta:empty { display: none; }
   .case-meta > div {
     display: flex; flex-direction: column; gap: 4px;
   }
@@ -565,7 +563,7 @@
           </span>
           <span class="brand-text">
             <span class="main">ромашовы</span>
-            <em>диджитал</em>
+            <em>в диджитал</em>
           </span>
         </a>
         <a href="/#cases" class="nav-back">
@@ -680,9 +678,7 @@
       <section class="case-hero">
         ${topBar ? `<div class="case-top-bar">${topBar}</div>` : ''}
         <h1 class="case-title">${renderInlineName(m.name)}</h1>
-        <div class="case-meta">
-          ${m.result ? `<div><span class="lbl">результат</span><span class="val hl">${escapeHtml(m.result)}</span></div>` : ''}
-        </div>
+        ${m.result ? `<div class="case-meta"><div><span class="lbl">результат</span><span class="val hl">${escapeHtml(m.result)}</span></div></div>` : ''}
         ${m.cover ? `<div class="case-cover"><img src="${m.cover}" alt="" /></div>` : ''}
       </section>
     `;
