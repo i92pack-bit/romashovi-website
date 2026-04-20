@@ -48,4 +48,4 @@ site/
 
 ## Контакты
 
-Telegram CTA указывает на `https://t.me/romashovi` — поправить при необходимости в самом конце `index.html`.
+Telegram CTA указывает на `https://t.me/sntqnbuy` — поправить при необходимости в самом конце `index.html`.
