@@ -3346,13 +3346,10 @@
     });
   });
 
-  // ===== reviews carousel =====
-  (async function reviewsCarousel() {
-    const track = document.getElementById('reviews-track');
-    const dotsEl = document.getElementById('reviews-dots');
-    const prev = document.getElementById('rv-prev');
-    const next = document.getElementById('rv-next');
-    if (!track || !prev || !next) return;
+  // ===== reviews live feed =====
+  (async function reviewsFeed() {
+    const feed = document.getElementById('reviews-feed');
+    if (!feed) return;
 
     const EXTS = ['.jpg', '.jpeg', '.png', '.webp'];
     const MAX = 20;
@@ -3375,51 +3372,43 @@
     }
 
     if (!found.length) {
-      const emptyLang = (localStorage.getItem('lang') === 'en') ? 'reviews will appear soon' : 'отзывы скоро появятся';
-      track.innerHTML = `<div class="rv-empty">${emptyLang}</div>`;
-      prev.disabled = true;
-      next.disabled = true;
+      const empty = (localStorage.getItem('lang') === 'en') ? 'reviews will appear soon' : 'отзывы скоро появятся';
+      feed.innerHTML = `<div class="rv-empty">${empty}</div>`;
       return;
     }
 
-    // render cards
-    found.forEach((src, i) => {
-      const card = document.createElement('div');
-      card.className = 'rv-card';
-      card.innerHTML = `<img src="${src}" alt="Отзыв ${i + 1}" loading="lazy" />`;
-      card.addEventListener('click', () => lbOpen(found, i));
-      track.appendChild(card);
+    const lang = document.documentElement.lang || localStorage.getItem('lang') || 'ru';
+    const tsStrings = lang === 'en'
+      ? ['just now', '2 min ago', '14 min ago', 'today', 'today', 'yesterday', 'last week', 'this week', 'recently', 'a few days ago']
+      : ['только что', '2 мин назад', '14 мин назад', 'сегодня', 'сегодня', 'вчера', 'на прошлой неделе', 'на этой неделе', 'недавно', 'несколько дней назад'];
+
+    const msgs = found.map((src, i) => {
+      const msg = document.createElement('div');
+      msg.className = 'rv-msg' + (i % 2 ? ' right' : '');
+      const ts = tsStrings[i % tsStrings.length];
+      msg.innerHTML = `
+        <div class="rv-ts"><span class="dot"></span> ${ts}</div>
+        <div class="rv-bubble"><img src="${src}" alt="Отзыв ${i + 1}" loading="lazy" /></div>
+      `;
+      msg.querySelector('.rv-bubble').addEventListener('click', () => lbOpen(found, i));
+      feed.appendChild(msg);
+      return msg;
     });
 
-    // dots
-    found.forEach((_, i) => {
-      const d = document.createElement('span');
-      d.className = 'rv-dot' + (i === 0 ? ' active' : '');
-      dotsEl.appendChild(d);
-    });
-
-    const getStep = () => {
-      const card = track.querySelector('.rv-card');
-      if (!card) return 316;
-      return card.getBoundingClientRect().width + 16;
-    };
-
-    prev.addEventListener('click', () => track.scrollBy({ left: -getStep(), behavior: 'smooth' }));
-    next.addEventListener('click', () => track.scrollBy({ left: getStep(), behavior: 'smooth' }));
-
-    // sync dots + arrows with scroll position
-    let syncT = null;
-    const sync = () => {
-      clearTimeout(syncT);
-      syncT = setTimeout(() => {
-        const idx = Math.round(track.scrollLeft / getStep());
-        dotsEl.querySelectorAll('.rv-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
-        prev.disabled = track.scrollLeft <= 4;
-        next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
-      }, 80);
-    };
-    track.addEventListener('scroll', sync, { passive: true });
-    sync();
+    // slide-in on scroll via IntersectionObserver
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('in');
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+      msgs.forEach(m => io.observe(m));
+    } else {
+      msgs.forEach(m => m.classList.add('in'));
+    }
   })();
 
   // tabs with aria + keyboard (←/→/Home/End)
