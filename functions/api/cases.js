@@ -45,14 +45,23 @@ function formatCase(page) {
   const p = page.properties || {};
   return {
     id: page.id,
-    slug: plainText(p.slug),
-    name: titleText(p.Name) || 'Без названия',
-    description: plainText(p.description),
-    platform: multiSelect(p.platform),
-    result: plainText(p.result),
-    period: plainText(p.period),
+    slug: plainText(pick(p, ['slug', 'Slug'])),
+    name: titleText(pick(p, ['Name', 'name', 'Title', 'title'])) || 'Без названия',
+    description: plainText(pick(p, ['description', 'Description', 'описание', 'Описание', 'desc', 'Desc'])),
+    platform: multiSelect(pick(p, ['platform', 'Platform', 'платформа', 'Площадки'])),
+    result: plainText(pick(p, ['result', 'Result', 'результат', 'Результат'])),
+    period: plainText(pick(p, ['period', 'Period', 'период', 'Период'])),
     cover: coverUrl(page),
   };
+}
+
+function pick(obj, keys) {
+  for (const k of keys) if (obj[k] != null) return obj[k];
+  // case-insensitive fallback
+  const lower = {};
+  for (const k in obj) lower[k.toLowerCase()] = obj[k];
+  for (const k of keys) if (lower[k.toLowerCase()] != null) return lower[k.toLowerCase()];
+  return undefined;
 }
 
 function titleText(prop) {
