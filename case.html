@@ -190,7 +190,9 @@
     letter-spacing: -0.025em;
     line-height: 1.15;
     font-variation-settings: 'SOFT' 60, 'opsz' 144;
+    text-transform: lowercase;
   }
+  .case-title { text-transform: lowercase; }
   .case-body h1, .case-body .nt-heading_1 { font-size: clamp(28px, 3.6vw, 40px); margin-top: 1.8em; }
   .case-body h2, .case-body .nt-heading_2 { font-size: clamp(24px, 3vw, 32px); margin-top: 1.6em; }
   .case-body h3, .case-body .nt-heading_3 { font-size: clamp(20px, 2.4vw, 24px); margin-top: 1.4em; }
@@ -555,17 +557,17 @@
       return `<span class="case-chip ${key}">${escapeHtml(p)}</span>`;
     }).join('');
 
+    const topBar = [
+      platforms ? `<span class="case-platforms-top">${platforms}</span>` : '',
+      m.period ? `<span class="case-period-top">${escapeHtml(m.period)}</span>` : '',
+    ].filter(Boolean).join('<span class="sep">·</span>');
+
     const heroHtml = `
       <section class="case-hero">
-        <div class="case-crumb">
-          <span>Кейс</span>
-          ${m.period ? `<span class="sep">/</span><span>${escapeHtml(m.period)}</span>` : ''}
-        </div>
+        ${topBar ? `<div class="case-top-bar">${topBar}</div>` : ''}
         <h1 class="case-title">${renderInlineName(m.name)}</h1>
         <div class="case-meta">
           ${m.result ? `<div><span class="lbl">результат</span><span class="val hl">${escapeHtml(m.result)}</span></div>` : ''}
-          ${m.period ? `<div><span class="lbl">период</span><span class="val">${escapeHtml(m.period)}</span></div>` : ''}
-          ${platforms ? `<div><span class="lbl">площадки</span><span class="val case-platforms">${platforms}</span></div>` : ''}
         </div>
         ${m.cover ? `<div class="case-cover"><img src="${m.cover}" alt="" /></div>` : ''}
       </section>
