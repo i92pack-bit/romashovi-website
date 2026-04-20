@@ -1,5 +1,3 @@
-# pretty URLs for cases: /cases/slug → /case.html?slug=slug
-/cases/:slug   /case.html?slug=:slug    200
-
 # /cases without slug → back to landing list section
+# (individual /cases/<slug> served by Pages Function at functions/cases/[slug].js)
 /cases         /#cases                  302
