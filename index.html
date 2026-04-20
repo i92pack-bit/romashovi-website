@@ -2123,7 +2123,7 @@
           <div class="label" data-i18n="stat.duration">года медианная длительность работы с клиентом — играем в долгую, а не на месяц</div>
         </div>
         <div class="stat" id="budget-stat">
-          <div class="num"><span class="tilde" aria-hidden="true"><svg viewBox="0 0 32 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 9 C 7 2, 13 2, 16 7 C 19 12, 25 12, 29 5" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" fill="none"/></svg></span><span id="budget-num">0</span><span class="unit" data-i18n="stat.mln">млн ₽</span></div>
+          <div class="num"><span class="tilde" aria-hidden="true"><svg viewBox="0 0 32 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 9 C 7 2, 13 2, 16 7 C 19 12, 25 12, 29 5" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" fill="none"/></svg></span><span id="budget-pre" data-i18n="stat.pre"></span><span id="budget-num">0</span><span class="unit" data-i18n="stat.mln">млн ₽</span></div>
           <div class="label" data-i18n-html="stat.budget"><b>реализованного бюджета</b> — за годы работы с клиентами в кабинетах</div>
         </div>
       </div>
@@ -2481,6 +2481,7 @@
       'stat.duration': 'года медианная длительность работы с клиентом — играем в долгую, а не на месяц',
       'stat.budget': '<b>реализованного бюджета</b> — за годы работы с клиентами в кабинетах',
       'stat.mln': 'млн ₽',
+      'stat.pre': '',
       'marq.vk': 'VK Реклама <span class="s"></span>',
       'marq.ya': 'Яндекс <em>Директ</em> <span class="s"></span>',
       'marq.analytics': 'сквозная <em>аналитика</em> <span class="s"></span>',
@@ -2554,7 +2555,8 @@
       'stat.projects': 'projects done — from local services to federal e-com and SaaS',
       'stat.duration': 'years median engagement with a client — we play the long game',
       'stat.budget': '<b>in ad budget managed</b> — across years of hands-on campaigns',
-      'stat.mln': 'M ₽',
+      'stat.mln': 'M',
+      'stat.pre': '$',
       'marq.vk': 'VK Ads <span class="s"></span>',
       'marq.ya': 'Yandex <em>Direct</em> <span class="s"></span>',
       'marq.analytics': 'end-to-end <em>analytics</em> <span class="s"></span>',
@@ -2629,6 +2631,10 @@
     document.querySelectorAll('.lang-switch button').forEach(b => {
       b.classList.toggle('active', b.dataset.lang === lang);
     });
+    const bn = document.getElementById('budget-num');
+    if (bn && bn.textContent !== '0') {
+      bn.textContent = (lang === 'en' ? 4 : 380);
+    }
   }
   document.querySelectorAll('.lang-switch button').forEach(btn => {
     btn.addEventListener('click', () => applyI18n(btn.dataset.lang));
@@ -3024,14 +3030,15 @@
   // budget count-up when 4th stat enters viewport
   const budgetEl = document.getElementById('budget-stat');
   const budgetNum = document.getElementById('budget-num');
-  const BUDGET_TARGET = 380;
+  const BUDGET_TARGETS = { ru: 380, en: 4 };
+  const getBudgetTarget = () => BUDGET_TARGETS[currentLang] || 380;
   const BUDGET_DURATION = 1800;
   function countUp() {
     const start = performance.now();
     function tick(now) {
       const t = Math.min(1, (now - start) / BUDGET_DURATION);
       const eased = 1 - Math.pow(1 - t, 3);
-      budgetNum.textContent = Math.round(eased * BUDGET_TARGET);
+      budgetNum.textContent = Math.round(eased * getBudgetTarget());
       if (t < 1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
@@ -3044,7 +3051,7 @@
     }, { threshold: 0.4 });
     bio.observe(budgetEl);
   } else if (budgetNum) {
-    budgetNum.textContent = BUDGET_TARGET;
+    budgetNum.textContent = getBudgetTarget();
   }
 
   // load cases list from Notion and replace the static placeholder rows
