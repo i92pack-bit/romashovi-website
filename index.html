@@ -242,7 +242,7 @@
     align-items: center;
   }
   .hello {
-    display: inline-flex; align-items: baseline;
+    display: flex; align-items: baseline;
     font-family: 'Fraunces', serif;
     font-size: clamp(58px, 9vw, 128px);
     font-weight: 400;
@@ -2123,7 +2123,7 @@
           <div class="label" data-i18n="stat.duration">года медианная длительность работы с клиентом — играем в долгую, а не на месяц</div>
         </div>
         <div class="stat" id="budget-stat">
-          <div class="num"><span class="tilde" aria-hidden="true"><svg viewBox="0 0 32 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 9 C 7 2, 13 2, 16 7 C 19 12, 25 12, 29 5" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" fill="none"/></svg></span><span id="budget-num">0</span><span class="unit">млн ₽</span></div>
+          <div class="num"><span class="tilde" aria-hidden="true"><svg viewBox="0 0 32 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 9 C 7 2, 13 2, 16 7 C 19 12, 25 12, 29 5" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" fill="none"/></svg></span><span id="budget-num">0</span><span class="unit" data-i18n="stat.mln">млн ₽</span></div>
           <div class="label" data-i18n-html="stat.budget"><b>реализованного бюджета</b> — за годы работы с клиентами в кабинетах</div>
         </div>
       </div>
@@ -2131,18 +2131,18 @@
 
     <div class="marquee">
       <div class="marquee-track">
-        <span class="marquee-item">VK Реклама <span class="s"></span></span>
-        <span class="marquee-item">Яндекс <em>Директ</em> <span class="s"></span></span>
+        <span class="marquee-item" data-i18n-html="marq.vk">VK Реклама <span class="s"></span></span>
+        <span class="marquee-item" data-i18n-html="marq.ya">Яндекс <em>Директ</em> <span class="s"></span></span>
         <span class="marquee-item">Telegram Ads <span class="s"></span></span>
         <span class="marquee-item">Google <em>Ads</em> <span class="s"></span></span>
-        <span class="marquee-item">сквозная <em>аналитика</em> <span class="s"></span></span>
-        <span class="marquee-item">лендинги <span class="s"></span></span>
-        <span class="marquee-item">VK Реклама <span class="s"></span></span>
-        <span class="marquee-item">Яндекс <em>Директ</em> <span class="s"></span></span>
+        <span class="marquee-item" data-i18n-html="marq.analytics">сквозная <em>аналитика</em> <span class="s"></span></span>
+        <span class="marquee-item" data-i18n-html="marq.landings">лендинги <span class="s"></span></span>
+        <span class="marquee-item" data-i18n-html="marq.vk">VK Реклама <span class="s"></span></span>
+        <span class="marquee-item" data-i18n-html="marq.ya">Яндекс <em>Директ</em> <span class="s"></span></span>
         <span class="marquee-item">Telegram Ads <span class="s"></span></span>
         <span class="marquee-item">Google <em>Ads</em> <span class="s"></span></span>
-        <span class="marquee-item">сквозная <em>аналитика</em> <span class="s"></span></span>
-        <span class="marquee-item">лендинги <span class="s"></span></span>
+        <span class="marquee-item" data-i18n-html="marq.analytics">сквозная <em>аналитика</em> <span class="s"></span></span>
+        <span class="marquee-item" data-i18n-html="marq.landings">лендинги <span class="s"></span></span>
       </div>
     </div>
 
@@ -2385,8 +2385,8 @@
       <div class="shots-tabs reveal" role="tablist" aria-label="Площадки рекламы">
         <button class="stab vk active" data-tab="vk" id="tab-vk" role="tab" aria-selected="true" aria-controls="pane-vk" tabindex="0"><span class="d"></span> <span data-i18n="tab.vk">VK Реклама</span> <span class="count">03</span></button>
         <button class="stab ya" data-tab="ya" id="tab-ya" role="tab" aria-selected="false" aria-controls="pane-ya" tabindex="-1"><span class="d"></span> <span data-i18n="tab.ya">Яндекс Директ</span> <span class="count">03</span></button>
-        <button class="stab tg" data-tab="tg" id="tab-tg" role="tab" aria-selected="false" aria-controls="pane-tg" tabindex="-1"><span class="d"></span> Telegram Ads <span class="count">02</span></button>
-        <button class="stab g" data-tab="g" id="tab-g" role="tab" aria-selected="false" aria-controls="pane-g" tabindex="-1"><span class="d"></span> Google Ads <span class="count">02</span></button>
+        <button class="stab tg" data-tab="tg" id="tab-tg" role="tab" aria-selected="false" aria-controls="pane-tg" tabindex="-1"><span class="d"></span> <span data-i18n="tab.tg">Telegram Ads</span> <span class="count">02</span></button>
+        <button class="stab g" data-tab="g" id="tab-g" role="tab" aria-selected="false" aria-controls="pane-g" tabindex="-1"><span class="d"></span> <span data-i18n="tab.g">Google Ads</span> <span class="count">02</span></button>
       </div>
 
       <div class="shots-pane active" data-pane="vk" id="pane-vk" role="tabpanel" aria-labelledby="tab-vk" tabindex="0">
