@@ -126,9 +126,10 @@
     white-space: nowrap;
   }
 
-  /* main content */
-  main {
-    padding: 160px 0 40px;
+  /* main content — main.wrap beats .wrap specificity */
+  main.wrap {
+    padding-top: 110px;
+    padding-bottom: 40px;
   }
   .brief-intro {
     margin-bottom: 52px;
@@ -398,7 +399,7 @@
 
   @media (max-width: 640px) {
     .wrap, .wrap-wide { padding: 0 18px; }
-    main { padding: 100px 0 30px; }
+    main.wrap { padding-top: 72px; padding-bottom: 30px; }
     .step h2 { font-size: 26px; }
     .step-hint { font-size: 13px; margin-bottom: 22px; }
     .options.wide { grid-template-columns: 1fr; }
