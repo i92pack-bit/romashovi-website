@@ -125,8 +125,9 @@
     letter-spacing: -0.035em;
     line-height: 1.02;
     font-variation-settings: 'SOFT' 70, 'opsz' 144;
-    margin-bottom: 28px;
+    margin-bottom: 20px;
   }
+  .case-title:last-child { margin-bottom: 0; }
   .case-title em { font-style: italic; color: var(--accent); }
 
   .case-meta {
@@ -187,7 +188,7 @@
 
   /* body — Notion rendered content */
   .case-body {
-    padding: 60px 0 40px;
+    padding: 30px 0 40px;
     font-size: 17px;
     line-height: 1.7;
     color: var(--ink-soft);
@@ -541,8 +542,8 @@
 
   @media (max-width: 640px) {
     .wrap, .wrap-wide { padding: 0 18px; }
-    .case-hero { padding: 40px 0 30px; }
-    .case-body { padding: 40px 0 30px; font-size: 16px; }
+    .case-hero { padding: 32px 0 12px; }
+    .case-body { padding: 20px 0 30px; font-size: 16px; }
     .case-body p { font-size: 16px; }
     .case-meta { grid-template-columns: 1fr; gap: 16px; }
     .strip { padding: 36px 22px; border-radius: 22px; margin: 40px 0 30px; }
