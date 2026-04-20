@@ -568,7 +568,10 @@
   </div>
 
 <script>
-  document.getElementById('year').textContent = new Date().getFullYear();
+  const cpEl = document.getElementById('cp');
+  if (cpEl) cpEl.textContent = '© ромашовы · ' + new Date().getFullYear();
+  const yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   // читаем slug из ?slug=xxx или из pathname /cases/xxx
   const _url = new URL(location.href);
