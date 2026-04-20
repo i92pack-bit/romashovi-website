@@ -1179,6 +1179,7 @@
   .case-chip.ya { background: #ffe4df; color: #d52b0e; }
   .case-chip.tg { background: #def1fc; color: #1e8cbf; }
   .case-chip.g  { background: var(--butter-soft); color: #6e5508; }
+  .case-chip.meta { background: #e7efff; color: #1877f2; }
   .case-chip.result {
     background: var(--ink); color: var(--butter);
     font-weight: 500;
@@ -2206,10 +2207,11 @@
       const iconClasses = ['a', 'b', 'c', 'd', 'e', 'a'];
       const pkey = (p) => {
         const n = (p || '').toLowerCase();
+        if (n.includes('meta') || n.includes('facebook') || n.includes('instagram')) return 'meta';
         if (n.includes('vk') || n.includes('вк')) return 'vk';
-        if (n.includes('ya') || n.includes('я') || n.includes('директ')) return 'ya';
+        if (n.includes('ya') || n.includes('яндекс') || n.includes('директ')) return 'ya';
         if (n.includes('tg') || n.includes('tele')) return 'tg';
-        if (n.includes('g') || n.includes('goog')) return 'g';
+        if (n.includes('goog')) return 'g';
         return '';
       };
       const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -2224,8 +2226,8 @@
           <a href="/cases/${esc(c.slug)}" class="case-row">
             <div class="case-ic ${ic}"><span>${icon}</span></div>
             <div class="case-main">
-              <div class="case-title">${esc(c.name)}${c.client ? ` / <em>${esc(c.client)}</em>` : ''}</div>
-              ${c.result || c.period ? `<div class="case-desc">${c.period ? esc(c.period) + ' · ' : ''}${c.result ? esc(c.result) : ''}</div>` : ''}
+              <div class="case-title">${esc(c.name)}</div>
+              ${c.description ? `<div class="case-desc">${esc(c.description)}</div>` : ''}
             </div>
             <div class="case-meta">${platforms}${result}</div>
             <div class="case-arrow">→</div>
