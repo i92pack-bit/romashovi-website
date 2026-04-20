@@ -112,14 +112,24 @@ function simplifyRich(arr) {
 
 function formatMeta(page) {
   const p = page.properties || {};
+  const pick = (keys) => {
+    for (const k of keys) if (p[k] != null) return p[k];
+    const low = {};
+    for (const k in p) low[k.toLowerCase()] = p[k];
+    for (const k of keys) if (low[k.toLowerCase()] != null) return low[k.toLowerCase()];
+    return null;
+  };
+  const rtxt = (prop) => (prop && prop.rich_text) ? prop.rich_text.map(t => t.plain_text).join('') : '';
+  const ttxt = (prop) => (prop && prop.title) ? prop.title.map(t => t.plain_text).join('') : '';
+  const ms = (prop) => (prop && prop.multi_select) ? prop.multi_select.map(o => o.name) : [];
   return {
     id: page.id,
-    slug: (p.slug && p.slug.rich_text) ? p.slug.rich_text.map(t => t.plain_text).join('') : '',
-    name: (p.Name && p.Name.title) ? p.Name.title.map(t => t.plain_text).join('') : 'Без названия',
-    description: (p.description && p.description.rich_text) ? p.description.rich_text.map(t => t.plain_text).join('') : '',
-    platform: (p.platform && p.platform.multi_select) ? p.platform.multi_select.map(o => o.name) : [],
-    result: (p.result && p.result.rich_text) ? p.result.rich_text.map(t => t.plain_text).join('') : '',
-    period: (p.period && p.period.rich_text) ? p.period.rich_text.map(t => t.plain_text).join('') : '',
+    slug: rtxt(pick(['slug', 'Slug'])),
+    name: ttxt(pick(['Name', 'name', 'Title', 'title'])) || 'Без названия',
+    description: rtxt(pick(['description', 'Description', 'описание', 'Описание', 'desc', 'Desc'])),
+    platform: ms(pick(['platform', 'Platform', 'платформа', 'Площадки'])),
+    result: rtxt(pick(['result', 'Result', 'результат', 'Результат'])),
+    period: rtxt(pick(['period', 'Period', 'период', 'Период'])),
     cover: page.cover ? ((page.cover.external && page.cover.external.url) || (page.cover.file && page.cover.file.url) || null) : null,
     last_edited: page.last_edited_time,
   };
