@@ -3344,6 +3344,82 @@
     });
   });
 
+  // ===== reviews carousel =====
+  (async function reviewsCarousel() {
+    const track = document.getElementById('reviews-track');
+    const dotsEl = document.getElementById('reviews-dots');
+    const prev = document.getElementById('rv-prev');
+    const next = document.getElementById('rv-next');
+    if (!track || !prev || !next) return;
+
+    const EXTS = ['.jpg', '.jpeg', '.png', '.webp'];
+    const MAX = 20;
+    const tryLoad = src => new Promise(r => {
+      const im = new Image();
+      im.onload = () => r(true);
+      im.onerror = () => r(false);
+      im.src = src;
+    });
+
+    const found = [];
+    for (let i = 1; i <= MAX; i++) {
+      let match = null;
+      for (const ext of EXTS) {
+        const src = `reviews/${i}${ext}`;
+        if (await tryLoad(src)) { match = src; break; }
+      }
+      if (!match) break;
+      found.push(match);
+    }
+
+    if (!found.length) {
+      const emptyLang = (localStorage.getItem('lang') === 'en') ? 'reviews will appear soon' : 'отзывы скоро появятся';
+      track.innerHTML = `<div class="rv-empty">${emptyLang}</div>`;
+      prev.disabled = true;
+      next.disabled = true;
+      return;
+    }
+
+    // render cards
+    found.forEach((src, i) => {
+      const card = document.createElement('div');
+      card.className = 'rv-card';
+      card.innerHTML = `<img src="${src}" alt="Отзыв ${i + 1}" loading="lazy" />`;
+      card.addEventListener('click', () => lbOpen(found, i));
+      track.appendChild(card);
+    });
+
+    // dots
+    found.forEach((_, i) => {
+      const d = document.createElement('span');
+      d.className = 'rv-dot' + (i === 0 ? ' active' : '');
+      dotsEl.appendChild(d);
+    });
+
+    const getStep = () => {
+      const card = track.querySelector('.rv-card');
+      if (!card) return 316;
+      return card.getBoundingClientRect().width + 16;
+    };
+
+    prev.addEventListener('click', () => track.scrollBy({ left: -getStep(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: getStep(), behavior: 'smooth' }));
+
+    // sync dots + arrows with scroll position
+    let syncT = null;
+    const sync = () => {
+      clearTimeout(syncT);
+      syncT = setTimeout(() => {
+        const idx = Math.round(track.scrollLeft / getStep());
+        dotsEl.querySelectorAll('.rv-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+        prev.disabled = track.scrollLeft <= 4;
+        next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+      }, 80);
+    };
+    track.addEventListener('scroll', sync, { passive: true });
+    sync();
+  })();
+
   // tabs with aria + keyboard (←/→/Home/End)
   const tabs = Array.from(document.querySelectorAll('.stab'));
   const panes = Array.from(document.querySelectorAll('.shots-pane'));
