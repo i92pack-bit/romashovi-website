@@ -1847,7 +1847,7 @@
   }
   @media (max-width: 980px) {
     .ai-grid { grid-template-columns: 1fr; gap: 40px; }
-    .ai-viz { min-height: 420px; }
+    .ai-viz { min-height: 560px; }
     .cases-head { grid-template-columns: 1fr; gap: 16px; }
     .cases-count { padding-bottom: 0; }
     .process-head { grid-template-columns: 1fr; gap: 16px; }
@@ -1945,13 +1945,19 @@
     .ai-lead { font-size: 15px; }
     .ai-feats { gap: 10px; }
     .ai-feat { font-size: 13px; }
-    .ai-viz { padding: 16px 18px; min-height: 440px; border-radius: 12px; }
-    .ai-viz .viz-head { font-size: 9.5px; }
+    .ai-viz { padding: 16px 18px; min-height: 600px; border-radius: 12px; }
+    .ai-viz .viz-head { font-size: 9.5px; flex-wrap: wrap; gap: 8px; }
+    .model-pill { font-size: 9.5px; padding: 2px 8px; }
+    .model-pill .model-name { min-width: 64px; font-size: 9.5px; }
     .ai-line { font-size: 11px; }
     .ai-line .ts { font-size: 10px; }
     .viz-metrics { grid-template-columns: repeat(2, 1fr); }
     .viz-metric .lbl { font-size: 8.5px; }
     .viz-metric .val { font-size: 13px; }
+    .viz-spark svg { height: 28px; }
+    .viz-spark .spark-value { font-size: 11px; }
+    .viz-prompt { font-size: 10.5px; min-height: 50px; }
+    .pp-tag { font-size: 9px; }
     .task { grid-template-columns: 1fr 50px 26px; font-size: 10px; }
     .task-pct { font-size: 9px; }
 
@@ -2466,6 +2472,26 @@
       { t: 'info', s: 'генерация заголовков для посадочной · <N> вариантов' },
     ];
     const PLATFORMS = ['VK Ads', 'Директ', 'Telegram Ads', 'Google Ads', 'Meta Ads'];
+    const MODELS = [
+      'gpt-4o', 'gpt-4.1', 'gpt-5', 'gpt-5-mini',
+      'claude-4.6-sonnet', 'claude-4.7-opus', 'claude-3.5-haiku',
+      'gemini-2.5-pro', 'gemini-3-flash',
+      'llama-3.3-70b', 'deepseek-r1', 'qwen-2.5-72b', 'mistral-large',
+    ];
+    const PROMPTS = [
+      { u: 'проанализируй кампанию #42 в VK за 7 дней', a: 'CPC вырос на 23%. предлагаю снизить ставку на lal-5%' },
+      { u: 'собери look-alike 1% от топ-покупателей', a: 'найдено 240k профилей, готов к запуску' },
+      { u: 'сгенерируй 10 заголовков для посадочной', a: '8 жизнеспособных, 2 слабых — убрал. готов к A/B' },
+      { u: 'оцени конкурентов в нише онлайн-школ', a: 'топ-3 захватили 68% трафика, средний CPC 142₽' },
+      { u: 'найди слив в кампании директа', a: 'группа "общие ключи" тратит 38% при CR 0.4% — стопаю' },
+      { u: 'перепиши оффер под холодную аудиторию', a: '5 вариантов: фокус на боль, а не на фичи продукта' },
+      { u: 'рекомендуй стратегию на май', a: 'фокус на Telegram Ads — CPC там в 2.1x ниже VK сейчас' },
+      { u: 'проверь гипотезу: ретаргет после 3 касаний', a: 'подтверждено на выборке 14k · ROAS вырос 1.8x' },
+      { u: 'покажи топ-офферы у конкурентов за квартал', a: 'собрал 47 · основной паттерн: гарантия + скорость' },
+      { u: 'дай 3 аудитории для ретаргета в директе', a: 'сегменты: корзина 7d · просмотр 30d · lookalike от них' },
+      { u: 'сделай текст для баннера под e-com', a: 'готово: 6 вариантов · тон: дружелюбный, CTA — прямой' },
+      { u: 'подбери семантику для новой кампании', a: '312 ключей высокой частотности, очистил мусор' },
+    ];
     const TASK_POOL = [
       'парсинг конкурентов',
       'генерация креативов',
@@ -2505,6 +2531,94 @@
     const waitUntilVisible = async () => {
       while (!inView || document.hidden) await sleep(400);
     };
+
+    // --- model rotator ---
+    let currentModel = MODELS[0];
+    function rotateModel() {
+      const el = document.getElementById('model-name');
+      if (!el) return;
+      const next = MODELS[rand(0, MODELS.length - 1)];
+      if (next === currentModel) return;
+      currentModel = next;
+      el.classList.remove('flip');
+      void el.offsetWidth;
+      el.textContent = next;
+      el.classList.add('flip');
+    }
+    function startModelRotator() {
+      const loop = async () => {
+        while (true) {
+          await sleep(2600 + Math.random() * 2400);
+          if (inView && !document.hidden) rotateModel();
+        }
+      };
+      loop();
+    }
+
+    // --- sparkline (tokens/sec) ---
+    const SPARK_MAX = 42;
+    const sparkPoints = [];
+    let sparkCur = 480 + rand(0, 300);
+    function tickSpark() {
+      sparkCur += rand(-70, 80);
+      sparkCur = Math.max(180, Math.min(1280, sparkCur));
+      sparkPoints.push(sparkCur);
+      if (sparkPoints.length > SPARK_MAX) sparkPoints.shift();
+
+      const line = document.getElementById('spark-line');
+      const fillEl = document.getElementById('spark-fill');
+      const valEl = document.getElementById('spark-val');
+      if (!line || !fillEl || !valEl) return;
+
+      const max = Math.max.apply(null, sparkPoints);
+      const min = Math.min.apply(null, sparkPoints);
+      const range = max - min || 1;
+      const W = 120, H = 32, PAD = 2;
+      const pts = sparkPoints.map((v, i) => {
+        const x = (i / (SPARK_MAX - 1)) * W;
+        const y = H - PAD - ((v - min) / range) * (H - PAD * 2);
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      });
+      line.setAttribute('points', pts.join(' '));
+      // area fill под линией
+      const firstX = pts.length ? pts[0].split(',')[0] : 0;
+      const lastX = pts.length ? pts[pts.length - 1].split(',')[0] : 0;
+      fillEl.setAttribute('points', `${firstX},${H} ${pts.join(' ')} ${lastX},${H}`);
+      valEl.textContent = sparkCur.toLocaleString('ru-RU');
+    }
+    function startSpark() {
+      // seed history
+      for (let i = 0; i < SPARK_MAX; i++) tickSpark();
+      setInterval(() => { if (inView && !document.hidden) tickSpark(); }, 700);
+    }
+
+    // --- prompt/response cycle ---
+    async function cyclePrompts() {
+      const root = document.getElementById('viz-prompt');
+      if (!root) return;
+      let idx = rand(0, PROMPTS.length - 1);
+      // initial render without fade-out
+      const renderPair = (p) => {
+        root.innerHTML = `
+          <div class="pp-row user"><span class="pp-tag">user</span><span class="pp-text">${escapeText(p.u)}</span></div>
+          <div class="pp-row assistant"><span class="pp-tag">${escapeText(currentModel)}</span><span class="pp-text">${escapeText(p.a)}</span></div>
+        `;
+      };
+      renderPair(PROMPTS[idx]);
+
+      while (true) {
+        await sleep(3600 + rand(600, 1800));
+        while (!inView || document.hidden) await sleep(400);
+        // fade out
+        [...root.children].forEach(c => c.classList.add('fade-out'));
+        await sleep(300);
+        idx = (idx + 1 + rand(0, 2)) % PROMPTS.length;
+        renderPair(PROMPTS[idx]);
+      }
+    }
+    function escapeText(s) {
+      return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
 
     // --- log stream loop ---
     async function runStream() {
@@ -2638,6 +2752,9 @@
     runStream();
     startMetrics();
     startTasks();
+    startModelRotator();
+    startSpark();
+    cyclePrompts();
   })();
 
   // sticky header — add .scrolled once user scrolls past 8px
