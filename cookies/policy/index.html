@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Политика cookie · Ромашовы-диджитал</title>
-<meta name="description" content="Политика использования cookie-файлов на сайте yul-n-ily.com" />
+<title>Cookie Policy · yul-n-ily.com</title>
+<meta name="description" content="Cookie Policy / Политика cookie — yul-n-ily.com" />
 <meta name="robots" content="noindex, follow" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Cg fill='%23ff5c3e'%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5'/%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5' transform='rotate(72 14 14)'/%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5' transform='rotate(144 14 14)'/%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5' transform='rotate(216 14 14)'/%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5' transform='rotate(288 14 14)'/%3E%3C/g%3E%3Ccircle cx='14' cy='14' r='3.2' fill='%231a1a17'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,6 +47,7 @@
     font-family: 'Fraunces', serif; font-style: italic; font-size: 14px; color: var(--accent);
     font-variation-settings: 'SOFT' 100, 'opsz' 120;
   }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
   .nav-back {
     display: inline-flex; align-items: center; gap: 8px;
     font-size: 14px; color: var(--ink-soft);
@@ -57,6 +58,22 @@
     display: inline-grid; place-items: center;
     width: 22px; height: 22px; border-radius: 50%;
     background: var(--ink); color: var(--bg); font-size: 11px;
+  }
+  .lang-switch {
+    display: inline-flex; gap: 2px;
+    background: var(--surface); border-radius: 999px; padding: 3px;
+  }
+  .lang-switch button {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.04em;
+    padding: 5px 10px; border-radius: 999px;
+    border: none; background: none; cursor: pointer;
+    color: var(--muted); transition: all .2s ease;
+  }
+  .lang-switch button:hover { color: var(--ink); }
+  .lang-switch button.active {
+    background: var(--ink); color: var(--bg);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
   }
 
   .legal { padding: 60px 0 40px; }
@@ -176,6 +193,9 @@
   }
   .cookie-toast .ct-close:hover { background: rgba(255,255,255,0.18); }
 
+  [data-lang-content] { display: none; }
+  [data-lang-content].active { display: block; }
+
   @media (max-width: 640px) {
     .wrap, .wrap-wide { padding: 0 18px; }
     .cookie-toast { right: 12px; left: 12px; bottom: 12px; max-width: none; }
@@ -196,128 +216,231 @@
             </svg>
           </span>
           <span class="brand-text">
-            <span class="main">ромашовы</span>
-            <em>в диджитал</em>
+            <span class="main" data-i18n="brand">ромашовы</span>
+            <em data-i18n="brand-sub">в диджитал</em>
           </span>
         </a>
-        <a href="/" class="nav-back">
-          <span class="ar">←</span>
-          <span>на главную</span>
-        </a>
+        <div class="nav-right">
+          <div class="lang-switch" role="group" aria-label="Language">
+            <button type="button" data-lang="ru">RU</button>
+            <button type="button" data-lang="en">EN</button>
+          </div>
+          <a href="/" class="nav-back">
+            <span class="ar">&larr;</span>
+            <span data-i18n="back">на главную</span>
+          </a>
+        </div>
       </nav>
     </div>
   </header>
 
   <div class="wrap">
     <section class="legal">
-      <div class="kicker">юридическая информация</div>
-      <h1>Политика <em>cookie</em></h1>
-      <div class="date">последняя редакция: 20 апреля 2026 г.</div>
 
-      <p>Настоящая Политика описывает, как сайт <strong>yul-n-ily.com</strong> использует файлы cookie и аналогичные технологии. Оператором Сайта является самозанятая <strong>Ромашова Юлия Юрьевна</strong> (ИНН: 701713904507).</p>
+      <!-- RU -->
+      <div data-lang-content="ru">
+        <div class="kicker">юридическая информация</div>
+        <h1>Политика <em>cookie</em></h1>
+        <div class="date">последняя редакция: 23 апреля 2026 г.</div>
 
-      <h2>1. Что такое cookie</h2>
-      <p>Cookie — это небольшие текстовые файлы, которые сайт размещает на устройстве пользователя (компьютере, телефоне, планшете). Они используются для того, чтобы Сайт мог запоминать информацию о посетителе и его действиях, что улучшает удобство использования.</p>
+        <p>Настоящая Политика описывает, как сайт <strong>yul-n-ily.com</strong> использует файлы cookie и аналогичные технологии. Оператором Сайта является самозанятая <strong>Ромашова Юлия Юрьевна</strong> (ИНН: 701713904507).</p>
 
-      <h2>2. Зачем мы используем cookie</h2>
-      <p>Оператор использует cookie в следующих целях:</p>
-      <ul>
-        <li>Обеспечение корректной работы Сайта и его отдельных функций</li>
-        <li>Сохранение настроек и предпочтений посетителя (например, скрытие уведомления о cookie)</li>
-        <li>Сбор обезличенной статистики посещаемости для улучшения Сайта</li>
-        <li>Обеспечение безопасности и защиты от злоупотреблений</li>
-      </ul>
+        <h2>1. Что такое cookie</h2>
+        <p>Cookie — это небольшие текстовые файлы, которые сайт размещает на устройстве пользователя (компьютере, телефоне, планшете). Они используются для того, чтобы Сайт мог запоминать информацию о посетителе и его действиях, что улучшает удобство использования.</p>
 
-      <h2>3. Какие cookie мы используем</h2>
-      <p>На Сайте используются следующие категории cookie-файлов:</p>
+        <h2>2. Зачем мы используем cookie</h2>
+        <p>Оператор использует cookie в следующих целях:</p>
+        <ul>
+          <li>Обеспечение корректной работы Сайта и его отдельных функций</li>
+          <li>Сохранение настроек и предпочтений посетителя (например, скрытие уведомления о cookie)</li>
+          <li>Сбор обезличенной статистики посещаемости для улучшения Сайта</li>
+          <li>Обеспечение безопасности и защиты от злоупотреблений</li>
+        </ul>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Категория</th>
-            <th>Назначение</th>
-            <th>Срок</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Технические (необходимые)</strong></td>
-            <td>Обеспечение базовой работы Сайта, маршрутизация, безопасность</td>
-            <td>Сессия</td>
-          </tr>
-          <tr>
-            <td><strong>Функциональные</strong></td>
-            <td>Сохранение согласия с использованием cookie, пользовательские настройки</td>
-            <td>До 1 года</td>
-          </tr>
-          <tr>
-            <td><strong>Аналитические</strong></td>
-            <td>Обезличенная статистика посещаемости (агрегированные данные без идентификации личности)</td>
-            <td>До 1 года</td>
-          </tr>
-        </tbody>
-      </table>
+        <h2>3. Какие cookie мы используем</h2>
+        <p>На Сайте используются следующие категории cookie-файлов:</p>
+        <table>
+          <thead>
+            <tr><th>Категория</th><th>Назначение</th><th>Срок</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Технические (необходимые)</strong></td><td>Обеспечение базовой работы Сайта, маршрутизация, безопасность</td><td>Сессия</td></tr>
+            <tr><td><strong>Функциональные</strong></td><td>Сохранение согласия с использованием cookie, пользовательские настройки</td><td>До 1 года</td></tr>
+            <tr><td><strong>Аналитические</strong></td><td>Обезличенная статистика посещаемости (агрегированные данные без идентификации личности)</td><td>До 1 года</td></tr>
+          </tbody>
+        </table>
 
-      <h2>4. Cookie третьих лиц</h2>
-      <p>Сайт может использовать сервисы третьих лиц, которые также устанавливают собственные cookie:</p>
-      <ul>
-        <li><strong>Cloudflare</strong> — хостинг-провайдер, использует cookie для защиты от ботов и DDoS-атак, а также для кеширования контента</li>
-        <li><strong>Google Fonts</strong> — сервис доставки шрифтов (без использования cookie, но загружает ресурсы с серверов Google)</li>
-      </ul>
+        <h2>4. Cookie третьих лиц</h2>
+        <p>Сайт может использовать сервисы третьих лиц, которые также устанавливают собственные cookie:</p>
+        <ul>
+          <li><strong>Cloudflare</strong> — хостинг-провайдер, использует cookie для защиты от ботов и DDoS-атак, а также для кеширования контента</li>
+          <li><strong>Google Fonts</strong> — сервис доставки шрифтов (без использования cookie, но загружает ресурсы с серверов Google)</li>
+        </ul>
 
-      <h2>5. Как управлять cookie</h2>
-      <p>Вы можете управлять cookie через настройки браузера. В большинстве браузеров есть возможность:</p>
-      <ul>
-        <li>Принимать или отклонять все cookie</li>
-        <li>Удалять существующие cookie</li>
-        <li>Блокировать cookie определённых сайтов</li>
-        <li>Получать уведомление каждый раз, когда cookie сохраняется</li>
-      </ul>
-      <p>Обратите внимание: отключение cookie может повлиять на удобство использования Сайта — некоторые функции могут перестать работать корректно.</p>
-      <p>Инструкции для популярных браузеров:</p>
-      <ul>
-        <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener">Google Chrome</a></li>
-        <li><a href="https://support.mozilla.org/ru/kb/udalenie-kukov-i-dannyh-sajtov-v-firefox" target="_blank" rel="noopener">Mozilla Firefox</a></li>
-        <li><a href="https://support.apple.com/ru-ru/guide/safari/sfri11471/mac" target="_blank" rel="noopener">Safari</a></li>
-        <li><a href="https://support.microsoft.com/ru-ru/microsoft-edge" target="_blank" rel="noopener">Microsoft Edge</a></li>
-      </ul>
+        <h2>5. Как управлять cookie</h2>
+        <p>Вы можете управлять cookie через настройки браузера. В большинстве браузеров есть возможность:</p>
+        <ul>
+          <li>Принимать или отклонять все cookie</li>
+          <li>Удалять существующие cookie</li>
+          <li>Блокировать cookie определённых сайтов</li>
+          <li>Получать уведомление каждый раз, когда cookie сохраняется</li>
+        </ul>
+        <p>Обратите внимание: отключение cookie может повлиять на удобство использования Сайта — некоторые функции могут перестать работать корректно.</p>
+        <p>Инструкции для популярных браузеров:</p>
+        <ul>
+          <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener">Google Chrome</a></li>
+          <li><a href="https://support.mozilla.org/ru/kb/udalenie-kukov-i-dannyh-sajtov-v-firefox" target="_blank" rel="noopener">Mozilla Firefox</a></li>
+          <li><a href="https://support.apple.com/ru-ru/guide/safari/sfri11471/mac" target="_blank" rel="noopener">Safari</a></li>
+          <li><a href="https://support.microsoft.com/ru-ru/microsoft-edge" target="_blank" rel="noopener">Microsoft Edge</a></li>
+        </ul>
 
-      <h2>6. Согласие на использование cookie</h2>
-      <p>При первом посещении Сайта в правом нижнем углу отображается уведомление об использовании cookie. Продолжая пользоваться Сайтом без закрытия уведомления или после его закрытия, Посетитель выражает согласие с использованием cookie-файлов в соответствии с настоящей Политикой.</p>
+        <h2>6. Согласие на использование cookie</h2>
+        <p>При первом посещении Сайта в правом нижнем углу отображается уведомление об использовании cookie. Продолжая пользоваться Сайтом без закрытия уведомления или после его закрытия, Посетитель выражает согласие с использованием cookie-файлов в соответствии с настоящей Политикой.</p>
 
-      <h2>7. Изменения Политики</h2>
-      <p>Оператор вправе вносить изменения в настоящую Политику в одностороннем порядке. Актуальная редакция всегда доступна по адресу <a href="/cookies/policy">/cookies/policy</a>.</p>
+        <h2>7. Изменения Политики</h2>
+        <p>Оператор вправе вносить изменения в настоящую Политику в одностороннем порядке. Актуальная редакция всегда доступна по адресу <a href="/cookies/policy">/cookies/policy</a>.</p>
 
-      <h2>8. Связанные документы</h2>
-      <p>См. также <a href="/privacy">Политику конфиденциальности</a>.</p>
+        <h2>8. Связанные документы</h2>
+        <p>См. также <a href="/privacy">Политику конфиденциальности</a>.</p>
 
-      <h2>9. Контакты</h2>
-      <p>По вопросам, связанным с использованием cookie, можно обратиться:</p>
-      <ul>
-        <li>Email: <a href="mailto:jromashova@icloud.com">jromashova@icloud.com</a></li>
-        <li>Телефон: +7 906 199 55 50</li>
-        <li>Самозанятая Ромашова Юлия Юрьевна, ИНН: 701713904507</li>
-      </ul>
+        <h2>9. Контакты</h2>
+        <p>По вопросам, связанным с использованием cookie, можно обратиться:</p>
+        <ul>
+          <li>Email: <a href="mailto:jromashova@icloud.com">jromashova@icloud.com</a></li>
+          <li>Телефон: +7 906 199 55 50</li>
+          <li>Самозанятая Ромашова Юлия Юрьевна, ИНН: 701713904507</li>
+        </ul>
+      </div>
+
+      <!-- EN -->
+      <div data-lang-content="en">
+        <div class="kicker">legal information</div>
+        <h1>Cookie <em>Policy</em></h1>
+        <div class="date">last updated: April 23, 2026</div>
+
+        <p>This Policy describes how the website <strong>yul-n-ily.com</strong> uses cookies and similar technologies. The Website is operated by sole proprietor <strong>Yulia Y. Romashova</strong> (TIN: 701713904507).</p>
+
+        <h2>1. What are cookies</h2>
+        <p>Cookies are small text files that a website places on a user's device (computer, phone, or tablet). They allow the Website to remember information about visitors and their actions, improving the user experience.</p>
+
+        <h2>2. Why we use cookies</h2>
+        <p>The Operator uses cookies for the following purposes:</p>
+        <ul>
+          <li>Ensuring the proper functioning of the Website and its features</li>
+          <li>Saving visitor preferences and settings (e.g., dismissing the cookie notice)</li>
+          <li>Collecting anonymized traffic statistics to improve the Website</li>
+          <li>Ensuring security and protection against abuse</li>
+        </ul>
+
+        <h2>3. Types of cookies we use</h2>
+        <p>The following categories of cookies are used on the Website:</p>
+        <table>
+          <thead>
+            <tr><th>Category</th><th>Purpose</th><th>Duration</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Essential (necessary)</strong></td><td>Basic website functionality, routing, security</td><td>Session</td></tr>
+            <tr><td><strong>Functional</strong></td><td>Storing cookie consent, user preferences</td><td>Up to 1 year</td></tr>
+            <tr><td><strong>Analytics</strong></td><td>Anonymized traffic statistics (aggregated data without personal identification)</td><td>Up to 1 year</td></tr>
+          </tbody>
+        </table>
+
+        <h2>4. Third-party cookies</h2>
+        <p>The Website may use third-party services that also set their own cookies:</p>
+        <ul>
+          <li><strong>Cloudflare</strong> — hosting provider that uses cookies for bot protection, DDoS mitigation, and content caching</li>
+          <li><strong>Google Fonts</strong> — font delivery service (does not use cookies, but loads resources from Google servers)</li>
+        </ul>
+
+        <h2>5. Managing cookies</h2>
+        <p>You can manage cookies through your browser settings. Most browsers allow you to:</p>
+        <ul>
+          <li>Accept or reject all cookies</li>
+          <li>Delete existing cookies</li>
+          <li>Block cookies from specific websites</li>
+          <li>Receive a notification each time a cookie is stored</li>
+        </ul>
+        <p>Please note: disabling cookies may affect the Website's usability — some features may not work properly.</p>
+        <p>Instructions for popular browsers:</p>
+        <ul>
+          <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener">Google Chrome</a></li>
+          <li><a href="https://support.mozilla.org/en-US/kb/clear-cookies-and-site-data-firefox" target="_blank" rel="noopener">Mozilla Firefox</a></li>
+          <li><a href="https://support.apple.com/guide/safari/sfri11471/mac" target="_blank" rel="noopener">Safari</a></li>
+          <li><a href="https://support.microsoft.com/en-us/microsoft-edge" target="_blank" rel="noopener">Microsoft Edge</a></li>
+        </ul>
+
+        <h2>6. Consent to the use of cookies</h2>
+        <p>Upon your first visit, a cookie notice appears in the bottom-right corner of the screen. By continuing to use the Website without dismissing the notice or after closing it, the Visitor consents to the use of cookies in accordance with this Policy.</p>
+
+        <h2>7. Changes to this Policy</h2>
+        <p>The Operator reserves the right to amend this Policy unilaterally. The current version is always available at <a href="/cookies/policy">/cookies/policy</a>.</p>
+
+        <h2>8. Related documents</h2>
+        <p>See also our <a href="/privacy">Privacy Policy</a>.</p>
+
+        <h2>9. Contact</h2>
+        <p>For any questions related to the use of cookies, please contact:</p>
+        <ul>
+          <li>Email: <a href="mailto:jromashova@icloud.com">jromashova@icloud.com</a></li>
+          <li>Phone: +7 906 199 55 50</li>
+          <li>Sole proprietor Yulia Y. Romashova, TIN: 701713904507</li>
+        </ul>
+      </div>
+
     </section>
 
     <footer>
       <div class="foot-bar">
-        <span id="cp">© ромашовы · 2026</span>
-        <span>сделано тёплыми руками</span>
+        <span id="cp"></span>
+        <span data-i18n="foot-made">сделано тёплыми руками</span>
       </div>
-      <div class="foot-legal">
+      <div class="foot-legal" data-lang-content="ru">
         Самозанятая Ромашова Юлия Юрьевна · ИНН: 701713904507 · Email: jromashova@icloud.com · Телефон: +7 906 199 55 50 · <a href="/privacy">Политика конфиденциальности</a> · <a href="/cookies/policy">Политика cookie</a>
+      </div>
+      <div class="foot-legal" data-lang-content="en">
+        Sole proprietor Yulia Y. Romashova · TIN: 701713904507 · Email: jromashova@icloud.com · Phone: +7 906 199 55 50 · <a href="/privacy">Privacy Policy</a> · <a href="/cookies/policy">Cookie Policy</a>
       </div>
     </footer>
   </div>
 
   <div class="cookie-toast" id="cookie-toast" hidden>
-    <div>Мы собираем <a href="/cookies/policy">Cookie</a>, чтобы улучшить работу сайта.</div>
-    <button class="ct-close" id="ct-close" aria-label="Закрыть">×</button>
+    <div data-lang-content="ru" class="active"><a href="/cookies/policy">Cookie</a> помогают улучшить работу сайта.</div>
+    <div data-lang-content="en">We use <a href="/cookies/policy">Cookies</a> to improve your experience.</div>
+    <button class="ct-close" id="ct-close" aria-label="Close">&times;</button>
   </div>
 
 <script>
-  document.getElementById('cp').textContent = '© ромашовы · ' + new Date().getFullYear();
+  const I18N = {
+    ru: { brand: 'ромашовы', 'brand-sub': 'в диджитал', back: 'на главную', 'foot-made': 'сделано тёплыми руками', cp: '© ромашовы в диджитал · ' },
+    en: { brand: 'romashovy', 'brand-sub': 'digital', back: 'back to home', 'foot-made': 'made with warm hands', cp: '© romashovy digital · ' }
+  };
+
+  let currentLang = localStorage.getItem('lang') ||
+    (navigator.language && navigator.language.toLowerCase().startsWith('ru') ? 'ru' : 'en');
+
+  function applyLang(lang) {
+    const dict = I18N[lang] || I18N.ru;
+    document.documentElement.lang = lang;
+    localStorage.setItem('lang', lang);
+    currentLang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const v = dict[el.dataset.i18n];
+      if (v !== undefined) el.textContent = v;
+    });
+    document.querySelectorAll('[data-lang-content]').forEach(el => {
+      el.classList.toggle('active', el.dataset.langContent === lang);
+    });
+    document.querySelectorAll('.lang-switch button').forEach(b => {
+      b.classList.toggle('active', b.dataset.lang === lang);
+    });
+    document.getElementById('cp').textContent = dict.cp + new Date().getFullYear();
+  }
+
+  document.querySelectorAll('.lang-switch button').forEach(btn => {
+    btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+  });
+  applyLang(currentLang);
+
   const KEY = 'cookieAck_v1';
   const toast = document.getElementById('cookie-toast');
   if (!localStorage.getItem(KEY)) toast.hidden = false;
