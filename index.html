@@ -2153,11 +2153,25 @@
     .grid { grid-template-columns: 1fr; }
     .card { padding: 26px; min-height: 0; }
     .card.big, .card.sm, .card.wide, .card.full { grid-column: 1 / -1; min-height: 0; }
-    .case-row { grid-template-columns: 44px 1fr auto; gap: 16px; padding: 18px 4px; }
-    .case-ic { width: 44px; height: 44px; font-size: 18px; }
-    .case-meta { display: none; }
+    .case-row {
+      grid-template-columns: 44px 1fr auto;
+      grid-template-areas:
+        "ic main arrow"
+        "ic meta arrow";
+      gap: 6px 16px;
+      padding: 18px 4px;
+    }
+    .case-ic { width: 44px; height: 44px; font-size: 18px; grid-area: ic; align-self: center; }
+    .case-main { grid-area: main; }
+    .case-meta {
+      grid-area: meta;
+      justify-content: flex-start;
+      max-width: none;
+      margin-top: 6px;
+      gap: 8px;
+    }
+    .case-arrow { width: 36px; height: 36px; font-size: 14px; grid-area: arrow; align-self: center; }
     .case-desc { font-size: 13px; }
-    .case-arrow { width: 36px; height: 36px; font-size: 14px; }
     .card.big h3 { font-size: 30px; }
     .card h3 { font-size: 26px; }
     .gallery { grid-template-columns: 1fr; }
