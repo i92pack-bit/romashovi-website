@@ -3732,6 +3732,7 @@
   function endPointer(e) {
     if (!dragStart) return;
     const wasDrag = moved;
+    const startX = dragStart.cx, startY = dragStart.cy;
     if (zoomed) {
       lbImg.classList.remove('dragging');
       try { lbImg.releasePointerCapture(e.pointerId); } catch (_) {}
@@ -3741,7 +3742,7 @@
     if (!wasDrag) {
       e.stopPropagation();
       if (zoomed) lbResetZoom();
-      else zoomAt(e.clientX, e.clientY);
+      else zoomAt(startX, startY);
     }
   }
   lbImg.addEventListener('pointerup', endPointer);
