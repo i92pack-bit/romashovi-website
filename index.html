@@ -3983,7 +3983,7 @@
       const t = document.createElement('div');
       t.className = 'rv-tile';
       t.innerHTML = `<img src="${src}" alt="${isDup ? '' : 'Отзыв ' + (i + 1)}" loading="lazy" ${isDup ? 'aria-hidden="true"' : ''} />`;
-      t.addEventListener('click', () => lbOpen(found, i));
+      t.addEventListener('click', () => lbOpen(found, [], i));
       return t;
     };
     found.forEach((src, i) => track.appendChild(makeTile(src, i, false)));
