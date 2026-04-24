@@ -1718,11 +1718,18 @@
     cursor: zoom-in;
     transition: transform .25s cubic-bezier(.2,.8,.2,1);
     touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    will-change: transform;
   }
   .lb-img.zoomed {
-    cursor: zoom-out;
-    max-height: none;
-    max-width: none;
+    cursor: grab;
+    touch-action: none;
+  }
+  .lb-img.dragging {
+    cursor: grabbing;
+    transition: none;
   }
   @keyframes lb-img-in {
     from { opacity: 0; transform: scale(0.96); }
@@ -3633,11 +3640,40 @@
   let lbCaps = [];
   let lbCur = 0;
 
-  function lbResetZoom() {
-    lbImg.classList.remove('zoomed');
-    lbImg.style.transform = '';
-    lbImg.style.transformOrigin = '';
+  // zoom & pan state
+  const ZOOM = 2.5;
+  let zoomed = false;
+  let tx = 0, ty = 0;
+
+  function applyTransform() {
+    lbImg.style.transform = zoomed ? `translate(${tx}px, ${ty}px) scale(${ZOOM})` : '';
   }
+  function clampPan() {
+    const w = lbImg.offsetWidth;
+    const h = lbImg.offsetHeight;
+    const maxX = (ZOOM - 1) * w / 2;
+    const maxY = (ZOOM - 1) * h / 2;
+    tx = Math.max(-maxX, Math.min(maxX, tx));
+    ty = Math.max(-maxY, Math.min(maxY, ty));
+  }
+  function lbResetZoom() {
+    zoomed = false;
+    tx = 0; ty = 0;
+    lbImg.classList.remove('zoomed', 'dragging');
+    applyTransform();
+  }
+  function zoomAt(clientX, clientY) {
+    const rect = lbImg.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    tx = ZOOM * (cx - clientX);
+    ty = ZOOM * (cy - clientY);
+    zoomed = true;
+    lbImg.classList.add('zoomed');
+    clampPan();
+    applyTransform();
+  }
+
   function lbShow(i) {
     lbCur = (i + lbSet.length) % lbSet.length;
     lbResetZoom();
@@ -3668,25 +3704,56 @@
   document.getElementById('lb-next').addEventListener('click', () => lbShow(lbCur + 1));
   lb.addEventListener('click', (e) => { if (e.target === lb) lbClose(); });
 
-  // click/tap on image → toggle zoom centered on click point
-  lbImg.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (lbImg.classList.contains('zoomed')) {
-      lbResetZoom();
-    } else {
-      const rect = lbImg.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      lbImg.style.transformOrigin = `${x}% ${y}%`;
-      lbImg.style.transform = 'scale(2.2)';
-      lbImg.classList.add('zoomed');
+  // pointer-based zoom & pan (works for mouse + touch)
+  let dragStart = null;       // { cx, cy, tx, ty }
+  let moved = false;
+
+  lbImg.addEventListener('pointerdown', (e) => {
+    if (e.button !== undefined && e.button !== 0) return;
+    dragStart = { cx: e.clientX, cy: e.clientY, tx, ty };
+    moved = false;
+    if (zoomed) {
+      lbImg.setPointerCapture(e.pointerId);
+      lbImg.classList.add('dragging');
     }
   });
 
-  // swipe on touch (disabled when zoomed or multi-touch)
+  lbImg.addEventListener('pointermove', (e) => {
+    if (!dragStart || !zoomed) return;
+    const dx = e.clientX - dragStart.cx;
+    const dy = e.clientY - dragStart.cy;
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
+    tx = dragStart.tx + dx;
+    ty = dragStart.ty + dy;
+    clampPan();
+    applyTransform();
+  });
+
+  function endPointer(e) {
+    if (!dragStart) return;
+    const wasDrag = moved;
+    if (zoomed) {
+      lbImg.classList.remove('dragging');
+      try { lbImg.releasePointerCapture(e.pointerId); } catch (_) {}
+    }
+    dragStart = null;
+    // treat as click if didn't drag
+    if (!wasDrag) {
+      e.stopPropagation();
+      if (zoomed) lbResetZoom();
+      else zoomAt(e.clientX, e.clientY);
+    }
+  }
+  lbImg.addEventListener('pointerup', endPointer);
+  lbImg.addEventListener('pointercancel', (e) => { dragStart = null; lbImg.classList.remove('dragging'); });
+
+  // prevent the synthetic click from bubbling up to lb (which closes lightbox)
+  lbImg.addEventListener('click', (e) => { e.stopPropagation(); });
+
+  // swipe for nav (disabled when zoomed or multi-touch)
   let touchX = null;
   lb.addEventListener('touchstart', e => {
-    if (e.touches.length > 1 || lbImg.classList.contains('zoomed')) { touchX = null; return; }
+    if (e.touches.length > 1 || zoomed || e.target === lbImg) { touchX = null; return; }
     touchX = e.touches[0].clientX;
   }, { passive: true });
   lb.addEventListener('touchend', e => {
