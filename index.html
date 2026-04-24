@@ -1765,6 +1765,21 @@
   }
   .lb-counter b { color: #fff; font-weight: 500; }
 
+  .lb-caption {
+    position: fixed;
+    bottom: 64px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.9);
+    font-size: 14px;
+    line-height: 1.4;
+    max-width: 80%;
+    text-align: center;
+    padding: 0 20px;
+    pointer-events: none;
+  }
+  .lb-caption:empty { display: none; }
+
   body.lb-open { overflow: hidden; }
 
   @media (max-width: 640px) {
@@ -2821,6 +2836,7 @@
     <div class="lb-stage">
       <img class="lb-img" id="lb-img" src="" alt="Скриншот кампании" />
     </div>
+    <div class="lb-caption" id="lb-caption"></div>
     <div class="lb-counter"><b id="lb-index">1</b> / <span id="lb-total">1</span></div>
   </div>
 
@@ -3498,8 +3514,21 @@
   // probe & populate screenshots dynamically
   const PLATFORMS = ['vk', 'ya', 'tg', 'g', 'mads'];
   const FILE_SEP = { vk: '-', ya: '-', tg: '-', g: '-', mads: '_' };
+  const PLATFORM_LABEL = { vk: 'VK', ya: 'Директ', tg: 'Telegram', g: 'Google', mads: 'Meta' };
   const EXTS = ['.jpg', '.jpeg', '.png', '.webp'];
   const MAX_PROBE = 20;
+
+  // captions per platform/index — add entries as you add screenshots
+  // example: CAPTIONS.vk[1] = 'фитнес-клуб, Омск · CPL 96 ₽'
+  const CAPTIONS = {
+    vk: {},
+    ya: {},
+    tg: {},
+    g: {},
+    mads: {},
+  };
+
+  const escHtml = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
   function tryLoad(src) {
     return new Promise(resolve => {
@@ -3518,6 +3547,23 @@
     return null;
   }
 
+  function buildSG(url, caption, platform) {
+    const plat = PLATFORM_LABEL[platform] || platform;
+    return `
+      <div class="sg" data-platform="${platform}" data-caption="${escHtml(caption)}">
+        <div class="sg-frame"><img src="${url}" alt="${escHtml(caption)}" /></div>
+        <div class="sg-caption">
+          <span class="sg-plat ${platform}">${escHtml(plat)}</span>
+          <span class="sg-txt">${escHtml(caption)}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  let allCount = 0;
+  const allGallery = document.querySelector('.gallery[data-platform="all"]');
+  const allBadge = document.querySelector('.stab[data-tab="all"] .count');
+
   async function populate(platform) {
     const gallery = document.querySelector(`.gallery[data-platform="${platform}"]`);
     const badge = document.querySelector(`.stab[data-tab="${platform}"] .count`);
@@ -3525,12 +3571,14 @@
     for (let i = 1; i <= MAX_PROBE; i++) {
       const url = await findScreen(platform, i);
       if (!url) break;
-      const sg = document.createElement('div');
-      sg.className = 'sg';
-      sg.innerHTML = `<div class="sg-frame"><img src="${url}" alt="" /></div>`;
-      gallery.appendChild(sg);
+      const caption = (CAPTIONS[platform] && CAPTIONS[platform][i]) || '';
+      const html = buildSG(url, caption, platform);
+      gallery.insertAdjacentHTML('beforeend', html);
+      if (allGallery) allGallery.insertAdjacentHTML('beforeend', html);
       count++;
+      allCount++;
       if (badge) badge.textContent = String(count).padStart(2, '0');
+      if (allBadge) allBadge.textContent = String(allCount).padStart(2, '0');
     }
     if (count === 0) {
       gallery.insertAdjacentHTML('beforeend', `
@@ -3543,24 +3591,37 @@
       if (badge) badge.textContent = '00';
     }
   }
-  PLATFORMS.forEach(populate);
+  Promise.all(PLATFORMS.map(populate)).then(() => {
+    if (allGallery && !allGallery.children.length) {
+      allGallery.insertAdjacentHTML('beforeend', `
+        <div class="sg-empty">
+          <div class="sg-empty-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15l5-5 4 4 4-4 5 5"/><circle cx="8" cy="9" r="1.5"/></svg></div>
+          <div class="sg-empty-t">пока нет скринов</div>
+        </div>
+      `);
+    }
+  });
 
   // lightbox for screenshots
   const lb = document.getElementById('lightbox');
   const lbImg = document.getElementById('lb-img');
   const lbIndex = document.getElementById('lb-index');
   const lbTotal = document.getElementById('lb-total');
+  const lbCap = document.getElementById('lb-caption');
   let lbSet = [];
+  let lbCaps = [];
   let lbCur = 0;
 
   function lbShow(i) {
     lbCur = (i + lbSet.length) % lbSet.length;
     lbImg.src = lbSet[lbCur];
     lbIndex.textContent = lbCur + 1;
+    if (lbCap) lbCap.textContent = lbCaps[lbCur] || '';
   }
-  function lbOpen(set, startIdx) {
+  function lbOpen(set, caps, startIdx) {
     if (!set.length) return;
     lbSet = set;
+    lbCaps = caps || [];
     lbTotal.textContent = set.length;
     lbShow(startIdx);
     lb.hidden = false;
@@ -3572,6 +3633,8 @@
     document.body.classList.remove('lb-open');
     lbImg.src = '';
     lbSet = [];
+    lbCaps = [];
+    if (lbCap) lbCap.textContent = '';
   }
   document.getElementById('lb-close').addEventListener('click', lbClose);
   document.getElementById('lb-prev').addEventListener('click', () => lbShow(lbCur - 1));
