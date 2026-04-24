@@ -3220,17 +3220,18 @@
   }
 
   // load cases list from Notion and replace the static placeholder rows
+  // skipped when SSR already injected real cases (data-ssr="1" on .case-list)
   // fails silently if API is not set up yet — static rows stay as a fallback
   (async function loadCases() {
+    const list = document.querySelector('.case-list');
+    if (!list) return;
+    if (list.dataset.ssr === '1') return; // SSR already rendered real cases
     try {
       const res = await fetch('/api/cases');
       if (!res.ok) return;
       const data = await res.json();
       const cases = (data.cases || []).filter(c => c.slug);
       if (!cases.length) return;
-
-      const list = document.querySelector('.case-list');
-      if (!list) return;
 
       const icons = ['✦', '◆', '⟐', '⚘', '❋', '✺'];
       const iconClasses = ['a', 'b', 'c', 'd', 'e', 'a'];
