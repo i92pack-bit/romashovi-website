@@ -1480,6 +1480,7 @@
     letter-spacing: -0.005em;
   }
   .stab .d { width: 7px; height: 7px; border-radius: 50%; }
+  .stab.all .d { background: linear-gradient(135deg, #0077ff 0%, #c1348a 50%, #fc3f1d 100%); }
   .stab.vk .d { background: #0077ff; }
   .stab.ya .d { background: #fc3f1d; }
   .stab.tg .d { background: #2aa9e0; }
@@ -1544,6 +1545,50 @@
     object-fit: cover; display: block;
     position: relative; z-index: 2;
   }
+
+  /* caption below screenshot */
+  .sg-caption {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px 14px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.35;
+    border-top: 1px solid var(--line);
+    background: #fff;
+  }
+  .sg-plat {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink);
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sg-plat::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--ink-soft);
+  }
+  .sg-plat.vk::before { background: #0077ff; }
+  .sg-plat.ya::before { background: #fc3f1d; }
+  .sg-plat.tg::before { background: #2aa9e0; }
+  .sg-plat.g::before  { background: #34a853; }
+  .sg-plat.mads::before { background: #c1348a; }
+  .sg-txt { flex: 1; min-width: 0; }
+  /* per-platform view: hide platform chip (tab already shows it) */
+  .gallery:not([data-platform="all"]) .sg-plat { display: none; }
+  /* hide whole caption row in per-platform view when text is empty */
+  .gallery:not([data-platform="all"]) .sg-caption:not(:has(.sg-txt:not(:empty))) { display: none; }
   .sg-placeholder {
     position: relative; z-index: 1;
     text-align: center;
@@ -2666,14 +2711,19 @@
       </div>
 
       <div class="shots-tabs reveal" role="tablist" aria-label="Площадки рекламы">
-        <button class="stab vk active" data-tab="vk" id="tab-vk" role="tab" aria-selected="true" aria-controls="pane-vk" tabindex="0"><span class="d"></span> <span data-i18n="tab.vk">VK Реклама</span> <span class="count">03</span></button>
+        <button class="stab all active" data-tab="all" id="tab-all" role="tab" aria-selected="true" aria-controls="pane-all" tabindex="0"><span class="d"></span> <span data-i18n="tab.all">все</span> <span class="count">00</span></button>
+        <button class="stab vk" data-tab="vk" id="tab-vk" role="tab" aria-selected="false" aria-controls="pane-vk" tabindex="-1"><span class="d"></span> <span data-i18n="tab.vk">VK Реклама</span> <span class="count">03</span></button>
         <button class="stab ya" data-tab="ya" id="tab-ya" role="tab" aria-selected="false" aria-controls="pane-ya" tabindex="-1"><span class="d"></span> <span data-i18n="tab.ya">Яндекс Директ</span> <span class="count">03</span></button>
         <button class="stab tg" data-tab="tg" id="tab-tg" role="tab" aria-selected="false" aria-controls="pane-tg" tabindex="-1"><span class="d"></span> <span data-i18n="tab.tg">Telegram Ads</span> <span class="count">02</span></button>
         <button class="stab g" data-tab="g" id="tab-g" role="tab" aria-selected="false" aria-controls="pane-g" tabindex="-1"><span class="d"></span> <span data-i18n="tab.g">Google Ads</span> <span class="count">02</span></button>
         <button class="stab mads" data-tab="mads" id="tab-mads" role="tab" aria-selected="false" aria-controls="pane-mads" tabindex="-1"><span class="d"></span> <span data-i18n="tab.mads">Meta Ads</span> <span class="count">00</span></button>
       </div>
 
-      <div class="shots-pane active" data-pane="vk" id="pane-vk" role="tabpanel" aria-labelledby="tab-vk" tabindex="0">
+      <div class="shots-pane active" data-pane="all" id="pane-all" role="tabpanel" aria-labelledby="tab-all" tabindex="0">
+        <div class="gallery" data-platform="all"></div>
+      </div>
+
+      <div class="shots-pane" data-pane="vk" id="pane-vk" role="tabpanel" aria-labelledby="tab-vk" tabindex="0" hidden>
         <div class="gallery" data-platform="vk"></div>
       </div>
 
