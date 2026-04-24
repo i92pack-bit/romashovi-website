@@ -1151,6 +1151,12 @@
   @media (prefers-reduced-motion: reduce) {
     .case-skeleton { animation: none; background: rgba(0,0,0,0.03); }
   }
+  .case-empty {
+    padding: 40px 4px;
+    color: var(--ink-soft);
+    font-size: 14px;
+    text-align: center;
+  }
   .case-row {
     display: grid;
     grid-template-columns: 56px 1fr auto auto;
@@ -3169,33 +3175,31 @@
     budgetNum.textContent = getBudgetTarget();
   }
 
-  // load cases list from Notion and replace the static placeholder rows
-  // rows are hidden via CSS until `.loaded` is added here (prevents flash of static placeholders)
-  // if API fails or stalls → `.loaded` is still added in finally + safety timer, so static rows become visible as fallback
+  // load cases list from Notion — skeletons stay visible until real cases arrive.
+  // on API failure shows a brief error message, never reverts to static placeholders.
   (async function loadCases() {
     const list = document.querySelector('.case-list');
     if (!list) return;
-    const reveal = () => list.classList.add('loaded');
-    const safety = setTimeout(reveal, 1500);
+
+    const icons = ['✦', '◆', '⟐', '⚘', '❋', '✺'];
+    const iconClasses = ['a', 'b', 'c', 'd', 'e', 'a'];
+    const pkey = (p) => {
+      const n = (p || '').toLowerCase();
+      if (n.includes('meta') || n.includes('facebook') || n.includes('instagram')) return 'meta';
+      if (n.includes('vk') || n.includes('вк')) return 'vk';
+      if (n.includes('ya') || n.includes('яндекс') || n.includes('директ')) return 'ya';
+      if (n.includes('tg') || n.includes('tele')) return 'tg';
+      if (n.includes('goog')) return 'g';
+      return '';
+    };
+    const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
     try {
       const res = await fetch('/api/cases');
-      if (!res.ok) return;
+      if (!res.ok) throw new Error('http ' + res.status);
       const data = await res.json();
       const cases = (data.cases || []).filter(c => c.slug);
-      if (!cases.length) return;
-
-      const icons = ['✦', '◆', '⟐', '⚘', '❋', '✺'];
-      const iconClasses = ['a', 'b', 'c', 'd', 'e', 'a'];
-      const pkey = (p) => {
-        const n = (p || '').toLowerCase();
-        if (n.includes('meta') || n.includes('facebook') || n.includes('instagram')) return 'meta';
-        if (n.includes('vk') || n.includes('вк')) return 'vk';
-        if (n.includes('ya') || n.includes('яндекс') || n.includes('директ')) return 'ya';
-        if (n.includes('tg') || n.includes('tele')) return 'tg';
-        if (n.includes('goog')) return 'g';
-        return '';
-      };
-      const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      if (!cases.length) throw new Error('empty');
 
       list.innerHTML = cases.map((c, i) => {
         const icon = icons[i % icons.length];
@@ -3215,13 +3219,15 @@
           </a>
         `;
       }).join('');
+      list.classList.add('loaded');
+      list.removeAttribute('aria-busy');
 
       const countEl = document.querySelector('.cases-count b');
       if (countEl) countEl.textContent = String(cases.length).padStart(2, '0');
-    } catch (e) { /* API not up — static fallback stays */ }
-    finally {
-      clearTimeout(safety);
-      reveal();
+    } catch (e) {
+      list.innerHTML = '<div class="case-empty">не удалось загрузить кейсы — попробуйте обновить страницу</div>';
+      list.classList.add('loaded');
+      list.removeAttribute('aria-busy');
     }
   })();
 
