@@ -3001,6 +3001,7 @@
       'shots.h2': 'из наших <em>кабинетов</em>',
       'shots.sub': 'скрины живых кампаний — переключайте площадки.',
       'tab.all': 'все',
+      'lb.hint': 'тап — зум · тяни пальцем',
       'tab.vk': 'VK Реклама',
       'tab.ya': 'Яндекс Директ',
       'tab.tg': 'Telegram Ads',
@@ -3090,6 +3091,7 @@
       'shots.h2': 'from our <em>cabinets</em>',
       'shots.sub': 'screenshots of live campaigns — switch the platforms.',
       'tab.all': 'all',
+      'lb.hint': 'tap to zoom · drag to pan',
       'tab.vk': 'VK Ads',
       'tab.ya': 'Yandex Direct',
       'tab.tg': 'Telegram Ads',
@@ -3707,9 +3709,29 @@
   const lbIndex = document.getElementById('lb-index');
   const lbTotal = document.getElementById('lb-total');
   const lbCap = document.getElementById('lb-caption');
+  const lbHint = document.getElementById('lb-hint');
   let lbSet = [];
   let lbCaps = [];
   let lbCur = 0;
+
+  // touch-only hint (shown once per session, hides on first tap)
+  const HINT_KEY = 'lb-hint-seen';
+  const isTouch = window.matchMedia('(hover: none)').matches;
+  let hintSeen = false;
+  try { hintSeen = sessionStorage.getItem(HINT_KEY) === '1'; } catch (_) {}
+
+  function showHint() {
+    if (!isTouch || hintSeen || !lbHint) return;
+    lbHint.classList.remove('hide');
+    lbHint.classList.add('show');
+  }
+  function hideHint() {
+    if (!lbHint || !lbHint.classList.contains('show')) return;
+    lbHint.classList.add('hide');
+    hintSeen = true;
+    try { sessionStorage.setItem(HINT_KEY, '1'); } catch (_) {}
+    setTimeout(() => { lbHint.classList.remove('show', 'hide'); }, 320);
+  }
 
   // zoom & pan state
   const ZOOM = 2.5;
@@ -3761,6 +3783,7 @@
     lb.hidden = false;
     document.body.classList.add('lb-open');
     document.getElementById('lb-close').focus();
+    showHint();
   }
   function lbClose() {
     lb.hidden = true;
@@ -3769,6 +3792,7 @@
     lbSet = [];
     lbCaps = [];
     if (lbCap) lbCap.textContent = '';
+    if (lbHint) lbHint.classList.remove('show', 'hide');
   }
   document.getElementById('lb-close').addEventListener('click', lbClose);
   document.getElementById('lb-prev').addEventListener('click', () => lbShow(lbCur - 1));
@@ -3813,6 +3837,7 @@
   lbImg.addEventListener('touchstart', (e) => {
     if (e.touches.length !== 1) { dragStart = null; return; }
     suppressClick = true;
+    hideHint();
     startDrag(e.touches[0].clientX, e.touches[0].clientY);
     if (zoomed) e.preventDefault();
   }, { passive: false });
