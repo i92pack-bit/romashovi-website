@@ -2903,6 +2903,7 @@
       'cases.sub': 'несколько проектов, где мы были нужны — и остались надолго.',
       'shots.h2': 'из наших <em>кабинетов</em>',
       'shots.sub': 'скрины живых кампаний — переключайте площадки.',
+      'tab.all': 'все',
       'tab.vk': 'VK Реклама',
       'tab.ya': 'Яндекс Директ',
       'tab.tg': 'Telegram Ads',
@@ -2991,6 +2992,7 @@
       'cases.sub': 'a few projects where we were needed — and stayed for a long while.',
       'shots.h2': 'from our <em>cabinets</em>',
       'shots.sub': 'screenshots of live campaigns — switch the platforms.',
+      'tab.all': 'all',
       'tab.vk': 'VK Ads',
       'tab.ya': 'Yandex Direct',
       'tab.tg': 'Telegram Ads',
@@ -3666,9 +3668,11 @@
       if (!sg || !pane.contains(sg)) return;
       const myImg = sg.querySelector('.sg-frame img');
       if (!myImg) return;
-      const imgs = Array.from(pane.querySelectorAll('.sg-frame img'));
+      const sgs = Array.from(pane.querySelectorAll('.sg')).filter(s => s.querySelector('.sg-frame img'));
+      const imgs = sgs.map(s => s.querySelector('.sg-frame img'));
+      const caps = sgs.map(s => s.getAttribute('data-caption') || '');
       const startIdx = imgs.indexOf(myImg);
-      lbOpen(imgs.map(i => i.src), startIdx);
+      lbOpen(imgs.map(i => i.src), caps, startIdx);
     });
   });
 
