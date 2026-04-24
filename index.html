@@ -3744,22 +3744,17 @@
   let lbCaps = [];
   let lbCur = 0;
 
-  // touch-only hint (shown once per session, hides on first tap)
-  const HINT_KEY = 'lb-hint-seen';
+  // touch-only hint (shown on every open, hides on first tap)
   const isTouch = window.matchMedia('(hover: none)').matches;
-  let hintSeen = false;
-  try { hintSeen = sessionStorage.getItem(HINT_KEY) === '1'; } catch (_) {}
 
   function showHint() {
-    if (!isTouch || hintSeen || !lbHint) return;
+    if (!isTouch || !lbHint) return;
     lbHint.classList.remove('hide');
     lbHint.classList.add('show');
   }
   function hideHint() {
     if (!lbHint || !lbHint.classList.contains('show')) return;
     lbHint.classList.add('hide');
-    hintSeen = true;
-    try { sessionStorage.setItem(HINT_KEY, '1'); } catch (_) {}
     setTimeout(() => { lbHint.classList.remove('show', 'hide'); }, 320);
   }
 
