@@ -1484,6 +1484,7 @@
   .stab.ya .d { background: #fc3f1d; }
   .stab.tg .d { background: #2aa9e0; }
   .stab.g .d { background: #34a853; }
+  .stab.mads .d { background: #c1348a; }
   .stab:hover { background: var(--surface); border-color: var(--surface); color: var(--ink); }
   .stab.active { background: var(--ink); border-color: var(--ink); color: var(--bg); }
   .stab .count {
@@ -2669,6 +2670,7 @@
         <button class="stab ya" data-tab="ya" id="tab-ya" role="tab" aria-selected="false" aria-controls="pane-ya" tabindex="-1"><span class="d"></span> <span data-i18n="tab.ya">Яндекс Директ</span> <span class="count">03</span></button>
         <button class="stab tg" data-tab="tg" id="tab-tg" role="tab" aria-selected="false" aria-controls="pane-tg" tabindex="-1"><span class="d"></span> <span data-i18n="tab.tg">Telegram Ads</span> <span class="count">02</span></button>
         <button class="stab g" data-tab="g" id="tab-g" role="tab" aria-selected="false" aria-controls="pane-g" tabindex="-1"><span class="d"></span> <span data-i18n="tab.g">Google Ads</span> <span class="count">02</span></button>
+        <button class="stab mads" data-tab="mads" id="tab-mads" role="tab" aria-selected="false" aria-controls="pane-mads" tabindex="-1"><span class="d"></span> <span data-i18n="tab.mads">Meta Ads</span> <span class="count">00</span></button>
       </div>
 
       <div class="shots-pane active" data-pane="vk" id="pane-vk" role="tabpanel" aria-labelledby="tab-vk" tabindex="0">
@@ -2685,6 +2687,10 @@
 
       <div class="shots-pane" data-pane="g" id="pane-g" role="tabpanel" aria-labelledby="tab-g" tabindex="0" hidden>
         <div class="gallery" data-platform="g"></div>
+      </div>
+
+      <div class="shots-pane" data-pane="mads" id="pane-mads" role="tabpanel" aria-labelledby="tab-mads" tabindex="0" hidden>
+        <div class="gallery" data-platform="mads"></div>
       </div>
     </section>
 
@@ -2835,6 +2841,7 @@
       'tab.ya': 'Яндекс Директ',
       'tab.tg': 'Telegram Ads',
       'tab.g': 'Google Ads',
+      'tab.mads': 'Meta Ads',
       'reviews.h2': 'что говорят <em>клиенты</em>',
       'reviews.sub': 'несколько скринов из личной переписки — так привычнее',
       'reviews.empty': 'отзывы скоро появятся',
@@ -3438,7 +3445,8 @@
   })();
 
   // probe & populate screenshots dynamically
-  const PLATFORMS = ['vk', 'ya', 'tg', 'g'];
+  const PLATFORMS = ['vk', 'ya', 'tg', 'g', 'mads'];
+  const FILE_SEP = { vk: '-', ya: '-', tg: '-', g: '-', mads: '_' };
   const EXTS = ['.jpg', '.jpeg', '.png', '.webp'];
   const MAX_PROBE = 20;
 
@@ -3451,8 +3459,9 @@
     });
   }
   async function findScreen(platform, idx) {
+    const sep = FILE_SEP[platform] || '-';
     for (const ext of EXTS) {
-      const src = `screenshots/${platform}-${idx}${ext}`;
+      const src = `screenshots/${platform}${sep}${idx}${ext}`;
       if (await tryLoad(src)) return src;
     }
     return null;
@@ -3477,7 +3486,7 @@
         <div class="sg-empty">
           <div class="sg-empty-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15l5-5 4 4 4-4 5 5"/><circle cx="8" cy="9" r="1.5"/></svg></div>
           <div class="sg-empty-t">пока нет скринов</div>
-          <div class="sg-empty-fn">положи файл <code>screenshots/${platform}-1.jpg</code></div>
+          <div class="sg-empty-fn">положи файл <code>screenshots/${platform}${FILE_SEP[platform] || '-'}1.jpg</code></div>
         </div>
       `);
       if (badge) badge.textContent = '00';
