@@ -2265,12 +2265,21 @@
     .cases { padding: 60px 0 20px; }
     .cases-head h2 { font-size: 32px; }
     .cases-count { font-size: 11px; }
-    .case-row { grid-template-columns: 40px 1fr 28px; gap: 14px; padding: 16px 2px; }
+    .case-row {
+      grid-template-columns: 40px 1fr 28px;
+      grid-template-areas:
+        "ic main arrow"
+        "ic meta arrow";
+      gap: 4px 14px;
+      padding: 16px 2px;
+    }
     .case-row:hover { padding-left: 10px; padding-right: 10px; }
     .case-ic { width: 40px; height: 40px; font-size: 16px; border-radius: 10px; }
     .case-title { font-size: 17px; }
     .case-desc { font-size: 12px; margin-top: 2px; }
     .case-arrow { width: 28px; height: 28px; font-size: 12px; }
+    .case-meta { margin-top: 6px; gap: 6px; }
+    .case-chip { font-size: 10px; padding: 4px 8px; }
 
     .shots { padding: 60px 0 30px; }
     .shots-tabs { gap: 6px; margin-bottom: 18px; padding-bottom: 14px; overflow-x: auto; flex-wrap: nowrap; white-space: nowrap; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
