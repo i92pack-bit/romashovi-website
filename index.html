@@ -1127,6 +1127,16 @@
   .case-list {
     border-top: 1px solid var(--line);
   }
+  .case-list .case-row {
+    opacity: 0;
+    transition: opacity .35s ease;
+  }
+  .case-list.loaded .case-row {
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .case-list .case-row { opacity: 1; transition: none; }
+  }
   .case-row {
     display: grid;
     grid-template-columns: 56px 1fr auto auto;
@@ -3220,12 +3230,13 @@
   }
 
   // load cases list from Notion and replace the static placeholder rows
-  // skipped when SSR already injected real cases (data-ssr="1" on .case-list)
-  // fails silently if API is not set up yet — static rows stay as a fallback
+  // rows are hidden via CSS until `.loaded` is added here (prevents flash of static placeholders)
+  // if API fails or stalls → `.loaded` is still added in finally + safety timer, so static rows become visible as fallback
   (async function loadCases() {
     const list = document.querySelector('.case-list');
     if (!list) return;
-    if (list.dataset.ssr === '1') return; // SSR already rendered real cases
+    const reveal = () => list.classList.add('loaded');
+    const safety = setTimeout(reveal, 1500);
     try {
       const res = await fetch('/api/cases');
       if (!res.ok) return;
@@ -3268,6 +3279,10 @@
       const countEl = document.querySelector('.cases-count b');
       if (countEl) countEl.textContent = String(cases.length).padStart(2, '0');
     } catch (e) { /* API not up — static fallback stays */ }
+    finally {
+      clearTimeout(safety);
+      reveal();
+    }
   })();
 
   // probe & populate screenshots dynamically
