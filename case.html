@@ -509,33 +509,174 @@
     text-underline-offset: 3px;
   }
 
-  /* LIGHTBOX (для изображений в контенте) */
+  /* LIGHTBOX (для изображений в контенте) — с зумом, пан-драгом, навигацией */
   .lightbox {
     position: fixed; inset: 0;
     z-index: 1000;
     background: rgba(10,10,8,0.96);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     display: flex; align-items: center; justify-content: center;
     animation: lb-in .25s cubic-bezier(.2,.8,.2,1);
   }
   .lightbox[hidden] { display: none !important; }
   @keyframes lb-in { from { opacity: 0 } to { opacity: 1 } }
-  .lightbox img {
+  .lb-stage {
     max-width: 94vw; max-height: 88vh;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .lb-img {
+    max-width: 100%; max-height: 88vh;
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 30px 80px -20px rgba(0,0,0,0.7);
+    display: block;
+    animation: lb-img-in .35s cubic-bezier(.2,.8,.2,1);
+    cursor: zoom-in;
+    transition: transform .25s cubic-bezier(.2,.8,.2,1);
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+    will-change: transform;
   }
-  .lb-close {
-    position: fixed; top: 20px; right: 20px;
-    width: 44px; height: 44px;
+  .lb-img.zoomed { cursor: grab; touch-action: none; }
+  .lb-img.dragging { cursor: grabbing; transition: none; }
+  @keyframes lb-img-in {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .lb-btn {
+    position: fixed;
+    z-index: 1001;
+    width: 48px; height: 48px;
     border-radius: 50%;
     background: rgba(255,255,255,0.08);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.12);
-    color: #fff; font-size: 22px;
-    display: grid; place-items: center;
+    color: #fff;
+    font-size: 22px; line-height: 1;
     cursor: pointer;
+    transition: all .25s cubic-bezier(.2,.8,.2,1);
+    display: grid; place-items: center;
+    padding: 0;
+  }
+  .lb-btn:hover {
+    background: rgba(255,255,255,0.18);
+    border-color: rgba(255,255,255,0.22);
+  }
+  .lb-close { top: 20px; right: 20px; font-size: 24px; }
+  .lb-prev { left: 20px; top: 50%; transform: translateY(-50%); }
+  .lb-next { right: 20px; top: 50%; transform: translateY(-50%); }
+  .lb-prev:hover { transform: translateY(-50%) translateX(-2px); }
+  .lb-next:hover { transform: translateY(-50%) translateX(2px); }
+  .lb-counter {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.65);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 999px;
+    backdrop-filter: blur(8px);
+  }
+  .lb-counter b { color: #fff; font-weight: 500; }
+  .lb-hint {
+    position: fixed;
+    top: max(14px, calc(env(safe-area-inset-top, 0px) + 10px));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1002;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+    pointer-events: none;
+    text-align: center;
+  }
+  .lb-hint.show { display: flex; animation: lb-hint-in .5s cubic-bezier(.2,.8,.2,1) both; }
+  .lb-hint.hide { animation: lb-hint-out .35s cubic-bezier(.2,.8,.2,1) forwards; }
+  @keyframes lb-hint-in {
+    0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+    100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+  @keyframes lb-hint-out {
+    0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  }
+  .lb-hint-anim {
+    position: relative;
+    width: 72px; height: 56px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lb-hand {
+    width: 36px; height: 36px;
+    color: #fff;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+    animation: lb-hand-move 2.6s cubic-bezier(.4,0,.2,1) infinite;
+    transform-origin: 50% 80%;
+  }
+  .lb-ripple {
+    position: absolute;
+    left: 50%; top: 28%;
+    width: 14px; height: 14px;
+    margin-left: -7px; margin-top: -7px;
+    border: 2px solid rgba(255,255,255,0.9);
+    border-radius: 50%;
+    opacity: 0;
+    animation: lb-ripple 2.6s ease-out infinite;
+  }
+  @keyframes lb-hand-move {
+    0% { transform: translate(0, 0) scale(1); }
+    10% { transform: translate(0, 4px) scale(0.88); }
+    18% { transform: translate(0, 0) scale(1); }
+    28% { transform: translate(0, 0) scale(1); }
+    48% { transform: translate(-22px, 0) scale(1); }
+    72% { transform: translate(22px, 0) scale(1); }
+    92% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(0, 0) scale(1); }
+  }
+  @keyframes lb-ripple {
+    0% { transform: scale(0.4); opacity: 0; }
+    6% { transform: scale(0.7); opacity: 0.9; }
+    25% { transform: scale(2.4); opacity: 0; }
+    100% { transform: scale(2.4); opacity: 0; }
+  }
+  .lb-hint-txt {
+    font-size: 13px;
+    letter-spacing: 0.005em;
+    line-height: 1.3;
+    max-width: 80vw;
+    padding: 7px 14px;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .lb-hint { display: none !important; }
+  }
+  body.lb-open { overflow: hidden; }
+  @media (max-width: 640px) {
+    .lb-btn { width: 40px; height: 40px; font-size: 18px; }
+    .lb-close { top: 14px; right: 14px; }
+    .lb-prev { left: 10px; }
+    .lb-next { right: 10px; }
+    .lb-counter { font-size: 10px; bottom: 18px; padding: 6px 11px; }
+    .lb-hint-anim { width: 64px; height: 50px; }
+    .lb-hand { width: 32px; height: 32px; }
+    .lb-hint-txt { font-size: 12px; padding: 6px 12px; }
   }
 
   @media (max-width: 640px) {
@@ -608,9 +749,25 @@
   </div>
 
   <!-- lightbox -->
-  <div class="lightbox" id="lightbox" hidden>
-    <button class="lb-close" id="lb-close" aria-label="Закрыть">×</button>
-    <img id="lb-img" src="" alt="" />
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Просмотр изображения" hidden>
+    <button class="lb-btn lb-close" id="lb-close" aria-label="Закрыть (Esc)">×</button>
+    <button class="lb-btn lb-prev" id="lb-prev" aria-label="Предыдущее (←)">←</button>
+    <button class="lb-btn lb-next" id="lb-next" aria-label="Следующее (→)">→</button>
+    <div class="lb-stage">
+      <img class="lb-img" id="lb-img" src="" alt="" />
+    </div>
+    <div class="lb-hint" id="lb-hint" aria-hidden="true">
+      <div class="lb-hint-anim">
+        <svg class="lb-hand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M10 11V6a2 2 0 1 1 4 0v5"/>
+          <path d="M14 10V4a2 2 0 1 1 4 0v7"/>
+          <path d="M18 9a2 2 0 1 1 4 0v5a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15V5a2 2 0 1 1 4 0v6"/>
+        </svg>
+        <span class="lb-ripple" aria-hidden="true"></span>
+      </div>
+      <span class="lb-hint-txt">нажми и двигай — чтобы рассмотреть</span>
+    </div>
+    <div class="lb-counter"><b id="lb-index">1</b> / <span id="lb-total">1</span></div>
   </div>
 
 <script>
@@ -719,11 +876,17 @@
 
     root.innerHTML = heroHtml + bodyHtml + ctaHtml;
 
-    // wire up lightbox
-    root.querySelectorAll('.nt-image .img-wrap').forEach(w => {
+    // wire up lightbox — все изображения кейса в одном сете (с prev/next навигацией)
+    const wraps = Array.from(root.querySelectorAll('.nt-image .img-wrap'));
+    const images = wraps.map(w => w.querySelector('img')).filter(Boolean);
+    const captions = wraps.map(w => {
+      const fc = w.parentElement?.querySelector('figcaption');
+      return fc ? fc.textContent.trim() : '';
+    });
+    wraps.forEach((w, idx) => {
       w.addEventListener('click', () => {
-        const img = w.querySelector('img');
-        if (img) openLb(img.src);
+        const set = images.map(i => i.src);
+        lbOpen(set, captions, idx);
       });
     });
   }
@@ -824,22 +987,186 @@
       .replace(/'/g, '&#039;');
   }
 
-  // lightbox
+  // ── lightbox (zoom + pan + nav) ──
   const lb = document.getElementById('lightbox');
   const lbImg = document.getElementById('lb-img');
-  function openLb(src) {
-    lbImg.src = src;
+  const lbIndex = document.getElementById('lb-index');
+  const lbTotal = document.getElementById('lb-total');
+  const lbHint = document.getElementById('lb-hint');
+  let lbSet = [];
+  let lbCaps = [];
+  let lbCur = 0;
+
+  const isTouch = window.matchMedia('(hover: none)').matches;
+  function showHint() {
+    if (!isTouch || !lbHint) return;
+    lbHint.classList.remove('hide');
+    lbHint.classList.add('show');
+  }
+  function hideHint() {
+    if (!lbHint || !lbHint.classList.contains('show')) return;
+    lbHint.classList.add('hide');
+    setTimeout(() => { lbHint.classList.remove('show', 'hide'); }, 320);
+  }
+
+  const ZOOM = 2.5;
+  let zoomed = false;
+  let tx = 0, ty = 0;
+  function applyTransform() {
+    lbImg.style.transform = zoomed ? `translate(${tx}px, ${ty}px) scale(${ZOOM})` : '';
+  }
+  function clampPan() {
+    const w = lbImg.offsetWidth, h = lbImg.offsetHeight;
+    const maxX = (ZOOM - 1) * w / 2, maxY = (ZOOM - 1) * h / 2;
+    tx = Math.max(-maxX, Math.min(maxX, tx));
+    ty = Math.max(-maxY, Math.min(maxY, ty));
+  }
+  function lbResetZoom() {
+    zoomed = false; tx = 0; ty = 0;
+    lbImg.classList.remove('zoomed', 'dragging');
+    applyTransform();
+  }
+  function zoomAt(cx, cy) {
+    const rect = lbImg.getBoundingClientRect();
+    const ccx = rect.left + rect.width / 2;
+    const ccy = rect.top + rect.height / 2;
+    tx = ZOOM * (ccx - cx);
+    ty = ZOOM * (ccy - cy);
+    zoomed = true;
+    lbImg.classList.add('zoomed');
+    clampPan();
+    applyTransform();
+  }
+
+  function lbShow(i) {
+    if (!lbSet.length) return;
+    lbCur = (i + lbSet.length) % lbSet.length;
+    lbResetZoom();
+    lbImg.src = lbSet[lbCur];
+    lbIndex.textContent = lbCur + 1;
+  }
+  function lbOpen(set, caps, startIdx) {
+    if (!set.length) return;
+    lbSet = set;
+    lbCaps = caps || [];
+    lbTotal.textContent = set.length;
+    lbShow(startIdx || 0);
     lb.hidden = false;
-    document.body.style.overflow = 'hidden';
+    document.body.classList.add('lb-open');
+    const btnPrev = document.getElementById('lb-prev');
+    const btnNext = document.getElementById('lb-next');
+    const singleImg = set.length <= 1;
+    if (btnPrev) btnPrev.style.display = singleImg ? 'none' : '';
+    if (btnNext) btnNext.style.display = singleImg ? 'none' : '';
+    document.getElementById('lb-close').focus();
+    showHint();
   }
-  function closeLb() {
+  function lbClose() {
     lb.hidden = true;
-    document.body.style.overflow = '';
+    document.body.classList.remove('lb-open');
     lbImg.src = '';
+    lbSet = []; lbCaps = [];
+    if (lbHint) lbHint.classList.remove('show', 'hide');
   }
-  document.getElementById('lb-close').addEventListener('click', closeLb);
-  lb.addEventListener('click', (e) => { if (e.target === lb) closeLb(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
+
+  document.getElementById('lb-close').addEventListener('click', lbClose);
+  document.getElementById('lb-prev').addEventListener('click', () => lbShow(lbCur - 1));
+  document.getElementById('lb-next').addEventListener('click', () => lbShow(lbCur + 1));
+  lb.addEventListener('click', (e) => { if (e.target === lb) lbClose(); });
+
+  // zoom & pan — touch + mouse
+  let dragStart = null;
+  let moved = false;
+  let suppressClick = false;
+
+  function startDrag(cx, cy) {
+    dragStart = { cx, cy, tx, ty };
+    moved = false;
+    if (zoomed) lbImg.classList.add('dragging');
+  }
+  function moveDrag(cx, cy) {
+    if (!dragStart) return;
+    const dx = cx - dragStart.cx, dy = cy - dragStart.cy;
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
+    if (zoomed) {
+      tx = dragStart.tx + dx;
+      ty = dragStart.ty + dy;
+      clampPan();
+      applyTransform();
+    }
+  }
+  function endDrag() {
+    if (!dragStart) return;
+    const start = dragStart;
+    const wasMoved = moved;
+    dragStart = null;
+    lbImg.classList.remove('dragging');
+    if (!wasMoved) {
+      if (zoomed) lbResetZoom();
+      else zoomAt(start.cx, start.cy);
+    }
+  }
+
+  lbImg.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) { dragStart = null; return; }
+    suppressClick = true;
+    hideHint();
+    startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    if (zoomed) e.preventDefault();
+  }, { passive: false });
+  lbImg.addEventListener('touchmove', (e) => {
+    if (!dragStart || e.touches.length !== 1) return;
+    if (zoomed) e.preventDefault();
+    moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: false });
+  lbImg.addEventListener('touchend', (e) => {
+    if (!dragStart) return;
+    e.preventDefault();
+    endDrag();
+  }, { passive: false });
+  lbImg.addEventListener('touchcancel', () => {
+    dragStart = null;
+    lbImg.classList.remove('dragging');
+  });
+
+  lbImg.addEventListener('mousedown', (e) => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (!dragStart) return;
+    moveDrag(e.clientX, e.clientY);
+  });
+  window.addEventListener('mouseup', () => {
+    if (!dragStart) return;
+    endDrag();
+  });
+
+  lbImg.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (suppressClick) { suppressClick = false; e.preventDefault(); }
+  });
+
+  // swipe nav (disabled when zoomed)
+  let touchX = null;
+  lb.addEventListener('touchstart', e => {
+    if (e.touches.length > 1 || zoomed || e.target === lbImg) { touchX = null; return; }
+    touchX = e.touches[0].clientX;
+  }, { passive: true });
+  lb.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 40) lbShow(lbCur + (dx < 0 ? 1 : -1));
+    touchX = null;
+  });
+
+  document.addEventListener('keydown', e => {
+    if (lb.hidden) return;
+    if (e.key === 'Escape') lbClose();
+    else if (e.key === 'ArrowLeft') lbShow(lbCur - 1);
+    else if (e.key === 'ArrowRight') lbShow(lbCur + 1);
+  });
 
   load();
 </script>
