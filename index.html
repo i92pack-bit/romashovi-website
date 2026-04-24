@@ -1721,6 +1721,7 @@
     user-select: none;
     -webkit-user-select: none;
     -webkit-user-drag: none;
+    -webkit-touch-callout: none;
     will-change: transform;
   }
   .lb-img.zoomed {
@@ -3704,52 +3705,85 @@
   document.getElementById('lb-next').addEventListener('click', () => lbShow(lbCur + 1));
   lb.addEventListener('click', (e) => { if (e.target === lb) lbClose(); });
 
-  // pointer-based zoom & pan (works for mouse + touch)
+  // zoom & pan — separate touch (iOS-safe) + mouse handlers
   let dragStart = null;       // { cx, cy, tx, ty }
   let moved = false;
+  let suppressClick = false;
 
-  lbImg.addEventListener('pointerdown', (e) => {
-    if (e.button !== undefined && e.button !== 0) return;
-    dragStart = { cx: e.clientX, cy: e.clientY, tx, ty };
+  function startDrag(cx, cy) {
+    dragStart = { cx, cy, tx, ty };
     moved = false;
-    if (zoomed) {
-      lbImg.setPointerCapture(e.pointerId);
-      lbImg.classList.add('dragging');
-    }
-  });
-
-  lbImg.addEventListener('pointermove', (e) => {
-    if (!dragStart || !zoomed) return;
-    const dx = e.clientX - dragStart.cx;
-    const dy = e.clientY - dragStart.cy;
-    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
-    tx = dragStart.tx + dx;
-    ty = dragStart.ty + dy;
-    clampPan();
-    applyTransform();
-  });
-
-  function endPointer(e) {
+    if (zoomed) lbImg.classList.add('dragging');
+  }
+  function moveDrag(cx, cy) {
     if (!dragStart) return;
-    const wasDrag = moved;
-    const startX = dragStart.cx, startY = dragStart.cy;
+    const dx = cx - dragStart.cx;
+    const dy = cy - dragStart.cy;
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
     if (zoomed) {
-      lbImg.classList.remove('dragging');
-      try { lbImg.releasePointerCapture(e.pointerId); } catch (_) {}
-    }
-    dragStart = null;
-    // treat as click if didn't drag
-    if (!wasDrag) {
-      e.stopPropagation();
-      if (zoomed) lbResetZoom();
-      else zoomAt(startX, startY);
+      tx = dragStart.tx + dx;
+      ty = dragStart.ty + dy;
+      clampPan();
+      applyTransform();
     }
   }
-  lbImg.addEventListener('pointerup', endPointer);
-  lbImg.addEventListener('pointercancel', (e) => { dragStart = null; lbImg.classList.remove('dragging'); });
+  function endDrag() {
+    if (!dragStart) return;
+    const start = dragStart;
+    const wasMoved = moved;
+    dragStart = null;
+    lbImg.classList.remove('dragging');
+    if (!wasMoved) {
+      if (zoomed) lbResetZoom();
+      else zoomAt(start.cx, start.cy);
+    }
+  }
 
-  // prevent the synthetic click from bubbling up to lb (which closes lightbox)
-  lbImg.addEventListener('click', (e) => { e.stopPropagation(); });
+  // --- Touch (iOS Safari, Android) ---
+  lbImg.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) { dragStart = null; return; }
+    suppressClick = true;
+    startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    if (zoomed) e.preventDefault();
+  }, { passive: false });
+
+  lbImg.addEventListener('touchmove', (e) => {
+    if (!dragStart || e.touches.length !== 1) return;
+    if (zoomed) e.preventDefault();
+    moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: false });
+
+  lbImg.addEventListener('touchend', (e) => {
+    if (!dragStart) return;
+    e.preventDefault();
+    endDrag();
+  }, { passive: false });
+
+  lbImg.addEventListener('touchcancel', () => {
+    dragStart = null;
+    lbImg.classList.remove('dragging');
+  });
+
+  // --- Mouse (desktop) ---
+  lbImg.addEventListener('mousedown', (e) => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (!dragStart) return;
+    moveDrag(e.clientX, e.clientY);
+  });
+  window.addEventListener('mouseup', (e) => {
+    if (!dragStart) return;
+    endDrag();
+  });
+
+  // swallow synthetic clicks (and any clicks) so they don't close the lightbox
+  lbImg.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (suppressClick) { suppressClick = false; e.preventDefault(); }
+  });
 
   // swipe for nav (disabled when zoomed or multi-touch)
   let touchX = null;
