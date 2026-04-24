@@ -1137,6 +1137,20 @@
   @media (prefers-reduced-motion: reduce) {
     .case-list .case-row { opacity: 1; transition: none; }
   }
+  .case-skeleton {
+    height: 88px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.04) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: case-skel 1.4s ease-in-out infinite;
+  }
+  @keyframes case-skel {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .case-skeleton { animation: none; background: rgba(0,0,0,0.03); }
+  }
   .case-row {
     display: grid;
     grid-template-columns: 56px 1fr auto auto;
@@ -2455,88 +2469,14 @@
       <div class="cases-head reveal">
         <h2 data-i18n-html="cases.h2">наши <em>кейсы</em></h2>
         <div class="cases-sub" data-i18n="cases.sub">несколько проектов, где мы были нужны — и остались надолго.</div>
-        <div class="cases-count"><b>06</b> / 400+</div>
+        <div class="cases-count"><b>—</b> / 400+</div>
       </div>
 
-      <div class="case-list reveal">
-        <a href="/cases/online-school" class="case-row">
-          <div class="case-ic a"><span>✦</span></div>
-          <div class="case-main">
-            <div class="case-title">онлайн-школа английского / <em>B2C, EdTech</em></div>
-            <div class="case-desc">вышли на ROMI 312% за 4 месяца, снизили CPL на 38% через РСЯ</div>
-          </div>
-          <div class="case-meta">
-            <span class="case-chip ya">Директ</span>
-            <span class="case-chip result">ROMI 312%</span>
-          </div>
-          <div class="case-arrow">→</div>
-        </a>
-
-        <a href="/cases/ecom-cosmetics" class="case-row">
-          <div class="case-ic b"><span>◆</span></div>
-          <div class="case-main">
-            <div class="case-title">e-com косметики / <em>маркетплейс</em></div>
-            <div class="case-desc">масштабировали VK Рекламу в ×3, удержали ROAS 6.4x на ретаргете</div>
-          </div>
-          <div class="case-meta">
-            <span class="case-chip vk">VK</span>
-            <span class="case-chip result">ROAS 6.4x</span>
-          </div>
-          <div class="case-arrow">→</div>
-        </a>
-
-        <a href="/cases/saas-b2b" class="case-row">
-          <div class="case-ic c"><span>⟐</span></div>
-          <div class="case-main">
-            <div class="case-title">SaaS для корпоративных клиентов / <em>B2B, EN</em></div>
-            <div class="case-desc">Google Ads на англоязычный рынок — снизили CPA на 27% и выросли в MRR</div>
-          </div>
-          <div class="case-meta">
-            <span class="case-chip g">Google</span>
-            <span class="case-chip result">CPA −27%</span>
-          </div>
-          <div class="case-arrow">→</div>
-        </a>
-
-        <a href="/cases/b2b-automation" class="case-row">
-          <div class="case-ic d"><span>⚘</span></div>
-          <div class="case-main">
-            <div class="case-title">b2b-сервис автоматизации / <em>SMB</em></div>
-            <div class="case-desc">Telegram Ads на каналы ниши — подписчик по €1.8 и CTR 2.4%</div>
-          </div>
-          <div class="case-meta">
-            <span class="case-chip tg">Telegram</span>
-            <span class="case-chip result">€1.8 за подписку</span>
-          </div>
-          <div class="case-arrow">→</div>
-        </a>
-
-        <a href="/cases/furniture-shop" class="case-row">
-          <div class="case-ic e"><span>❋</span></div>
-          <div class="case-main">
-            <div class="case-title">интернет-магазин мебели / <em>ритейл</em></div>
-            <div class="case-desc">вышли на федеральный охват: бюджет ×3.2, ДРР с 14% до 8.4%</div>
-          </div>
-          <div class="case-meta">
-            <span class="case-chip ya">Директ</span>
-            <span class="case-chip result">ДРР 8.4%</span>
-          </div>
-          <div class="case-arrow">→</div>
-        </a>
-
-        <a href="/cases/clinic" class="case-row">
-          <div class="case-ic a"><span>✺</span></div>
-          <div class="case-main">
-            <div class="case-title">клиника пластической хирургии / <em>медицина</em></div>
-            <div class="case-desc">связка VK + Директ, настроили end-to-end аналитику от клика до приёма</div>
-          </div>
-          <div class="case-meta">
-            <span class="case-chip vk">VK</span>
-            <span class="case-chip ya">Директ</span>
-            <span class="case-chip result">end-to-end</span>
-          </div>
-          <div class="case-arrow">→</div>
-        </a>
+      <div class="case-list reveal" aria-busy="true">
+        <div class="case-skeleton"></div>
+        <div class="case-skeleton"></div>
+        <div class="case-skeleton"></div>
+        <div class="case-skeleton"></div>
       </div>
     </section>
 
