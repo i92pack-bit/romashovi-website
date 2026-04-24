@@ -2972,369 +2972,226 @@
     });
   })();
 
-  // ai-panel — живая анимация (log stream + metrics + task queue)
-  (function aiPanel() {
-    const viz = document.getElementById('ai-viz');
-    const stream = document.getElementById('ai-stream');
-    const tasks = document.getElementById('ai-tasks');
-    if (!viz || !stream || !tasks) return;
+  // ai-terminal — имитация работы AI-агента в VS Code-подобном терминале
+  (function aiTerminal() {
+    const term = document.getElementById('ai-term');
+    const body = document.getElementById('term-body');
+    const tabName = document.getElementById('term-tab-name');
+    const modelEl = document.getElementById('term-model');
+    if (!term || !body) return;
 
-    const POOLS = {
-      ru: {
-        LOG: [
-          { t: 'info', s: 'init · сканирую нишу и <N> конкурентов' },
-          { t: 'info', s: 'найдено <N> неочевидных связок аудитория × оффер' },
-          { t: 'info', s: 'генерирую <N> вариантов креативов под сегменты' },
-          { t: 'ok',   s: '✓ группы подготовлены к запуску' },
-          { t: 'warn', s: '◆ обнаружен слив в кампании #<N>' },
-          { t: 'info', s: 'рекомендовано <N> действий по оптимизации' },
-          { t: 'info', s: 'анализирую отчёты по <P>' },
-          { t: 'ok',   s: '✓ гипотеза #<N> подтверждена, ROAS <R>x' },
-          { t: 'info', s: 'собираю look-alike <N>% от топ-покупателей' },
-          { t: 'warn', s: '◆ CPC вырос на <N>% за 24ч' },
-          { t: 'ok',   s: '✓ запущено <N> новых кампаний в <P>' },
-          { t: 'info', s: 'A/B тест #<N> · вариант B лучше на <N>%' },
-          { t: 'info', s: 'парсинг комментариев в нише · <N> постов' },
-          { t: 'ok',   s: '✓ снижен CPL на <N>% в <P>' },
-          { t: 'info', s: 'скоринг аудиторий · обработано <N>k записей' },
-          { t: 'warn', s: '◆ низкий CTR в группе #<N>, реагирую' },
-          { t: 'ok',   s: '✓ бюджет перераспределён в пользу топ-3 групп' },
-          { t: 'info', s: 'генерация заголовков для посадочной · <N> вариантов' },
-        ],
-        PLATFORMS: ['VK Ads', 'Директ', 'Telegram Ads', 'Google Ads', 'Meta Ads'],
-        TASKS: [
-          'парсинг конкурентов', 'генерация креативов', 'анализ аудиторий',
-          'оптимизация ставок', 'обучение модели', 'сборка look-alike',
-          'A/B тест гипотез', 'скоринг офферов', 'семантика для директа',
-          'кластеризация отзывов', 'генерация заголовков', 'аудит кампаний',
-        ],
-        PROMPTS: [
-          { u: 'проанализируй кампанию #42 в VK за 7 дней', a: 'CPC вырос на 23%. предлагаю снизить ставку на lal-5%' },
-          { u: 'собери look-alike 1% от топ-покупателей', a: 'найдено 240k профилей, готов к запуску' },
-          { u: 'сгенерируй 10 заголовков для посадочной', a: '8 жизнеспособных, 2 слабых — убрал. готов к A/B' },
-          { u: 'оцени конкурентов в нише онлайн-школ', a: 'топ-3 захватили 68% трафика, средний CPC 142₽' },
-          { u: 'найди слив в кампании директа', a: 'группа "общие ключи" тратит 38% при CR 0.4% — стопаю' },
-          { u: 'перепиши оффер под холодную аудиторию', a: '5 вариантов: фокус на боль, а не на фичи продукта' },
-          { u: 'рекомендуй стратегию на май', a: 'фокус на Telegram Ads — CPC там в 2.1x ниже VK сейчас' },
-          { u: 'проверь гипотезу: ретаргет после 3 касаний', a: 'подтверждено на выборке 14k · ROAS вырос 1.8x' },
-          { u: 'покажи топ-офферы у конкурентов за квартал', a: 'собрал 47 · основной паттерн: гарантия + скорость' },
-          { u: 'дай 3 аудитории для ретаргета в директе', a: 'сегменты: корзина 7d · просмотр 30d · lookalike от них' },
-          { u: 'сделай текст для баннера под e-com', a: 'готово: 6 вариантов · тон: дружелюбный, CTA — прямой' },
-          { u: 'подбери семантику для новой кампании', a: '312 ключей высокой частотности, очистил мусор' },
-        ],
-      },
-      en: {
-        LOG: [
-          { t: 'info', s: 'init · scanning the niche and <N> competitors' },
-          { t: 'info', s: 'found <N> non-obvious audience × offer combos' },
-          { t: 'info', s: 'generating <N> creative variants per segment' },
-          { t: 'ok',   s: '✓ ad groups ready to launch' },
-          { t: 'warn', s: '◆ budget leak detected in campaign #<N>' },
-          { t: 'info', s: '<N> optimization actions recommended' },
-          { t: 'info', s: 'analyzing reports on <P>' },
-          { t: 'ok',   s: '✓ hypothesis #<N> confirmed, ROAS <R>x' },
-          { t: 'info', s: 'building look-alike <N>% from top buyers' },
-          { t: 'warn', s: '◆ CPC up <N>% over 24h' },
-          { t: 'ok',   s: '✓ <N> new campaigns launched on <P>' },
-          { t: 'info', s: 'A/B test #<N> · variant B wins by <N>%' },
-          { t: 'info', s: 'parsing niche comments · <N> posts' },
-          { t: 'ok',   s: '✓ CPL reduced by <N>% on <P>' },
-          { t: 'info', s: 'audience scoring · <N>k records processed' },
-          { t: 'warn', s: '◆ low CTR in group #<N>, reacting' },
-          { t: 'ok',   s: '✓ budget reallocated to top 3 groups' },
-          { t: 'info', s: 'generating landing headlines · <N> variants' },
-        ],
-        PLATFORMS: ['VK Ads', 'Yandex Direct', 'Telegram Ads', 'Google Ads', 'Meta Ads'],
-        TASKS: [
-          'competitor parsing', 'creatives generation', 'audience analysis',
-          'bid optimization', 'model training', 'lookalike building',
-          'hypothesis A/B test', 'offer scoring', 'semantic research',
-          'reviews clustering', 'headline generation', 'campaign audit',
-        ],
-        PROMPTS: [
-          { u: 'analyze VK campaign #42 for the last 7 days', a: 'CPC up 23%. suggest lowering bid on lal-5%' },
-          { u: 'build a 1% look-alike from top buyers', a: 'found 240k profiles, ready to launch' },
-          { u: 'generate 10 landing headlines', a: '8 viable, 2 weak — dropped. ready for A/B' },
-          { u: 'benchmark competitors in online-schools niche', a: 'top-3 captured 68% of traffic, avg CPC $1.7' },
-          { u: 'find the leak in Direct campaign', a: 'the "broad keywords" group spends 38% at CR 0.4% — pausing' },
-          { u: 'rewrite the offer for cold audience', a: '5 variants: pain-focused, not feature-focused' },
-          { u: 'recommend strategy for May', a: 'double down on Telegram Ads — CPC is 2.1x lower than VK now' },
-          { u: 'test hypothesis: retarget after 3 touches', a: 'confirmed on 14k sample · ROAS up 1.8x' },
-          { u: 'show top offers from competitors this quarter', a: 'collected 47 · main pattern: guarantee + speed' },
-          { u: 'suggest 3 retarget audiences for Direct', a: 'segments: cart 7d · view 30d · lookalike from them' },
-          { u: 'write a banner copy for e-com', a: 'done: 6 variants · friendly tone, direct CTA' },
-          { u: 'build semantic core for a new campaign', a: '312 high-frequency keywords, junk removed' },
-        ],
-      }
-    };
-    const getPool = () => POOLS[currentLang] || POOLS.ru;
-    let LOG_POOL = getPool().LOG;
-    let PLATFORMS = getPool().PLATFORMS;
-    let TASK_POOL = getPool().TASKS;
-    let PROMPTS = getPool().PROMPTS;
-    const syncPools = () => {
-      const p = getPool();
-      LOG_POOL = p.LOG;
-      PLATFORMS = p.PLATFORMS;
-      TASK_POOL = p.TASKS;
-      PROMPTS = p.PROMPTS;
-    };
-    // observe language changes via MutationObserver on <html lang>
-    new MutationObserver(syncPools).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
     const MODELS = [
-      'gpt-4o', 'gpt-4.1', 'gpt-5', 'gpt-5-mini',
-      'claude-4.6-sonnet', 'claude-4.7-opus', 'claude-3.5-haiku',
-      'gemini-2.5-pro', 'gemini-3-flash',
-      'llama-3.3-70b', 'deepseek-r1', 'qwen-2.5-72b', 'mistral-large',
+      'claude-sonnet-4.6', 'claude-opus-4.7', 'claude-haiku-4.5',
+      'gpt-5', 'gpt-4.1', 'gemini-2.5-pro', 'deepseek-r1',
     ];
+
+    const RUNS = {
+      ru: [
+        { tab: 'audit.py', cmd: 'agent run audit --account meta_ads --period 14d', steps: [
+          { k:'info', text:'подключаюсь к кабинету: meta_ads (id: ***2847)', d:420 },
+          { k:'ok',   text:'аутентифицирован · расход 2.4M ₽ за 14d', d:260 },
+          { k:'info', text:'загружаю отчёты · кампании · креативы · сегменты', d:520 },
+          { k:'progress', label:'поиск паттернов', steps:10, sd:140 },
+          { k:'ok',   text:'найдено 7 паттернов в данных', d:320 },
+          { k:'progress', label:'генерация гипотез', steps:8, sd:170 },
+          { k:'hl',   text:'3 гипотезы могут снизить CPA на ~18%', d:400 },
+          { k:'dim',  text:'отчёт: reports/audit-2026-04-24.md' },
+        ]},
+        { tab: 'creatives.py', cmd: 'agent run creatives --brand "beauty-berlin" --count 24', steps: [
+          { k:'info', text:'конфиг бренда загружен · brand_voice v3', d:300 },
+          { k:'info', text:'генерирую 24 варианта (8 аудиторий × 3 оффера)', d:420 },
+          { k:'progress', label:'тексты + заголовки', steps:12, sd:110 },
+          { k:'progress', label:'визуалы через midjourney', steps:10, sd:180 },
+          { k:'ok',   text:'24 креатива готовы к ревью', d:300 },
+          { k:'dim',  text:'превью: preview/beauty-berlin-batch-042/' },
+        ]},
+        { tab: 'lookalike.py', cmd: 'agent run lookalike --source purchasers_12m --pct 1', steps: [
+          { k:'info', text:'читаю базу покупателей за 12 месяцев', d:340 },
+          { k:'ok',   text:'12 480 покупателей найдено', d:260 },
+          { k:'info', text:'строю LAL-1% · 3 пересечения аудиторий', d:440 },
+          { k:'progress', label:'кластеризация сегментов', steps:9, sd:160 },
+          { k:'hl',   text:'340k профилей · рекомендую старт с LAL-1%', d:380 },
+          { k:'warn', text:'LAL-5% даёт шум · не рекомендую', d:280 },
+        ]},
+        { tab: 'budget.py', cmd: 'agent run budget --period month --action reallocate', steps: [
+          { k:'info', text:'анализирую ROAS по 14 группам объявлений', d:380 },
+          { k:'progress', label:'расчёт оптимума', steps:10, sd:130 },
+          { k:'warn', text:'группа "ретаргет-30d" сливает · ROAS 0.8', d:340 },
+          { k:'ok',   text:'топ-3 группы забирают 82% эффективности', d:280 },
+          { k:'hl',   text:'перераспределение может дать +31% конверсий', d:380 },
+          { k:'dim',  text:'diff: reports/budget-shift.md' },
+        ]},
+        { tab: 'ab_test.py', cmd: 'agent run ab --hypothesis "price-anchor" --sample 14k', steps: [
+          { k:'info', text:'настройка эксперимента · 2 группы по 7k', d:340 },
+          { k:'progress', label:'сбор данных', steps:12, sd:160 },
+          { k:'info', text:'проверка значимости · p-value = 0.03', d:280 },
+          { k:'hl',   text:'вариант B выигрывает · CR +24%, ROAS 1.8×', d:400 },
+          { k:'ok',   text:'готов к раскатке на полную аудиторию', d:260 },
+        ]},
+      ],
+      en: [
+        { tab: 'audit.py', cmd: 'agent run audit --account meta_ads --period 14d', steps: [
+          { k:'info', text:'connecting to cabinet: meta_ads (id: ***2847)', d:420 },
+          { k:'ok',   text:'authenticated · $24k spent over 14d', d:260 },
+          { k:'info', text:'loading reports · campaigns · creatives · segments', d:520 },
+          { k:'progress', label:'pattern detection', steps:10, sd:140 },
+          { k:'ok',   text:'7 patterns detected', d:320 },
+          { k:'progress', label:'hypothesis generation', steps:8, sd:170 },
+          { k:'hl',   text:'3 hypotheses could cut CPA by ~18%', d:400 },
+          { k:'dim',  text:'report: reports/audit-2026-04-24.md' },
+        ]},
+        { tab: 'creatives.py', cmd: 'agent run creatives --brand "beauty-berlin" --count 24', steps: [
+          { k:'info', text:'brand config loaded · brand_voice v3', d:300 },
+          { k:'info', text:'generating 24 variants (8 audiences × 3 offers)', d:420 },
+          { k:'progress', label:'copy + headlines', steps:12, sd:110 },
+          { k:'progress', label:'visuals via midjourney', steps:10, sd:180 },
+          { k:'ok',   text:'24 creatives ready for review', d:300 },
+          { k:'dim',  text:'preview: preview/beauty-berlin-batch-042/' },
+        ]},
+        { tab: 'lookalike.py', cmd: 'agent run lookalike --source purchasers_12m --pct 1', steps: [
+          { k:'info', text:'reading purchaser base over last 12 months', d:340 },
+          { k:'ok',   text:'12,480 purchasers found', d:260 },
+          { k:'info', text:'building LAL-1% · 3 audience intersections', d:440 },
+          { k:'progress', label:'segment clustering', steps:9, sd:160 },
+          { k:'hl',   text:'340k profiles · suggest starting with LAL-1%', d:380 },
+          { k:'warn', text:'LAL-5% is noisy · not recommended', d:280 },
+        ]},
+        { tab: 'budget.py', cmd: 'agent run budget --period month --action reallocate', steps: [
+          { k:'info', text:'analyzing ROAS across 14 ad groups', d:380 },
+          { k:'progress', label:'optimum calculation', steps:10, sd:130 },
+          { k:'warn', text:'"retarget-30d" group leaking · ROAS 0.8', d:340 },
+          { k:'ok',   text:'top-3 groups capture 82% of efficiency', d:280 },
+          { k:'hl',   text:'reallocation can yield +31% conversions', d:380 },
+          { k:'dim',  text:'diff: reports/budget-shift.md' },
+        ]},
+        { tab: 'ab_test.py', cmd: 'agent run ab --hypothesis "price-anchor" --sample 14k', steps: [
+          { k:'info', text:'experiment setup · 2 groups of 7k', d:340 },
+          { k:'progress', label:'data collection', steps:12, sd:160 },
+          { k:'info', text:'significance check · p-value = 0.03', d:280 },
+          { k:'hl',   text:'variant B wins · CR +24%, ROAS 1.8×', d:400 },
+          { k:'ok',   text:'ready to roll out to full audience', d:260 },
+        ]},
+      ],
+    };
+
     const rand = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
     const pick = (a) => a[Math.floor(Math.random() * a.length)];
-    const pad = (n) => String(n).padStart(2, '0');
-    const sleep = (ms) => new Promise(r => setTimeout(r, ms));
-    const fmtTime = () => {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const pad = n => String(n).padStart(2, '0');
+    const ts = () => {
       const d = new Date();
-      return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+      return `<span class="tok-ts">[${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}]</span>`;
     };
-    const fill = (s) => s
-      .replace(/<N>/g, () => String(rand(3, 78)))
-      .replace(/<R>/g, () => (2 + Math.random() * 7).toFixed(1))
-      .replace(/<P>/g, () => pick(PLATFORMS));
 
-    // visibility: pause when off-screen
+    // visibility observer
     let inView = false;
     if ('IntersectionObserver' in window) {
-      new IntersectionObserver((entries) => {
+      new IntersectionObserver(entries => {
         entries.forEach(e => { inView = e.isIntersecting; });
-      }, { threshold: 0.05 }).observe(viz);
+      }, { threshold: 0.05 }).observe(term);
     } else { inView = true; }
+    const waitVisible = async () => { while (!inView || document.hidden) await sleep(400); };
 
-    const waitUntilVisible = async () => {
-      while (!inView || document.hidden) await sleep(400);
-    };
-
-    // --- model rotator ---
-    let currentModel = MODELS[0];
-    function rotateModel() {
-      const el = document.getElementById('model-name');
-      if (!el) return;
-      const next = MODELS[rand(0, MODELS.length - 1)];
-      if (next === currentModel) return;
-      currentModel = next;
-      el.classList.remove('flip');
-      void el.offsetWidth;
-      el.textContent = next;
-      el.classList.add('flip');
-    }
-    function startModelRotator() {
-      const loop = async () => {
-        while (true) {
-          await sleep(2600 + Math.random() * 2400);
-          if (inView && !document.hidden) rotateModel();
+    const MAX_LINES = 12;
+    function addLine(html) {
+      const line = document.createElement('div');
+      line.className = 'term-line';
+      line.innerHTML = html;
+      body.appendChild(line);
+      if (body.children.length > MAX_LINES) {
+        const oldest = body.firstElementChild;
+        if (oldest) {
+          oldest.classList.add('fade-out');
+          setTimeout(() => oldest.remove(), 250);
         }
-      };
-      loop();
+      }
+      return line;
+    }
+    function clearBody() {
+      body.innerHTML = '';
     }
 
-    // --- sparkline (tokens/sec) ---
-    const SPARK_MAX = 42;
-    const sparkPoints = [];
-    let sparkCur = 480 + rand(0, 300);
-    function tickSpark() {
-      sparkCur += rand(-70, 80);
-      sparkCur = Math.max(180, Math.min(1280, sparkCur));
-      sparkPoints.push(sparkCur);
-      if (sparkPoints.length > SPARK_MAX) sparkPoints.shift();
-
-      const line = document.getElementById('spark-line');
-      const fillEl = document.getElementById('spark-fill');
-      const valEl = document.getElementById('spark-val');
-      if (!line || !fillEl || !valEl) return;
-
-      const max = Math.max.apply(null, sparkPoints);
-      const min = Math.min.apply(null, sparkPoints);
-      const range = max - min || 1;
-      const W = 120, H = 32, PAD = 2;
-      const pts = sparkPoints.map((v, i) => {
-        const x = (i / (SPARK_MAX - 1)) * W;
-        const y = H - PAD - ((v - min) / range) * (H - PAD * 2);
-        return `${x.toFixed(1)},${y.toFixed(1)}`;
-      });
-      line.setAttribute('points', pts.join(' '));
-      // area fill под линией
-      const firstX = pts.length ? pts[0].split(',')[0] : 0;
-      const lastX = pts.length ? pts[pts.length - 1].split(',')[0] : 0;
-      fillEl.setAttribute('points', `${firstX},${H} ${pts.join(' ')} ${lastX},${H}`);
-      valEl.textContent = sparkCur.toLocaleString('ru-RU');
-    }
-    function startSpark() {
-      // seed history
-      for (let i = 0; i < SPARK_MAX; i++) tickSpark();
-      setInterval(() => { if (inView && !document.hidden) tickSpark(); }, 700);
+    function colorCmd(cmd) {
+      // colour the command + flags/args
+      const parts = cmd.split(' ');
+      const bin = parts.shift();
+      const rest = parts.map((p, i) => {
+        if (p.startsWith('--') || p.startsWith('-')) return `<span class="tok-flag">${esc(p)}</span>`;
+        if (/^".*"$/.test(p) || /^'.*'$/.test(p)) return `<span class="tok-str">${esc(p)}</span>`;
+        if (/^\d+[a-z]?$/.test(p)) return `<span class="tok-num">${esc(p)}</span>`;
+        return `<span class="tok-cmd">${esc(p)}</span>`;
+      }).join(' ');
+      return `<span class="tok-prompt">$</span> <span class="tok-cmd">${esc(bin)}</span> ${rest}`;
     }
 
-    // --- prompt/response cycle ---
-    async function cyclePrompts() {
-      const root = document.getElementById('viz-prompt');
-      if (!root) return;
-      let idx = rand(0, PROMPTS.length - 1);
-      // initial render without fade-out
-      const renderPair = (p) => {
-        root.innerHTML = `
-          <div class="pp-row user"><span class="pp-tag">user</span><span class="pp-text">${escapeText(p.u)}</span></div>
-          <div class="pp-row assistant"><span class="pp-tag">${escapeText(currentModel)}</span><span class="pp-text">${escapeText(p.a)}</span></div>
-        `;
-      };
-      renderPair(PROMPTS[idx]);
+    function progressBar(pct, width) {
+      const filled = Math.round((pct / 100) * width);
+      const bar = '█'.repeat(filled) + '░'.repeat(width - filled);
+      return `<span class="tok-bar">[${bar}]</span> <span class="tok-pct">${String(pct).padStart(3)}%</span>`;
+    }
 
+    async function runStep(step) {
+      await waitVisible();
+      if (step.k === 'progress') {
+        const line = addLine('');
+        const label = step.label;
+        const n = step.steps || 10;
+        for (let i = 0; i <= n; i++) {
+          const pct = Math.round((i / n) * 100);
+          line.innerHTML = `${ts()} <span class="tok-info">▶</span> <span class="tok-info">${esc(label)}</span> ${progressBar(pct, 14)}`;
+          await sleep(step.sd || 150);
+        }
+        return;
+      }
+      await sleep(step.d || 300);
+      const txt = esc(step.text);
+      if (step.k === 'ok') {
+        addLine(`${ts()} <span class="tok-ok">✓</span> <span class="tok-ok">${txt}</span>`);
+      } else if (step.k === 'info') {
+        addLine(`${ts()} <span class="tok-arrow">→</span> <span class="tok-info">${txt}</span>`);
+      } else if (step.k === 'warn') {
+        addLine(`${ts()} <span class="tok-warn">⚠</span> <span class="tok-warn">${txt}</span>`);
+      } else if (step.k === 'err') {
+        addLine(`${ts()} <span class="tok-err">✗</span> <span class="tok-err">${txt}</span>`);
+      } else if (step.k === 'hl') {
+        addLine(`${ts()} <span class="tok-acc">✨</span> <span class="tok-hl">${txt}</span>`);
+      } else if (step.k === 'dim') {
+        addLine(`<span class="tok-dim">   ${txt}</span>`);
+      }
+    }
+
+    function getLang() {
+      try { return (localStorage.getItem('lang') || document.documentElement.lang || 'ru').split('-')[0]; }
+      catch (_) { return 'ru'; }
+    }
+
+    async function runScript(run) {
+      if (tabName) tabName.textContent = run.tab;
+      if (modelEl) modelEl.textContent = pick(MODELS);
+      clearBody();
+      await sleep(300);
+      addLine(colorCmd(run.cmd));
+      await sleep(rand(280, 520));
+      for (const step of run.steps) {
+        await runStep(step);
+      }
+      await sleep(500);
+      addLine(`<span class="tok-prompt">$</span> <span class="term-caret"></span>`);
+    }
+
+    async function loop() {
+      let i = 0;
+      // small initial delay so user sees it start fresh
+      await sleep(500);
       while (true) {
-        await sleep(3600 + rand(600, 1800));
-        while (!inView || document.hidden) await sleep(400);
-        // fade out
-        [...root.children].forEach(c => c.classList.add('fade-out'));
-        await sleep(300);
-        idx = (idx + 1 + rand(0, 2)) % PROMPTS.length;
-        renderPair(PROMPTS[idx]);
+        const pool = RUNS[getLang()] || RUNS.ru;
+        await runScript(pool[i % pool.length]);
+        await sleep(4200);
+        i++;
       }
     }
-    function escapeText(s) {
-      return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    }
-
-    // --- log stream loop ---
-    async function runStream() {
-      while (true) {
-        await waitUntilVisible();
-        const item = pick(LOG_POOL);
-        const text = fill(item.s);
-        const line = document.createElement('div');
-        line.className = 'ai-line type-' + item.t;
-        line.innerHTML = `<span class="ts">${fmtTime()}</span><span class="ar">→</span><span class="msg"></span>`;
-        stream.appendChild(line);
-
-        // keep only last 6 lines
-        while (stream.children.length > 6) {
-          const old = stream.children[0];
-          old.classList.add('fade-out');
-          await sleep(100);
-          old.remove();
-        }
-
-        const msg = line.querySelector('.msg');
-        const caret = document.createElement('span');
-        caret.className = 'caret';
-        msg.after(caret);
-        for (const ch of text) {
-          msg.textContent += ch;
-          await sleep(8 + Math.random() * 22);
-        }
-        caret.remove();
-        await sleep(700 + Math.random() * 900);
-      }
-    }
-
-    // --- metrics ---
-    const metrics = {
-      creatives: 1247 + rand(0, 400),
-      cpu: 47,
-      queue: 3,
-    };
-    const setMetric = (id, val) => {
-      const el = document.getElementById(id);
-      if (!el || el.textContent === String(val)) return;
-      el.textContent = val;
-      el.classList.remove('pulse');
-      void el.offsetWidth;
-      el.classList.add('pulse');
-    };
-    function startMetrics() {
-      setInterval(() => {
-        if (!inView) return;
-        metrics.creatives += rand(1, 4);
-        setMetric('m-creatives', metrics.creatives.toLocaleString('ru-RU'));
-      }, 600);
-      setInterval(() => {
-        if (!inView) return;
-        metrics.cpu = Math.max(28, Math.min(74, metrics.cpu + rand(-9, 9)));
-        setMetric('m-cpu', metrics.cpu + '%');
-      }, 1100);
-      setInterval(() => {
-        if (!inView) return;
-        metrics.queue = rand(1, 6);
-        setMetric('m-queue', metrics.queue);
-      }, 2300);
-
-      const BASE = 14 * 86400 + 3 * 3600 + 27 * 60; // фейк 14d 3h 27m
-      const t0 = Date.now();
-      function updUptime() {
-        const s = BASE + Math.floor((Date.now() - t0) / 1000);
-        const d = Math.floor(s / 86400);
-        const h = Math.floor((s % 86400) / 3600);
-        const m = Math.floor((s % 3600) / 60);
-        document.getElementById('m-uptime').textContent = `${d}d ${h}h ${m}m`;
-      }
-      setInterval(updUptime, 1000);
-      updUptime();
-    }
-
-    // --- task queue ---
-    function createTask() {
-      const el = document.createElement('div');
-      el.className = 'task';
-      el.innerHTML = `
-        <span class="task-label">${pick(TASK_POOL)}</span>
-        <div class="task-bar"><div class="task-fill"></div></div>
-        <span class="task-pct">0%</span>
-      `;
-      return el;
-    }
-    function animateTask(el) {
-      const fillEl = el.querySelector('.task-fill');
-      const pctEl = el.querySelector('.task-pct');
-      const speed = 1.8 + Math.random() * 4.5; // % per tick
-      let p = 0;
-      const tick = () => {
-        if (!inView || document.hidden) { setTimeout(tick, 400); return; }
-        p += speed * (0.5 + Math.random());
-        if (p >= 100) {
-          p = 100;
-          fillEl.style.width = '100%';
-          pctEl.textContent = '✓';
-          el.classList.add('done');
-          setTimeout(() => {
-            el.classList.add('fade-out');
-            setTimeout(() => {
-              el.remove();
-              const fresh = createTask();
-              tasks.appendChild(fresh);
-              animateTask(fresh);
-            }, 350);
-          }, 1100);
-          return;
-        }
-        fillEl.style.width = p.toFixed(1) + '%';
-        pctEl.textContent = Math.floor(p) + '%';
-        setTimeout(tick, 240 + Math.random() * 380);
-      };
-      tick();
-    }
-    function startTasks() {
-      for (let i = 0; i < 3; i++) {
-        const t = createTask();
-        tasks.appendChild(t);
-        // stagger initial progress so they look mid-flight, not synchronized
-        t.querySelector('.task-fill').style.width = rand(5, 60) + '%';
-        t.querySelector('.task-pct').textContent = rand(5, 60) + '%';
-        setTimeout(() => animateTask(t), i * 300);
-      }
-    }
-
-    // kick off
-    runStream();
-    startMetrics();
-    startTasks();
-    startModelRotator();
-    startSpark();
-    cyclePrompts();
+    loop();
   })();
 
   // sticky header — add .scrolled once user scrolls past 8px
