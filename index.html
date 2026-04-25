@@ -2145,13 +2145,19 @@
   }
   .rv-msg-meta {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
     gap: 4px;
-    margin-top: 4px;
+    margin-top: 6px;
     color: #8a93a0;
     font-size: 11px;
     user-select: none;
+  }
+  .rv-msg-meta .rv-tg {
+    width: 13px; height: 13px;
+    color: #2aabee;
+    opacity: 0.65;
+    flex-shrink: 0;
+    margin-right: auto;
   }
   .rv-msg-meta .tick {
     color: #4fae4e;
@@ -3725,6 +3731,8 @@
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 
+    const TG_SVG = '<svg class="rv-tg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>';
+
     const makeBubble = (r, i, isDup) => {
       const el = document.createElement('div');
       el.className = 'rv-msg';
@@ -3734,7 +3742,7 @@
         <div class="rv-msg-head" style="color: ${colorFor(r.name)}">${esc(r.name)}</div>
         <div class="rv-msg-role">${esc(r.role || '')}</div>
         <div class="rv-msg-text">${esc(r.text)}</div>
-        <div class="rv-msg-meta"><span>${esc(r.time || '')}</span><span class="tick">${tick}</span></div>
+        <div class="rv-msg-meta">${TG_SVG}<span>${esc(r.time || '')}</span><span class="tick">${tick}</span></div>
       `;
       return el;
     };
