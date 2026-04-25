@@ -2079,16 +2079,19 @@
   .reviews-ticker {
     position: relative;
     overflow: hidden;
-    padding: 16px 0 24px;
+    padding: 28px 0 32px;
     width: 100vw;
     margin-left: calc(50% - 50vw);
+    background:
+      linear-gradient(180deg, rgba(243,241,234,0) 0%, #f3f1ea 12%, #f3f1ea 88%, rgba(243,241,234,0) 100%);
     -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
     mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
   }
   .reviews-ticker-track {
     display: inline-flex;
-    gap: 18px;
+    gap: 14px;
     padding-left: 18px;
+    align-items: flex-end;
     animation: tk-slide var(--ticker-duration, 60s) linear infinite;
     will-change: transform;
   }
@@ -2789,7 +2792,7 @@
     <section class="reviews reveal" id="reviews">
       <div class="reviews-head">
         <h2 data-i18n-html="reviews.h2">что говорят <em>клиенты</em></h2>
-        <div class="reviews-sub" data-i18n="reviews.sub">несколько скринов из личной переписки — так привычнее</div>
+        <div class="reviews-sub" data-i18n="reviews.sub">сообщения из переписок — без скринов и фотошопа.</div>
       </div>
       <div class="reviews-ticker">
         <div class="reviews-ticker-track" id="reviews-ticker"></div>
@@ -3695,45 +3698,53 @@
     const wrap = track && track.parentElement;
     if (!track) return;
 
-    const EXTS = ['.jpg', '.jpeg', '.png', '.webp'];
-    const MAX = 20;
-    const tryLoad = src => new Promise(r => {
-      const im = new Image();
-      im.onload = () => r(true);
-      im.onerror = () => r(false);
-      im.src = src;
-    });
-
-    const found = [];
-    for (let i = 1; i <= MAX; i++) {
-      let match = null;
-      for (const ext of EXTS) {
-        const src = `reviews/${i}${ext}`;
-        if (await tryLoad(src)) { match = src; break; }
+    let reviews = [];
+    try {
+      const res = await fetch('/reviews-data.json', { cache: 'no-cache' });
+      if (res.ok) {
+        const data = await res.json();
+        reviews = (data.reviews || []).filter(r => r && r.text && r.name);
       }
-      if (!match) break;
-      found.push(match);
-    }
+    } catch (e) { /* fallthrough → empty state */ }
 
-    if (!found.length) {
+    if (!reviews.length) {
       const empty = (localStorage.getItem('lang') === 'en') ? 'reviews will appear soon' : 'отзывы скоро появятся';
       wrap.outerHTML = `<div class="rv-empty">${empty}</div>`;
       return;
     }
 
-    // create tile for each review, then duplicate track for seamless loop
-    const makeTile = (src, i, isDup) => {
-      const t = document.createElement('div');
-      t.className = 'rv-tile';
-      t.innerHTML = `<img src="${src}" alt="${isDup ? '' : 'Отзыв ' + (i + 1)}" loading="lazy" ${isDup ? 'aria-hidden="true"' : ''} />`;
-      t.addEventListener('click', () => lbOpen(found, [], i));
-      return t;
+    // sender-name colors (Telegram-like rotating palette)
+    const PALETTE = ['#cc5049', '#d67722', '#955db4', '#4fad2d', '#168acd', '#2a7eda', '#cd6c8c', '#d99a2c'];
+    const colorFor = (name) => {
+      let h = 0;
+      for (const c of String(name)) h = ((h * 31) + c.charCodeAt(0)) >>> 0;
+      return PALETTE[h % PALETTE.length];
     };
-    found.forEach((src, i) => track.appendChild(makeTile(src, i, false)));
-    found.forEach((src, i) => track.appendChild(makeTile(src, i, true)));
+    const esc = (s) => String(s || '')
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 
-    // set animation speed proportional to count (≈8s per tile)
-    track.style.setProperty('--ticker-duration', (Math.max(found.length, 4) * 8) + 's');
+    const makeBubble = (r, i, isDup) => {
+      const el = document.createElement('div');
+      el.className = 'rv-msg';
+      if (isDup) el.setAttribute('aria-hidden', 'true');
+      const tick = r.read === false ? '✓' : '✓✓';
+      el.innerHTML = `
+        <div class="rv-msg-head" style="color: ${colorFor(r.name)}">${esc(r.name)}</div>
+        <div class="rv-msg-role">${esc(r.role || '')}</div>
+        <div class="rv-msg-text">${esc(r.text)}</div>
+        <div class="rv-msg-meta"><span>${esc(r.time || '')}</span><span class="tick">${tick}</span></div>
+      `;
+      return el;
+    };
+
+    reviews.forEach((r, i) => track.appendChild(makeBubble(r, i, false)));
+    reviews.forEach((r, i) => track.appendChild(makeBubble(r, i, true)));
+
+    // длинные отзывы — за визуальное прохождение лучше дать больше времени
+    const totalLen = reviews.reduce((s, r) => s + (r.text || '').length, 0);
+    const seconds = Math.max(60, Math.round(totalLen / 35));
+    track.style.setProperty('--ticker-duration', seconds + 's');
   })();
 
   // tabs with aria + keyboard (←/→/Home/End)
