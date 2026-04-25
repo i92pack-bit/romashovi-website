@@ -1157,6 +1157,63 @@
     font-size: 14px;
     text-align: center;
   }
+  .cases-cta {
+    margin: 28px 0 0;
+    padding: 26px 32px;
+    background: var(--surface);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .cases-cta-text {
+    display: flex; flex-direction: column; gap: 4px;
+    flex: 1 1 320px;
+  }
+  .cases-cta-text strong {
+    font-weight: 500;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .cases-cta-text span {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .cases-cta-actions {
+    display: flex; gap: 10px;
+    flex-wrap: wrap;
+  }
+  .cases-cta .cta-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 12px 20px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all .25s ease;
+    white-space: nowrap;
+  }
+  .cases-cta .cta-btn.primary {
+    background: var(--ink); color: var(--bg);
+  }
+  .cases-cta .cta-btn.primary:hover {
+    background: var(--accent);
+  }
+  .cases-cta .cta-btn.ghost {
+    background: transparent; color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  .cases-cta .cta-btn.ghost:hover {
+    background: var(--ink); color: var(--bg);
+    border-color: var(--ink);
+  }
+  @media (max-width: 640px) {
+    .cases-cta { padding: 22px; flex-direction: column; align-items: stretch; }
+    .cases-cta-actions { flex-direction: column; }
+    .cases-cta .cta-btn { padding: 14px 20px; }
+  }
   .case-row {
     display: grid;
     grid-template-columns: 56px 1fr auto auto;
@@ -2482,6 +2539,17 @@
         <div class="case-skeleton"></div>
         <div class="case-skeleton"></div>
         <div class="case-skeleton"></div>
+      </div>
+
+      <div class="cases-cta reveal">
+        <div class="cases-cta-text">
+          <strong>не нашли в кейсах подходящей ниши?</strong>
+          <span>здесь далеко не всё — уточните у нас лично.</span>
+        </div>
+        <div class="cases-cta-actions">
+          <a href="#contact" class="cta-btn primary">написать нам</a>
+          <a href="/brief" class="cta-btn ghost">заполнить бриф</a>
+        </div>
       </div>
     </section>
 
