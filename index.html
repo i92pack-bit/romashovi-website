@@ -1215,6 +1215,88 @@
     .cases-cta-actions { flex-direction: column; }
     .cases-cta .cta-btn { padding: 14px 20px; }
   }
+
+  /* ABOUT — кто мы */
+  .about {
+    padding: 80px 0 60px;
+  }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .about-photo {
+    aspect-ratio: 4 / 5;
+    background: var(--surface);
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+  }
+  .about-photo img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .about-photo--empty::after {
+    content: '📷 семейное фото — добавь /family.jpg';
+    position: absolute;
+    inset: 0;
+    display: grid; place-items: center;
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.02em;
+    padding: 0 20px;
+    text-align: center;
+  }
+  .about-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 18px;
+  }
+  .about h2 {
+    font-size: 42px;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 22px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .about h2 em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .about-lead {
+    font-size: 18px;
+    line-height: 1.55;
+    margin-bottom: 14px;
+    color: var(--ink);
+  }
+  .about-lead b { font-weight: 600; }
+  .about p {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  @media (max-width: 768px) {
+    .about { padding: 50px 0 30px; }
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    .about-photo {
+      aspect-ratio: 4 / 3;
+      max-height: 380px;
+    }
+    .about h2 { font-size: 30px; }
+    .about-lead { font-size: 16px; }
+    .about p { font-size: 15px; }
+  }
   .case-row {
     display: grid;
     grid-template-columns: 56px 1fr auto auto;
@@ -2550,6 +2632,20 @@
         <div class="cases-cta-actions">
           <a href="#contact" class="cta-btn primary">написать нам</a>
           <a href="/brief" class="cta-btn ghost">заполнить бриф</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="about reveal" id="about">
+      <div class="about-grid">
+        <div class="about-photo">
+          <img src="/family.jpg" alt="Юля, Илья и Марк" onerror="this.parentElement.classList.add('about-photo--empty'); this.remove();" />
+        </div>
+        <div class="about-text">
+          <div class="about-kicker">кто мы</div>
+          <h2>юля + илья + <em>марк</em>.<br>семейная команда — и в жизни, и в проектах.</h2>
+          <p class="about-lead">вместе <b>13 лет</b>: вырастили сына и больше <b>400 проектов</b> в трафике.</p>
+          <p>работаем вдвоём — без офиса, без менеджеров, без отчётов «всё нормально».</p>
         </div>
       </div>
     </section>
