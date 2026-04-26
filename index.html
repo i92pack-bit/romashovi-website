@@ -2075,33 +2075,67 @@
     color: var(--ink-soft);
   }
 
-  /* breakout из .wrap чтобы тикер шёл от края до края */
-  .reviews-ticker {
+  /* breakout из .wrap чтобы слайдер шёл от края до края */
+  .reviews-slider {
     position: relative;
-    overflow: hidden;
     padding: 12px 0 28px;
     width: 100vw;
     margin-left: calc(50% - 50vw);
     background:
       linear-gradient(180deg, rgba(243,241,234,0) 0%, #f3f1ea 12%, #f3f1ea 88%, rgba(243,241,234,0) 100%);
-    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
-    mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
   }
-  .reviews-ticker-track {
-    display: inline-flex;
+  .reviews-track {
+    display: flex;
     gap: 14px;
-    padding-left: 18px;
+    padding: 6px clamp(60px, 6vw, 88px);
     align-items: flex-end;
-    animation: tk-slide var(--ticker-duration, 60s) linear infinite;
-    will-change: transform;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 96%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 96%, transparent 100%);
   }
-  .reviews-ticker:hover .reviews-ticker-track,
-  .reviews-ticker:focus-within .reviews-ticker-track {
-    animation-play-state: paused;
+  .reviews-track::-webkit-scrollbar { display: none; }
+  .reviews-track:focus { outline: none; }
+  .reviews-track:focus-visible { outline: 2px solid var(--ink); outline-offset: -6px; border-radius: 8px; }
+  .reviews-track .rv-msg { scroll-snap-align: start; }
+
+  .rv-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 4;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    border: 1px solid rgba(26,26,23,0.10);
+    background: #fff;
+    color: #1a1a17;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-shadow: 0 4px 14px -4px rgba(0,0,0,0.12);
+    transition: transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s ease, opacity .2s ease;
   }
-  @keyframes tk-slide {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+  .rv-arrow:hover { box-shadow: 0 6px 20px -4px rgba(0,0,0,0.18); transform: translateY(-50%) scale(1.06); }
+  .rv-arrow:active { transform: translateY(-50%) scale(0.94); }
+  .rv-arrow:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .rv-arrow svg { width: 18px; height: 18px; }
+  .rv-arrow.rv-prev { left: clamp(8px, 2vw, 28px); }
+  .rv-arrow.rv-next { right: clamp(8px, 2vw, 28px); }
+  .rv-arrow[disabled] { opacity: 0.3; cursor: default; pointer-events: none; box-shadow: none; }
+
+  @media (max-width: 640px) {
+    .reviews-track { padding: 6px 16px; gap: 10px; }
+    .rv-arrow { width: 38px; height: 38px; }
+    .rv-arrow svg { width: 16px; height: 16px; }
+    .rv-arrow.rv-prev { left: 6px; }
+    .rv-arrow.rv-next { right: 6px; }
   }
 
   /* TG-style review bubble */
