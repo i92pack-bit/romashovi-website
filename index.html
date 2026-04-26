@@ -2103,11 +2103,13 @@
   .reviews-track:focus-visible { outline: 2px solid var(--ink); outline-offset: -6px; border-radius: 8px; }
   .reviews-track .rv-msg { scroll-snap-align: start; }
 
+  .rv-controls {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin: 8px 0 18px;
+  }
   .rv-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 4;
     width: 44px;
     height: 44px;
     border-radius: 999px;
@@ -2119,23 +2121,47 @@
     align-items: center;
     justify-content: center;
     padding: 0;
-    box-shadow: 0 4px 14px -4px rgba(0,0,0,0.12);
-    transition: transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s ease, opacity .2s ease;
+    box-shadow: 0 4px 14px -4px rgba(0,0,0,0.10);
+    transition: transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s ease, opacity .2s ease, background .2s ease;
   }
-  .rv-arrow:hover { box-shadow: 0 6px 20px -4px rgba(0,0,0,0.18); transform: translateY(-50%) scale(1.06); }
-  .rv-arrow:active { transform: translateY(-50%) scale(0.94); }
+  .rv-arrow:hover { box-shadow: 0 6px 20px -4px rgba(0,0,0,0.16); transform: scale(1.06); background: #fafaf7; }
+  .rv-arrow:active { transform: scale(0.94); }
   .rv-arrow:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
   .rv-arrow svg { width: 18px; height: 18px; }
-  .rv-arrow.rv-prev { left: clamp(8px, 2vw, 28px); }
-  .rv-arrow.rv-next { right: clamp(8px, 2vw, 28px); }
-  .rv-arrow[disabled] { opacity: 0.3; cursor: default; pointer-events: none; box-shadow: none; }
+  .rv-arrow[disabled] { opacity: 0.28; cursor: default; pointer-events: none; box-shadow: none; }
+
+  .rv-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    margin: 18px auto 4px;
+    padding: 0 16px;
+    flex-wrap: wrap;
+    max-width: 600px;
+  }
+  .rv-dot {
+    width: 7px;
+    height: 7px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(26,26,23,0.18);
+    cursor: pointer;
+    transition: background .2s ease, width .25s cubic-bezier(.2,.8,.2,1);
+  }
+  .rv-dot:hover { background: rgba(26,26,23,0.4); }
+  .rv-dot.active { background: var(--ink); width: 22px; }
+  .rv-dot:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
   @media (max-width: 640px) {
     .reviews-track { padding: 6px 16px; gap: 10px; }
     .rv-arrow { width: 38px; height: 38px; }
     .rv-arrow svg { width: 16px; height: 16px; }
-    .rv-arrow.rv-prev { left: 6px; }
-    .rv-arrow.rv-next { right: 6px; }
+    .rv-controls { gap: 12px; margin: 4px 0 14px; }
+    .rv-dots { margin-top: 14px; gap: 6px; }
+    .rv-dot { width: 6px; height: 6px; }
+    .rv-dot.active { width: 18px; }
   }
 
   /* TG-style review bubble */
@@ -2846,15 +2872,18 @@
       <div class="reviews-head">
         <h2 data-i18n-html="reviews.h2">что говорят <em>клиенты</em></h2>
       </div>
-      <div class="reviews-slider" role="region" aria-roledescription="карусель" aria-label="отзывы клиентов">
-        <button class="rv-arrow rv-prev" type="button" aria-label="предыдущий отзыв">
+      <div class="rv-controls">
+        <button class="rv-arrow rv-prev" type="button" aria-label="предыдущий отзыв" aria-controls="reviews-track">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
-        <div class="reviews-track" id="reviews-track" tabindex="0"></div>
-        <button class="rv-arrow rv-next" type="button" aria-label="следующий отзыв">
+        <button class="rv-arrow rv-next" type="button" aria-label="следующий отзыв" aria-controls="reviews-track">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
       </div>
+      <div class="reviews-slider" role="region" aria-roledescription="карусель" aria-label="отзывы клиентов">
+        <div class="reviews-track" id="reviews-track" tabindex="0"></div>
+      </div>
+      <div class="rv-dots" id="reviews-dots" role="tablist" aria-label="навигация по отзывам"></div>
     </section>
 
     <section class="strip reveal" id="contact">
@@ -3770,9 +3799,12 @@
   (async function reviewsSlider() {
     const track = document.getElementById('reviews-track');
     const slider = track && track.parentElement;
-    if (!track || !slider) return;
-    const prevBtn = slider.querySelector('.rv-prev');
-    const nextBtn = slider.querySelector('.rv-next');
+    const section = document.getElementById('reviews');
+    if (!track || !slider || !section) return;
+    const prevBtn = section.querySelector('.rv-prev');
+    const nextBtn = section.querySelector('.rv-next');
+    const dotsWrap = document.getElementById('reviews-dots');
+    const controls = section.querySelector('.rv-controls');
 
     let reviews = [];
     try {
@@ -3785,6 +3817,8 @@
 
     if (!reviews.length) {
       const empty = (localStorage.getItem('lang') === 'en') ? 'reviews will appear soon' : 'отзывы скоро появятся';
+      if (controls) controls.remove();
+      if (dotsWrap) dotsWrap.remove();
       slider.outerHTML = `<div class="rv-empty">${empty}</div>`;
       return;
     }
