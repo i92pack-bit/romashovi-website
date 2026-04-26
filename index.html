@@ -2232,7 +2232,7 @@
     .rv-msg-text { font-size: 13px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .reviews-ticker-track { animation: none; }
+    .reviews-track { scroll-behavior: auto; }
   }
 
   /* about strip */
@@ -2846,8 +2846,14 @@
       <div class="reviews-head">
         <h2 data-i18n-html="reviews.h2">что говорят <em>клиенты</em></h2>
       </div>
-      <div class="reviews-ticker">
-        <div class="reviews-ticker-track" id="reviews-ticker"></div>
+      <div class="reviews-slider" role="region" aria-roledescription="карусель" aria-label="отзывы клиентов">
+        <button class="rv-arrow rv-prev" type="button" aria-label="предыдущий отзыв">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="reviews-track" id="reviews-track" tabindex="0"></div>
+        <button class="rv-arrow rv-next" type="button" aria-label="следующий отзыв">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
       </div>
     </section>
 
@@ -3760,11 +3766,13 @@
     });
   });
 
-  // ===== reviews ticker =====
-  (async function reviewsTicker() {
-    const track = document.getElementById('reviews-ticker');
-    const wrap = track && track.parentElement;
-    if (!track) return;
+  // ===== reviews slider =====
+  (async function reviewsSlider() {
+    const track = document.getElementById('reviews-track');
+    const slider = track && track.parentElement;
+    if (!track || !slider) return;
+    const prevBtn = slider.querySelector('.rv-prev');
+    const nextBtn = slider.querySelector('.rv-next');
 
     let reviews = [];
     try {
@@ -3777,11 +3785,10 @@
 
     if (!reviews.length) {
       const empty = (localStorage.getItem('lang') === 'en') ? 'reviews will appear soon' : 'отзывы скоро появятся';
-      wrap.outerHTML = `<div class="rv-empty">${empty}</div>`;
+      slider.outerHTML = `<div class="rv-empty">${empty}</div>`;
       return;
     }
 
-    // sender-name colors (Telegram-like rotating palette)
     const PALETTE = ['#cc5049', '#d67722', '#955db4', '#4fad2d', '#168acd', '#2a7eda', '#cd6c8c', '#d99a2c'];
     const colorFor = (name) => {
       let h = 0;
@@ -3794,10 +3801,9 @@
 
     const TG_SVG = '<svg class="rv-tg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>';
 
-    const makeBubble = (r, i, isDup) => {
+    const makeBubble = (r) => {
       const el = document.createElement('div');
       el.className = 'rv-msg';
-      if (isDup) el.setAttribute('aria-hidden', 'true');
       const tick = r.read === false ? '✓' : '✓✓';
       const platformHtml = r.platform ? `<div class="rv-msg-platform">${esc(r.platform)}</div>` : '';
       el.innerHTML = `
@@ -3810,13 +3816,31 @@
       return el;
     };
 
-    reviews.forEach((r, i) => track.appendChild(makeBubble(r, i, false)));
-    reviews.forEach((r, i) => track.appendChild(makeBubble(r, i, true)));
+    reviews.forEach(r => track.appendChild(makeBubble(r)));
 
-    // длинные отзывы — за визуальное прохождение лучше дать больше времени
-    const totalLen = reviews.reduce((s, r) => s + (r.text || '').length, 0);
-    const seconds = Math.max(60, Math.round(totalLen / 35));
-    track.style.setProperty('--ticker-duration', seconds + 's');
+    const stepSize = () => {
+      const first = track.querySelector('.rv-msg');
+      if (!first) return 320;
+      const gap = parseFloat(getComputedStyle(track).columnGap) || parseFloat(getComputedStyle(track).gap) || 14;
+      return first.offsetWidth + gap;
+    };
+    const updateButtons = () => {
+      const max = track.scrollWidth - track.clientWidth - 1;
+      prevBtn.disabled = track.scrollLeft <= 1;
+      nextBtn.disabled = track.scrollLeft >= max;
+    };
+
+    prevBtn.addEventListener('click', () => track.scrollBy({ left: -stepSize(), behavior: 'smooth' }));
+    nextBtn.addEventListener('click', () => track.scrollBy({ left: stepSize(), behavior: 'smooth' }));
+    track.addEventListener('scroll', updateButtons, { passive: true });
+    window.addEventListener('resize', updateButtons);
+
+    track.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); track.scrollBy({ left: -stepSize(), behavior: 'smooth' }); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); track.scrollBy({ left: stepSize(), behavior: 'smooth' }); }
+    });
+
+    requestAnimationFrame(() => requestAnimationFrame(updateButtons));
   })();
 
   // tabs with aria + keyboard (←/→/Home/End)
