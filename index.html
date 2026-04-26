@@ -2087,7 +2087,7 @@
   .reviews-track {
     display: flex;
     gap: 14px;
-    padding: 6px clamp(60px, 6vw, 88px);
+    padding: 6px max(24px, calc((100vw - 1116px) / 2));
     align-items: flex-end;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
@@ -2104,10 +2104,30 @@
   .reviews-track .rv-msg { scroll-snap-align: start; }
 
   .rv-controls {
+    position: relative;
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 14px;
     margin: 8px 0 18px;
+  }
+  .rv-hint {
+    position: absolute;
+    top: 50%;
+    left: calc(50% + 72px);
+    transform: translateY(-50%);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: var(--faint);
+    white-space: nowrap;
+    pointer-events: none;
+    text-transform: lowercase;
+  }
+  .rv-hint::before {
+    content: '←';
+    margin-right: 4px;
+    color: var(--faint);
   }
   .rv-arrow {
     width: 44px;
@@ -2134,34 +2154,39 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 7px;
-    margin: 18px auto 4px;
+    gap: 8px;
+    margin: 22px auto 6px;
     padding: 0 16px;
     flex-wrap: wrap;
     max-width: 600px;
+    min-height: 10px;
   }
   .rv-dot {
-    width: 7px;
-    height: 7px;
+    flex: 0 0 auto;
+    width: 9px;
+    height: 9px;
     padding: 0;
     border: 0;
     border-radius: 999px;
-    background: rgba(26,26,23,0.18);
+    background: rgba(26,26,23,0.28);
     cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
     transition: background .2s ease, width .25s cubic-bezier(.2,.8,.2,1);
   }
-  .rv-dot:hover { background: rgba(26,26,23,0.4); }
-  .rv-dot.active { background: var(--ink); width: 22px; }
+  .rv-dot:hover { background: rgba(26,26,23,0.5); }
+  .rv-dot.active { background: var(--ink); width: 26px; }
   .rv-dot:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
   @media (max-width: 640px) {
-    .reviews-track { padding: 6px 16px; gap: 10px; }
+    .reviews-track { padding: 6px 24px; gap: 10px; }
     .rv-arrow { width: 38px; height: 38px; }
     .rv-arrow svg { width: 16px; height: 16px; }
     .rv-controls { gap: 12px; margin: 4px 0 14px; }
-    .rv-dots { margin-top: 14px; gap: 6px; }
-    .rv-dot { width: 6px; height: 6px; }
-    .rv-dot.active { width: 18px; }
+    .rv-hint { display: none; }
+    .rv-dots { margin-top: 16px; gap: 7px; }
+    .rv-dot { width: 8px; height: 8px; }
+    .rv-dot.active { width: 22px; }
   }
 
   /* TG-style review bubble */
@@ -2879,6 +2904,7 @@
         <button class="rv-arrow rv-next" type="button" aria-label="следующий отзыв" aria-controls="reviews-track">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
+        <span class="rv-hint" data-i18n="reviews.hint">листайте стрелками или свайпом</span>
       </div>
       <div class="reviews-slider" role="region" aria-roledescription="карусель" aria-label="отзывы клиентов">
         <div class="reviews-track" id="reviews-track" tabindex="0"></div>
