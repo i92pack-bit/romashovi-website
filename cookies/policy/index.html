@@ -162,6 +162,17 @@
   }
   .foot-legal a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
   .foot-legal a:hover { color: var(--accent); }
+  .foot-right { display: inline-flex; align-items: center; gap: 12px; }
+  .foot-social {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    color: var(--faint);
+    border: 1px solid rgba(255,255,255,.08);
+    transition: color .2s ease, border-color .2s ease, background-color .2s ease, transform .2s ease;
+  }
+  .foot-social:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+  .foot-social svg { width: 14px; height: 14px; display: block; }
 
   .cookie-toast {
     position: fixed;
