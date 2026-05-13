@@ -2435,6 +2435,16 @@
   }
   .foot-legal a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
   .foot-legal a:hover { color: var(--accent); }
+  .foot-social {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    color: var(--faint);
+    border: 1px solid rgba(255,255,255,.08);
+    transition: color .2s ease, border-color .2s ease, background-color .2s ease, transform .2s ease;
+  }
+  .foot-social:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+  .foot-social svg { width: 14px; height: 14px; display: block; }
 
   @media (max-width: 1080px) {
     .stats { grid-template-columns: repeat(2, 1fr); gap: 28px 32px; }
@@ -2952,7 +2962,7 @@
         <span id="cp">© ромашовы в диджитал · 2026</span>
               </div>
       <div class="foot-legal">
-        Самозанятая Ромашова Юлия Юрьевна · ИНН: 701713904507 · Email: jromashova@icloud.com · Телефон: +7 906 199 55 50 · <a href="/privacy" data-i18n="foot.privacy">Политика конфиденциальности</a> · <a href="/cookies/policy" data-i18n="foot.cookies">Политика cookie</a>
+        Самозанятая Ромашова Юлия Юрьевна · ИНН: 701713904507 · Email: info@yul-n-ily.com · Телефон: +7 906 199 55 50 · <a href="/privacy" data-i18n="foot.privacy">Политика конфиденциальности</a> · <a href="/cookies/policy" data-i18n="foot.cookies">Политика cookie</a>
       </div>
     </footer>
   </div>
