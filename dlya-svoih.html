@@ -1,0 +1,770 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Что мы делаем · ромашовы в диджитал</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fbfaf7;
+  --surface: #f3f1ea;
+  --ink: #1a1a17;
+  --muted: #7a7870;
+  --faint: #b5b3aa;
+  --line: rgba(26,26,23,0.10);
+  --accent: #ff5c3e;
+  --sage: #8ba888;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  background: #18171a;
+  color: var(--ink);
+  font-family: 'Geist', system-ui, sans-serif;
+  height: 100%;
+  overflow: hidden;
+}
+.stage {
+  position: fixed; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+}
+.slide {
+  width: 100%; max-width: 1100px;
+  height: 100%; max-height: 720px;
+  background: var(--bg);
+  border-radius: 22px;
+  box-shadow: 0 30px 80px -20px rgba(0,0,0,0.55);
+  padding: 64px 80px;
+  position: relative;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+}
+.slide.active { display: flex; }
+.slide::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(26,26,23,0.05) 1px, transparent 0);
+  background-size: 18px 18px;
+  mask-image: radial-gradient(ellipse at bottom left, rgba(0,0,0,0.45), transparent 65%);
+  -webkit-mask-image: radial-gradient(ellipse at bottom left, rgba(0,0,0,0.45), transparent 65%);
+  pointer-events: none;
+}
+.top {
+  display: flex; justify-content: space-between; align-items: center;
+  position: relative; z-index: 2;
+  margin-bottom: 18px;
+}
+.label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; text-transform: lowercase; color: var(--muted);
+  letter-spacing: 0.06em;
+  display: inline-flex; align-items: center; gap: 12px;
+}
+.label .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 0 5px rgba(255,92,62,0.18); }
+.mark { font-family: 'Fraunces', serif; font-style: italic; font-size: 16px; color: var(--muted); }
+.mark::before { content: "✿"; color: var(--accent); margin-right: 8px; font-style: normal; }
+.body {
+  flex: 1;
+  display: flex; flex-direction: column;
+  justify-content: center;
+  position: relative; z-index: 2;
+}
+h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 64px; line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 24px;
+  max-width: 900px;
+}
+h1 em {
+  font-style: italic; font-weight: 500; color: var(--accent);
+  background: linear-gradient(transparent 70%, rgba(255,92,62,0.18) 70%);
+}
+h2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 400; font-style: italic;
+  font-size: 48px; line-height: 1.1;
+  margin: 0 0 28px;
+  max-width: 900px;
+}
+h2 em {
+  font-style: italic; font-weight: 500; color: var(--accent);
+  background: linear-gradient(transparent 70%, rgba(255,92,62,0.18) 70%);
+}
+.lead { font-size: 22px; line-height: 1.5; color: var(--ink); max-width: 800px; }
+.muted { color: var(--muted); }
+.faint { color: var(--faint); }
+p { margin: 0 0 16px; font-size: 19px; line-height: 1.55; max-width: 820px; }
+ul { font-size: 19px; line-height: 1.7; padding-left: 20px; margin: 0; max-width: 820px; }
+ul li::marker { color: var(--accent); }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.cols-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 22px 24px;
+}
+.card h3 {
+  margin: 0 0 10px;
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--accent);
+  font-style: italic;
+}
+.card p { font-size: 17px; line-height: 1.5; margin: 0; }
+.card .meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; color: var(--muted);
+  text-transform: lowercase; letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+.stat {
+  font-family: 'Fraunces', serif;
+  font-size: 56px; line-height: 1; color: var(--accent);
+  font-weight: 500;
+}
+.stat-sub { font-size: 15px; color: var(--muted); margin-top: 4px; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; text-transform: lowercase;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 14px;
+  color: var(--ink);
+}
+.chip.accent { background: rgba(255,92,62,0.08); border-color: rgba(255,92,62,0.3); color: var(--accent); }
+.divider {
+  height: 1px; background: var(--line); margin: 18px 0;
+}
+.foot {
+  display: flex; justify-content: space-between; align-items: center;
+  position: relative; z-index: 2;
+  margin-top: 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; color: var(--faint); letter-spacing: 0.04em;
+}
+.arrow {
+  font-family: 'Fraunces', serif; font-style: italic; color: var(--accent);
+}
+.example-box {
+  background: var(--surface);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 14px 0;
+  font-size: 17px; line-height: 1.55;
+  max-width: 820px;
+}
+.example-box b { color: var(--accent); font-weight: 600; }
+.quote {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 36px; line-height: 1.2;
+  color: var(--ink);
+  max-width: 820px;
+  margin: 0 0 18px;
+}
+.quote-mark {
+  font-family: 'Fraunces', serif;
+  font-size: 100px; line-height: 0.3; color: var(--accent);
+  display: block; margin-bottom: 10px;
+}
+.nav {
+  position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 18px; align-items: center;
+  z-index: 99;
+  background: rgba(0,0,0,0.45); backdrop-filter: blur(8px);
+  padding: 8px 18px; border-radius: 999px;
+  color: #ddd;
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+}
+.nav button {
+  background: transparent; border: 1px solid rgba(255,255,255,0.25);
+  color: #fff; border-radius: 50%; width: 32px; height: 32px;
+  cursor: pointer; font-size: 16px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.nav button:hover { background: rgba(255,255,255,0.1); }
+.flow {
+  display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+  margin: 18px 0;
+}
+.flow-step {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 16px;
+  min-width: 130px;
+  text-align: center;
+}
+.flow-step b { display: block; color: var(--accent); font-family: 'Fraunces', serif; font-style: italic; font-size: 18px; margin-bottom: 4px; }
+.flow-arrow { color: var(--accent); font-size: 24px; }
+.kbd-hint {
+  position: fixed; top: 14px; right: 18px;
+  color: #999; font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  z-index: 99;
+}
+@media (max-width: 800px) {
+  .slide { padding: 36px 28px; }
+  h1 { font-size: 38px; }
+  h2 { font-size: 28px; }
+  .lead { font-size: 17px; }
+  .cols, .cols-3 { grid-template-columns: 1fr; }
+  .stat { font-size: 40px; }
+  .quote { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<div class="kbd-hint">← → стрелками · Esc выход</div>
+
+<div class="stage" id="stage">
+
+<!-- ============ SLIDE 1 ============ -->
+<section class="slide active">
+  <div class="top">
+    <span class="label"><span class="dot"></span>внутренняя памятка</span>
+    <span class="mark">ромашовы в диджитал</span>
+  </div>
+  <div class="body">
+    <h1>чем мы занимаемся <em>на самом деле</em></h1>
+    <p class="lead">короткий разбор. что такое перформанс-маркетинг, какие клиенты у нас сейчас и что отвечать, когда спросят «а вы чем занимаетесь?».</p>
+    <div class="chips">
+      <span class="chip accent">18 слайдов</span>
+      <span class="chip">10 минут на чтение</span>
+      <span class="chip">примеры из нашей реальной работы</span>
+    </div>
+  </div>
+  <div class="foot">
+    <span>дата: 16 мая 2026</span>
+    <span class="arrow">листай →</span>
+  </div>
+</section>
+
+<!-- ============ SLIDE 2 ============ -->
+<section class="slide">
+  <div class="top">
+    <span class="label"><span class="dot"></span>суть · за 30 секунд</span>
+    <span class="mark">если коротко</span>
+  </div>
+  <div class="body">
+    <h2>мы покупаем у площадок <em>показы рекламы</em> и продаём клиентам <em>заявки и продажи</em></h2>
+    <div class="cols">
+      <div class="card">
+        <div class="meta">сторона 1 · что мы делаем</div>
+        <p>настраиваем кабинеты в Яндекс Директ, VK Рекламе, Telegram Ads, Google Ads, Meta. крутим бюджет клиента. меряем что работает. убираем что сливает деньги. усиливаем что заходит.</p>
+      </div>
+      <div class="card">
+        <div class="meta">сторона 2 · за что нам платят</div>
+        <p>клиент сам не умеет (или не хочет) тратить часы каждый день на эти кабинеты. ему нужны не «отчёты с красивыми графиками», а звонки, заявки и оплаты — за деньги, которые экономически окупаются.</p>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:24px;font-size:17px;">это и есть «перформанс-маркетинг» — маркетинг по результату, который можно посчитать в рублях.</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 3 ============ -->
+<section class="slide">
+  <div class="top">
+    <span class="label"><span class="dot"></span>основы · 2 типа рекламы</span>
+    <span class="mark">самое главное различие</span>
+  </div>
+  <div class="body">
+    <h2>интернет-реклама бывает <em>двух типов</em> — мы делаем обе</h2>
+    <div class="cols">
+      <div class="card">
+        <div class="meta">тип 1 · контекстная</div>
+        <h3>человек уже ищет — мы ловим</h3>
+        <p>пользователь сам вбил в поиске «пластика груди Краснодар» или «робототехника для детей Вена». реклама показывается прямо в результатах. он уже горячий — нужно только не упустить.</p>
+        <div class="chips">
+          <span class="chip">Яндекс Директ</span>
+          <span class="chip">Google Ads</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="meta">тип 2 · таргетированная</div>
+        <h3>человек не ищет — но подходит</h3>
+        <p>пользователь листает ленту ВК или Instagram. он ничего не искал, но по портрету (возраст, гео, интересы, поведение) подходит под продукт. реклама вклинивается между постами.</p>
+        <div class="chips">
+          <span class="chip">VK Реклама</span>
+          <span class="chip">Telegram Ads</span>
+          <span class="chip">Meta (FB / Instagram)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 4 ============ -->
+<section class="slide">
+  <div class="top">
+    <span class="label"><span class="dot"></span>аналогия · из офлайна</span>
+    <span class="mark">чтобы прочувствовать</span>
+  </div>
+  <div class="body">
+    <h2>если перевести <em>в офлайн</em></h2>
+    <div class="cols">
+      <div class="card">
+        <div class="meta">контекст = вывеска на улице</div>
+        <p style="font-size:18px;">человек идёт по городу <b>голодный</b> и видит вывеску <b>«Кафе — обед 250₽»</b>. он зашёл — потому что уже хотел есть.</p>
+        <p class="muted" style="font-size:15px;margin-top:8px;">в интернете: он гуглит «обед рядом» — наш клиент-кафе показывается в выдаче.</p>
+      </div>
+      <div class="card">
+        <div class="meta">таргет = листовка в почтовом ящике</div>
+        <p style="font-size:18px;">в почтовый ящик в районе, <b>где живут любители кофе</b>, мы кладём флаер «открылась кофейня». они не искали — но мы знаем, что попадаем в их интересы.</p>
+        <p class="muted" style="font-size:15px;margin-top:8px;">в интернете: ВКонтакте показывает рекламу женщинам 30+, которые подписаны на паблики о красоте.</p>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:24px;font-size:16px;">контекст — короткая дорога к продаже. таргет — длиннее, но дешевле и шире охват.</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 5 ============ -->
+<section class="slide">
+  <div class="top">
+    <span class="label"><span class="dot"></span>площадки · с которыми работаем</span>
+    <span class="mark">5 кабинетов одновременно</span>
+  </div>
+  <div class="body">
+    <h2>где конкретно <em>крутим рекламу</em></h2>
+    <div class="cols-3">
+      <div class="card">
+        <div class="meta">контекст</div>
+        <h3>Яндекс Директ</h3>
+        <p>главная российская система контекста. поиск Яндекса + сайты-партнёры (РСЯ). у нас <b>27 клиентов</b> здесь.</p>
+      </div>
+      <div class="card">
+        <div class="meta">контекст</div>
+        <h3>Google Ads</h3>
+        <p>зарубежный контекст + YouTube. для тех, кто работает на западные рынки или продвигает YouTube-канал.</p>
+      </div>
+      <div class="card">
+        <div class="meta">таргет</div>
+        <h3>VK Реклама</h3>
+        <p>таргет ВКонтакте, Одноклассники, мини-приложения. сейчас <b>2 клиента</b>: танцстудия и земельные участки.</p>
+      </div>
+      <div class="card">
+        <div class="meta">таргет</div>
+        <h3>Telegram Ads</h3>
+        <p>реклама в чужих каналах Telegram. подписчики, переходы в боты, продажа курсов и услуг.</p>
+      </div>
+      <div class="card">
+        <div class="meta">таргет · международный</div>
+        <h3>Meta Ads</h3>
+        <p>Facebook + Instagram для зарубежных клиентов. сейчас <b>4 клиента</b> — США, Австрия, Испания.</p>
+      </div>
+      <div class="card">
+        <div class="meta">не реклама, но обязательно</div>
+        <h3>аналитика и лендинги</h3>
+        <p>Яндекс Метрика, GA4, сквозная аналитика, посадочные на Tilda. иначе непонятно «что окупается».</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 6 ============ -->
+<section class="slide">
+  <div class="top">
+    <span class="label"><span class="dot"></span>анатомия рекламы</span>
+    <span class="mark">из чего состоит</span>
+  </div>
+  <div class="body">
+    <h2>любая реклама — это <em>4 кирпичика</em></h2>
+    <ul>
+      <li><b>оффер</b> — что мы предлагаем. «обед за 250₽», «бесплатный вебинар», «курс лица за $1»</li>
+      <li><b>креатив</b> — то, что человек видит. картинка или видео + текст-обещание + кнопка «купить / записаться»</li>
+      <li><b>посадка</b> — куда ведёт клик. сайт, лендинг, лид-форма, бот в Telegram, мини-приложение</li>
+      <li><b>цель</b> — что считаем «успехом». заявка с формы, звонок, оплата, регистрация на вебинар</li>
+    </ul>
+    <div class="example-box" style="margin-top:24px;">
+      <b>пример (клиент-клиника).</b> <b>оффер:</b> «консультация у нашего хирурга». <b>креатив:</b> фото врача + «опыт 12 лет, бесплатный осмотр». <b>посадка:</b> страница с формой записи. <b>цель:</b> заявка с подтверждённым телефоном.
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 7 ============ -->
+<section class="slide">
+  <div class="top">
+    <span class="label"><span class="dot"></span>словарь · 8 слов</span>
+    <span class="mark">которые звучат у нас каждый день</span>
+  </div>
+  <div class="body">
+    <h2>что значат <em>слова</em>, которые я бубню в чатах</h2>
+    <div class="cols">
+      <div>
+        <p><b>показ</b> — реклама один раз появилась перед человеком. за показы мы платим площадке.</p>
+        <p><b>клик</b> — человек нажал на рекламу. <b>CTR</b> = сколько % увидевших кликнули.</p>
+        <p><b>лид</b> — заявка. кто-то оставил телефон / email / нажал «записаться».</p>
+        <p><b>CPL</b> = cost per lead. цена одной заявки. главная метрика на старте.</p>
+      </div>
+      <div>
+        <p><b>CPA / CPO</b> — цена покупки или заказа. главное на длинной дистанции.</p>
+        <p><b>ROAS</b> — сколько рублей выручки на рубль рекламы. ROAS 5 = с 1₽ вернулось 5₽.</p>
+        <p><b>выгорание</b> — реклама примелькалась, кликают хуже. пора менять креатив.</p>
+        <p><b>атрибуция</b> — кому «зачёт» за продажу: контексту, таргету или прямому заходу.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 8 ============ -->
+<section class="slide">
+  <div class="top">
+    <span class="label"><span class="dot"></span>математика · одна кампания</span>
+    <span class="mark">на пальцах</span>
+  </div>
+  <div class="body">
+    <h2>как из <em>10 000₽ бюджета</em> рождаются клиенты</h2>
+    <div class="flow">
+      <div class="flow-step"><b>10 000₽</b>заплатили площадке</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step"><b>500</b>кликов на сайт</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step"><b>50</b>заявок (CPL 200₽)</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step"><b>10</b>продаж (CPA 1 000₽)</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step"><b>60 000₽</b>выручки клиента</div>
+    </div>
+    <p class="muted" style="font-size:16px;">это идеальный случай. реальные цифры везде разные: иногда CPL $1, иногда €40. наша работа — <b>держать эти цифры в плановых рамках</b> и улучшать их со временем.</p>
+    <div class="example-box">
+      когда клиент платит нам 50 000₽ в месяц и получает с рекламы 1 000 000₽ выручки — он будет работать с нами годами. поэтому самые длинные наши клиенты — <b>4–5 лет</b>, медиана — <b>2+ года</b>.
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 9 ============ -->
+<section class="slide">
+  <div class="top">
+    <span class="label"><span class="dot"></span>наш день · процесс</span>
+    <span class="mark">за что нам платят</span>
+  </div>
+  <div class="body">
+    <h2>как выглядит <em>обычный рабочий день</em></h2>
+    <ul>
+      <li><b>утро</b> — открываем все кабинеты (5+ платформ × 30+ клиентов). смотрим, что было вчера, сравниваем с позавчера.</li>
+      <li><b>гасим плохое</b> — если кампания вчера слила бюджет без заявок — выключаем. если креатив выгорел — на паузу.</li>
+      <li><b>усиливаем хорошее</b> — если связка зашла (например, реклама принесла 5 заявок по 150₽ при плане 300₽) — поднимаем бюджет на 20–30%.</li>
+      <li><b>раз в неделю-две</b> — пачка новых креативов. старые надоедают аудитории за 2–4 недели.</li>
+      <li><b>раз в неделю</b> — отчёт клиенту: что сделали, что планируем, как идём по KPI.</li>
+      <li><b>горящее</b> — клиент пишет «упали заявки» — разбираемся сразу: что сломалось, площадка глючит или мы пропустили выгорание.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ SLIDE 10 ============ -->
+<section class="slide">
+  <div class="top">
+    <span class="label"><span class="dot"></span>кейс · клиника</span>
+    <span class="mark">3 года вместе</span>
+  </div>
+  <div class="body">
+    <h2>клиника эстетической медицины · <em>3 года с нами</em></h2>
+    <p style="font-size:19px;">7 врачей в штате. до нас они трижды меняли подрядчиков — каждый предыдущий «настраивал рекламу», но <b>заявки приходили мусорные</b>: люди, которые не записывались или записывались и не приходили. деньги уходили — пациентов не прибавлялось.</p>
+    <div class="example-box">
+      <b>что мы сделали в первый месяц:</b> не торопились запускать новое. сначала <b>поставили аналитику</b> — связали сайт, телефонию и CRM, чтобы было видно <i>не клики, а реальные записи и оплаты</i>. без этого любая реклама — стрельба наугад.<br><br>
+      <b>что было дальше:</b> когда стало видно, какие услуги маржинальные, а какие — пустая трата, перезапустили рекламу прицельно. <b>сейчас это основной канал записей клиники.</b>
+    </div>
+    <div class="cols-3" style="margin-top:18px;">
+      <div>
+        <div class="stat">7</div>
+        <div class="stat-sub">врачей в штате</div>
+      </div>
+      <div>
+        <div class="stat">3</div>
+        <div class="stat-sub">года вместе</div>
+      </div>
+      <div>
+        <div class="stat">×3</div>
+        <div class="stat-sub">меняли подрядчиков до нас</div>
+      </div>
+    </div>
+    <div class="chips">
+      <span class="chip">Яндекс Директ</span>
+      <span class="chip">сквозная аналитика</span>
+      <span class="chip">CRM + касса</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 11 ============ -->
+<section class="slide">
+  <div class="top">
+    <span class="label"><span class="dot"></span>кейс · франшиза</span>
+    <span class="mark">с сайта · мульти-локация</span>
+  </div>
+  <div class="body">
+    <h2>сеть клубов <em>художественной гимнастики</em> на юге России</h2>
+    <p style="font-size:19px;">взяли один город «посмотреть». сейчас под нами <b>вся франшиза</b>. каждый филиал — свой бюджет, своё руководство, своя площадка.</p>
+    <div class="example-box">
+      <b>главный KPI клиента:</b> управляющие на местах перестали приходить к собственнику с претензиями «нет заявок». <b>тишина в чате франчайзи = успех.</b>
+    </div>
+    <div class="chips">
+      <span class="chip">Яндекс Директ</span>
+      <span class="chip">ВКонтакте</span>
+      <span class="chip">мульти-локация</span>
+    </div>
+    <p class="muted" style="margin-top:24px;font-size:16px;">самое сложное в франшизе — то, что нельзя «настроить одну кампанию на всех». у каждого города свой бюджет, свой кружок около дома, свои тренеры. для нас это десятки параллельных микро-кампаний с одной методологией.</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 12 ============ -->
+<section class="slide">
+  <div class="top">
+    <span class="label"><span class="dot"></span>кейс · YouTube-канал</span>
+    <span class="mark">с сайта · контент + реклама</span>
+  </div>
+  <div class="body">
+    <span class="quote-mark">«</span>
+    <p class="quote"><em style="color:var(--accent);">185 000+</em> подписчиков за год · с нуля</p>
+    <p style="font-size:19px;margin-top:24px;">экспертный YouTube-канал с приглашёнными гостями. упаковка, шорты, продвижение через Google Ads. без накруток, реальные люди, реальные просмотры.</p>
+    <div class="example-box">
+      это редкий случай, когда мы делаем не только трафик, но и <b>контент-стратегию</b> — какой ролик снять, какой заголовок поставить, какие гости приведут аудиторию.
+    </div>
+    <div class="chips">
+      <span class="chip">Google Ads</span>
+      <span class="chip">YouTube</span>
+      <span class="chip">контент-стратегия</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 13 ============ -->
+<section class="slide">
+  <div class="top">
+    <span class="label"><span class="dot"></span>портфолио · международные</span>
+    <span class="mark">не только Россия</span>
+  </div>
+  <div class="body">
+    <h2>что у нас крутится <em>прямо сейчас</em> · Meta Ads</h2>
+    <div class="cols">
+      <div class="card">
+        <div class="meta">США · Великобритания · Австралия</div>
+        <h3>Dr. Ales · MindBodyFace</h3>
+        <p>онлайн-курсы натурального омоложения лица для англоязычных женщин 30–60. большой англоязычный аккаунт, бюджет — <b>десятки тысяч долларов в месяц</b>. главный наш клиент в Meta.</p>
+      </div>
+      <div class="card">
+        <div class="meta">Испания</div>
+        <h3>Kazantools · 3D-моделирование одежды</h3>
+        <p>онлайн-школа цифровой моды (CLO 3D + Blender). 5-месячный курс, бесплатные вебинары на испанском. диалект Испании, не латиноамериканский.</p>
+      </div>
+      <div class="card">
+        <div class="meta">Вена, Австрия</div>
+        <h3>ROBBO Club · детские робо-лагеря</h3>
+        <p>летние Sommercamps по робототехнике и программированию для детей 6–16 лет. реклама на немецком, родителям в Вене. сейчас идёт сезон продаж лагерей 2026.</p>
+      </div>
+      <div class="card">
+        <div class="meta">Telegram / партнёрский</div>
+        <h3>Askarov-Ildar</h3>
+        <p>четвёртый клиент в Meta. эмоциональный lifestyle-стиль, отдельный почерк креативов.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 14 ============ -->
+<section class="slide">
+  <div class="top">
+    <span class="label"><span class="dot"></span>портфолио · Россия</span>
+    <span class="mark">27 на Яндексе + 2 в VK</span>
+  </div>
+  <div class="body">
+    <h2>что крутится <em>в России</em></h2>
+    <div class="cols">
+      <div class="card">
+        <div class="meta">VK Реклама · Пермь</div>
+        <h3>Танцевальная студия «у Алёны»</h3>
+        <p>фитнес-формат на ул. Белинского 31. реклама в ленте ВКонтакте + видео-Клипы. лид-формы прямо в кабинете VK — без перехода на сайт.</p>
+      </div>
+      <div class="card">
+        <div class="meta">VK Реклама · вся РФ</div>
+        <h3>Hesoyam · земельные участки</h3>
+        <p>VK Mini App «Земельные участки по госпрограмме». реклама ведёт в приложение внутри ВКонтакте. таргет по областям РФ.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <p style="font-size:18px;margin-top:8px;">+ <b>27 клиентов на Яндекс Директе</b>. ниши, в которых у нас глубокий опыт:</p>
+    <div class="chips">
+      <span class="chip">эстетическая медицина</span>
+      <span class="chip">пластическая хирургия</span>
+      <span class="chip">фитнес и групповые занятия</span>
+      <span class="chip">EdTech · онлайн-школы</span>
+      <span class="chip">e-commerce</span>
+      <span class="chip">недвижимость</span>
+      <span class="chip">локальные услуги</span>
+      <span class="chip">детский спорт</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 15 ============ -->
+<section class="slide">
+  <div class="top">
+    <span class="label"><span class="dot"></span>почему остаются с нами</span>
+    <span class="mark">главный показатель</span>
+  </div>
+  <div class="body">
+    <h2>наш <em>главный KPI</em> — не цена клика, а сколько лет с нами клиент</h2>
+    <div class="cols-3">
+      <div>
+        <div class="stat">2+</div>
+        <div class="stat-sub">года · медиана работы с клиентом</div>
+      </div>
+      <div>
+        <div class="stat">4–5</div>
+        <div class="stat-sub">лет · самые длинные</div>
+      </div>
+      <div>
+        <div class="stat">400+</div>
+        <div class="stat-sub">проектов за 13 лет</div>
+      </div>
+    </div>
+    <div class="example-box" style="margin-top:28px;">
+      обычное агентство гонится за новыми клиентами и теряет старых через 3–6 месяцев. мы наоборот — берём проект, только если понимаем, что сможем его окупить. поэтому первый месяц иногда уходит в аналитику, а не в открутку. <b>зато потом — годы.</b>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 16 ============ -->
+<section class="slide">
+  <div class="top">
+    <span class="label"><span class="dot"></span>AI в стеке · честный разбор</span>
+    <span class="mark">что это и что это НЕ</span>
+  </div>
+  <div class="body">
+    <h2>«у нас свои <em>AI-агенты</em>» — что это значит</h2>
+    <p style="font-size:18px;">за последний год у нас в команде собраны три собственные программы-помощника для трёх рекламных систем:</p>
+    <div class="cols-3" style="margin-top:8px;">
+      <div class="card">
+        <div class="meta">проект</div>
+        <h3>ai_ads_agent</h3>
+        <p>помощник для Facebook / Instagram. 58 инструментов, 17 «скиллов».</p>
+      </div>
+      <div class="card">
+        <div class="meta">проект</div>
+        <h3>yandex-direct-ai</h3>
+        <p>помощник для Яндекс Директа + VK Ads. 170+ инструментов.</p>
+      </div>
+      <div class="card">
+        <div class="meta">проект</div>
+        <h3>vk-ads-ai</h3>
+        <p>отдельный помощник для VK Рекламы с мониторингом.</p>
+      </div>
+    </div>
+    <div class="example-box" style="margin-top:24px;">
+      <b>что они делают:</b> анализируют отчёты, генерируют десятки текстов и заголовков, подсвечивают что отключить, рисуют картинки-креативы.<br>
+      <b>что они НЕ делают:</b> не принимают решения. не общаются с клиентом. не выбирают стратегию. <b>человек по-прежнему за рулём.</b>
+    </div>
+    <p class="muted" style="font-size:15px;">это позволяет нам вести десятки клиентов вдвоём — без офиса и менеджеров.</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 17 ============ -->
+<section class="slide">
+  <div class="top">
+    <span class="label"><span class="dot"></span>команда</span>
+    <span class="mark">кто мы</span>
+  </div>
+  <div class="body">
+    <h2>семейная команда · <em>и в жизни, и в проектах</em></h2>
+    <p style="font-size:20px;">вместе 13 лет: вырастили сына Марка и больше 400 проектов в трафике. работаем вдвоём — <b>без офиса, без менеджеров-прокладок.</b></p>
+    <div class="cols" style="margin-top:24px;">
+      <div class="card">
+        <h3>стратегия и клиент</h3>
+        <p>оффер, позиционирование, переговоры, видение проекта, общение с клиентами. ИП оформлено на меня — я юридическое лицо команды.</p>
+      </div>
+      <div class="card">
+        <h3>трафик и аналитика</h3>
+        <p>настройка и ведение кабинетов, креативы, аналитика, AI-стек. ежедневная рутина в кабинетах.</p>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:24px;font-size:15px;">сайт: <b>yul-n-ily.com</b> · email: <b>info@yul-n-ily.com</b> · телефон: <b>+7 906 199 55 50</b></p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 18 ============ -->
+<section class="slide">
+  <div class="top">
+    <span class="label"><span class="dot"></span>шпаргалка · что говорить</span>
+    <span class="mark">когда спросят «а вы чем?»</span>
+  </div>
+  <div class="body">
+    <h2>готовые <em>фразы-ответы</em></h2>
+    <div class="example-box">
+      <b>спрашивают «чем вы занимаетесь?»</b><br>
+      → <i>«Мы настраиваем интернет-рекламу для бизнеса. Площадки — Яндекс, ВКонтакте, Telegram, Google, Facebook. Сейчас около 30 клиентов в России и несколько за рубежом — США, Австрия, Испания. Команде 13 лет, 400+ проектов.»</i>
+    </div>
+    <div class="example-box">
+      <b>спрашивают «а что конкретно делаешь ты?»</b><br>
+      → <i>«Я отвечаю за стратегию и общение с клиентами. Юридически наша компания оформлена на меня — самозанятая. Работаем вдвоём, как маленькое агентство.»</i>
+    </div>
+    <div class="example-box">
+      <b>спрашивают «а ниши какие?»</b><br>
+      → <i>«В основном эстетическая медицина, пластическая хирургия, фитнес, онлайн-школы. Есть и редкие — детский робо-лагерь в Вене, испанский курс 3D-моделирования одежды, курсы омоложения для англоязычных женщин.»</i>
+    </div>
+    <div class="example-box">
+      <b>спрашивают «а сколько это стоит?»</b><br>
+      → <i>«Под задачу. Обычно — бесплатный 30-минутный созвон, на нём понимаем, сможем ли быть полезны. Бюджеты клиентов от десятков тысяч рублей в месяц до десятков тысяч долларов.»</i>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<div class="nav">
+  <button onclick="go(-1)">‹</button>
+  <span><span id="curr">1</span> / <span id="total">18</span></span>
+  <button onclick="go(1)">›</button>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+document.getElementById('total').textContent = total;
+let i = 0;
+function show(n) {
+  i = Math.max(0, Math.min(total - 1, n));
+  slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+  document.getElementById('curr').textContent = i + 1;
+  history.replaceState(null, '', '#' + (i + 1));
+}
+function go(d) { show(i + d); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { go(1); e.preventDefault(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { go(-1); e.preventDefault(); }
+  else if (e.key === 'Home') show(0);
+  else if (e.key === 'End') show(total - 1);
+  else if (e.key === 'Escape') { /* nothing */ }
+});
+document.addEventListener('click', e => {
+  if (e.target.closest('.nav') || e.target.closest('button') || e.target.closest('a')) return;
+  const r = window.innerWidth;
+  if (e.clientX > r / 2) go(1); else go(-1);
+});
+// swipe
+let sx = 0;
+document.addEventListener('touchstart', e => { sx = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - sx;
+  if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+});
+// initial hash
+const h = parseInt(location.hash.replace('#', ''), 10);
+if (h >= 1 && h <= total) show(h - 1);
+</script>
+
+</body>
+</html>
