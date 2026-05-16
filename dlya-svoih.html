@@ -9,311 +9,126 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #fbfaf7;
-  --surface: #f3f1ea;
-  --ink: #1a1a17;
-  --muted: #7a7870;
-  --faint: #b5b3aa;
-  --line: rgba(26,26,23,0.10);
-  --accent: #ff5c3e;
-  --sage: #8ba888;
-}
+:root { --bg:#fbfaf7; --surface:#f3f1ea; --ink:#1a1a17; --muted:#7a7870; --faint:#b5b3aa; --line:rgba(26,26,23,0.10); --accent:#ff5c3e; }
 * { box-sizing: border-box; }
-html, body {
-  margin: 0; padding: 0;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: 'Geist', system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-body::before {
-  content: "";
-  position: fixed; inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(26,26,23,0.05) 1px, transparent 0);
-  background-size: 18px 18px;
-  mask-image: radial-gradient(ellipse at top, rgba(0,0,0,0.35), transparent 70%);
-  -webkit-mask-image: radial-gradient(ellipse at top, rgba(0,0,0,0.35), transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-main {
-  position: relative; z-index: 1;
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 64px 28px 120px;
-}
-.label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px; text-transform: lowercase; color: var(--muted);
-  letter-spacing: 0.06em;
-  display: inline-flex; align-items: center; gap: 12px;
-  margin-bottom: 14px;
-}
-.label .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 0 5px rgba(255,92,62,0.18); }
-.mark { font-family: 'Fraunces', serif; font-style: italic; font-size: 16px; color: var(--muted); }
-.mark::before { content: "✿"; color: var(--accent); margin-right: 8px; font-style: normal; }
-
-.hero {
-  padding: 60px 0 50px;
-  border-bottom: 1px solid var(--line);
-  margin-bottom: 50px;
-}
-.hero h1 {
-  font-family: 'Fraunces', serif;
-  font-weight: 400;
-  font-size: 56px; line-height: 1.05;
-  letter-spacing: -0.02em;
-  margin: 0 0 24px;
-}
-.hero h1 em {
-  font-style: italic; font-weight: 500; color: var(--accent);
-  background: linear-gradient(transparent 70%, rgba(255,92,62,0.18) 70%);
-}
-.lead { font-size: 21px; line-height: 1.5; color: var(--ink); }
-
-section {
-  padding: 48px 0;
-  border-bottom: 1px solid var(--line);
-  scroll-margin-top: 24px;
-}
-section:last-of-type { border-bottom: none; }
-
-h2 {
-  font-family: 'Fraunces', serif;
-  font-weight: 400; font-style: italic;
-  font-size: 38px; line-height: 1.15;
-  letter-spacing: -0.01em;
-  margin: 0 0 24px;
-}
-h2 em {
-  font-style: italic; font-weight: 500; color: var(--accent);
-  background: linear-gradient(transparent 70%, rgba(255,92,62,0.18) 70%);
-}
-
-p { margin: 0 0 16px; font-size: 18px; line-height: 1.6; }
-.muted { color: var(--muted); }
-.faint { color: var(--faint); }
-
-ul {
-  font-size: 18px; line-height: 1.7;
-  padding-left: 22px; margin: 0 0 16px;
-}
-ul li { margin-bottom: 8px; }
-ul li::marker { color: var(--accent); }
-
-.cols {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 20px; margin: 18px 0;
-}
-.cols-3 {
-  display: grid; grid-template-columns: 1fr 1fr 1fr;
-  gap: 18px; margin: 18px 0;
-}
-.card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 22px 24px;
-}
-.card h3 {
-  margin: 0 0 10px;
-  font-family: 'Fraunces', serif;
-  font-weight: 500;
-  font-size: 21px;
-  color: var(--accent);
-  font-style: italic;
-}
-.card p { font-size: 16px; line-height: 1.55; margin: 0; }
-.card .meta {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; color: var(--muted);
-  text-transform: lowercase; letter-spacing: 0.05em;
-  margin-bottom: 8px;
-}
-.stat {
-  font-family: 'Fraunces', serif;
-  font-size: 56px; line-height: 1; color: var(--accent);
-  font-weight: 500;
-}
-.stat-sub { font-size: 14px; color: var(--muted); margin-top: 6px; }
-.stats-row {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 24px; margin: 22px 0;
-  padding: 22px 0;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-
-.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-.chip {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px; text-transform: lowercase;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 6px 12px;
-  color: var(--ink);
-}
-.chip.accent { background: rgba(255,92,62,0.08); border-color: rgba(255,92,62,0.3); color: var(--accent); }
-
-.example-box {
-  background: var(--surface);
-  border-left: 4px solid var(--accent);
-  border-radius: 0 10px 10px 0;
-  padding: 18px 24px;
-  margin: 16px 0;
-  font-size: 17px; line-height: 1.6;
-}
-.example-box b { color: var(--accent); font-weight: 600; }
-.example-box + .example-box { margin-top: 12px; }
-
-.gallery {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 22px; margin: 20px 0 8px;
-}
-.creative {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  overflow: hidden;
-  display: flex; flex-direction: column;
-}
-.creative .thumb {
-  display: block;
-  background: #0a0908;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-}
-.creative .thumb img {
-  display: block; width: 100%; height: 100%;
-  object-fit: cover;
-  transition: transform .4s ease;
-}
-.creative:hover .thumb img { transform: scale(1.02); }
-.creative .info {
-  padding: 16px 18px 18px;
-  flex: 1; display: flex; flex-direction: column;
-}
-.creative .ptag {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; text-transform: lowercase;
-  color: var(--accent); letter-spacing: 0.05em;
-  margin-bottom: 6px;
-}
-.creative h3 {
-  font-family: 'Fraunces', serif;
-  font-style: italic; font-weight: 500;
-  font-size: 19px; color: var(--ink);
-  margin: 0 0 8px;
-}
-.creative p {
-  font-size: 14px; line-height: 1.5; color: var(--muted);
-  margin: 0;
-}
-.gallery-group-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px; text-transform: lowercase;
-  color: var(--muted); letter-spacing: 0.05em;
-  margin: 22px 0 8px;
-  padding-top: 16px;
-  border-top: 1px dashed var(--line);
-}
-.gallery-group-label:first-of-type { padding-top: 0; border-top: none; }
-
-.quote {
-  font-family: 'Fraunces', serif;
-  font-style: italic;
-  font-size: 30px; line-height: 1.25;
-  color: var(--ink);
-  margin: 0 0 18px;
-}
-.quote-mark {
-  font-family: 'Fraunces', serif;
-  font-size: 80px; line-height: 0.3; color: var(--accent);
-  display: block; margin-bottom: 8px;
-}
-
-.flow {
-  display: flex; gap: 10px; align-items: center;
-  flex-wrap: wrap; margin: 18px 0;
-}
-.flow-step {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 12px 14px;
-  font-size: 14px;
-  min-width: 120px;
-  text-align: center;
-  flex: 1 1 120px;
-}
-.flow-step b { display: block; color: var(--accent); font-family: 'Fraunces', serif; font-style: italic; font-size: 17px; margin-bottom: 4px; }
-.flow-arrow { color: var(--accent); font-size: 18px; flex: 0 0 auto; }
-
-.toc {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 20px 24px;
-  margin: 24px 0 0;
-}
-.toc-title {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; text-transform: lowercase;
-  color: var(--muted); letter-spacing: 0.05em;
-  margin-bottom: 10px;
-}
-.toc ol {
-  margin: 0; padding-left: 22px;
-  font-size: 15px; line-height: 1.7;
-  columns: 2; column-gap: 24px;
-}
-.toc li::marker { color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
-.toc a { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
-.toc a:hover { border-color: var(--accent); }
-
-.footer {
-  margin-top: 60px;
-  padding-top: 28px;
-  border-top: 1px solid var(--line);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px; color: var(--faint);
-  text-align: center;
-  letter-spacing: 0.04em;
-}
-
-@media (max-width: 720px) {
-  main { padding: 36px 18px 60px; }
-  .hero { padding: 28px 0; margin-bottom: 28px; }
-  .hero h1 { font-size: 36px; }
-  .lead { font-size: 17px; }
-  section { padding: 32px 0; }
-  h2 { font-size: 26px; }
-  p, ul { font-size: 16px; }
-  .cols, .cols-3, .stats-row { grid-template-columns: 1fr; }
-  .stat { font-size: 42px; }
-  .quote { font-size: 21px; }
-  .toc ol { columns: 1; }
-  .flow-step { flex: 1 1 100%; }
-  .flow-arrow { display: none; }
-  .gallery { grid-template-columns: 1fr; gap: 16px; }
+html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family:'Geist',system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+body.lb-open { overflow:hidden; }
+body::before { content:""; position:fixed; inset:0; background-image:radial-gradient(circle at 1px 1px, rgba(26,26,23,0.05) 1px, transparent 0); background-size:18px 18px; mask-image:radial-gradient(ellipse at top, rgba(0,0,0,0.35), transparent 70%); -webkit-mask-image:radial-gradient(ellipse at top, rgba(0,0,0,0.35), transparent 70%); pointer-events:none; z-index:0; }
+main { position:relative; z-index:1; max-width:880px; margin:0 auto; padding:64px 28px 120px; }
+.label { font-family:'JetBrains Mono',monospace; font-size:13px; text-transform:lowercase; color:var(--muted); letter-spacing:0.06em; display:inline-flex; align-items:center; gap:12px; margin-bottom:14px; }
+.label .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 0 5px rgba(255,92,62,0.18); }
+.hero { padding:60px 0 50px; border-bottom:1px solid var(--line); margin-bottom:50px; }
+.hero h1 { font-family:'Fraunces',serif; font-weight:400; font-size:56px; line-height:1.05; letter-spacing:-0.02em; margin:0 0 24px; }
+.hero h1 em { font-style:italic; font-weight:500; color:var(--accent); background:linear-gradient(transparent 70%, rgba(255,92,62,0.18) 70%); }
+.lead { font-size:21px; line-height:1.5; color:var(--ink); }
+section { padding:48px 0; border-bottom:1px solid var(--line); scroll-margin-top:24px; }
+section:last-of-type { border-bottom:none; }
+h2 { font-family:'Fraunces',serif; font-weight:400; font-style:italic; font-size:38px; line-height:1.15; letter-spacing:-0.01em; margin:0 0 24px; }
+h2 em { font-style:italic; font-weight:500; color:var(--accent); background:linear-gradient(transparent 70%, rgba(255,92,62,0.18) 70%); }
+p { margin:0 0 16px; font-size:18px; line-height:1.6; }
+.muted { color:var(--muted); }
+ul { font-size:18px; line-height:1.7; padding-left:22px; margin:0 0 16px; }
+ul li { margin-bottom:8px; }
+ul li::marker { color:var(--accent); }
+.cols { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:18px 0; }
+.cols-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; margin:18px 0; }
+.card { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:22px 24px; }
+.card h3 { margin:0 0 10px; font-family:'Fraunces',serif; font-weight:500; font-size:21px; color:var(--accent); font-style:italic; }
+.card p { font-size:16px; line-height:1.55; margin:0; }
+.card p + p { margin-top:10px; }
+.card .meta { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); text-transform:lowercase; letter-spacing:0.05em; margin-bottom:8px; }
+.stat { font-family:'Fraunces',serif; font-size:56px; line-height:1; color:var(--accent); font-weight:500; }
+.stat-sub { font-size:14px; color:var(--muted); margin-top:6px; }
+.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin:22px 0; padding:22px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+.chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+.chip { font-family:'JetBrains Mono',monospace; font-size:12px; text-transform:lowercase; background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:6px 12px; color:var(--ink); }
+.chip.accent { background:rgba(255,92,62,0.08); border-color:rgba(255,92,62,0.3); color:var(--accent); }
+.example-box { background:var(--surface); border-left:4px solid var(--accent); border-radius:0 10px 10px 0; padding:18px 24px; margin:16px 0; font-size:17px; line-height:1.6; }
+.example-box b { color:var(--accent); font-weight:600; }
+.example-box + .example-box { margin-top:12px; }
+.flow { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:18px 0; }
+.flow-step { background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:12px 14px; font-size:14px; min-width:120px; text-align:center; flex:1 1 120px; }
+.flow-step b { display:block; color:var(--accent); font-family:'Fraunces',serif; font-style:italic; font-size:17px; margin-bottom:4px; }
+.flow-arrow { color:var(--accent); font-size:18px; flex:0 0 auto; }
+.toc { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:20px 24px; margin:24px 0 0; }
+.toc-title { font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:lowercase; color:var(--muted); letter-spacing:0.05em; margin-bottom:10px; }
+.toc ol { margin:0; padding-left:22px; font-size:15px; line-height:1.7; columns:2; column-gap:24px; }
+.toc li::marker { color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:12px; }
+.toc a { color:var(--ink); text-decoration:none; border-bottom:1px solid transparent; transition:border-color .15s; }
+.toc a:hover { border-color:var(--accent); }
+.footer { margin-top:60px; padding-top:28px; border-top:1px solid var(--line); font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--faint); text-align:center; letter-spacing:0.04em; }
+.h3-section { font-family:'Fraunces',serif; font-style:italic; font-size:24px; margin:32px 0 14px; color:var(--accent); font-weight:500; }
+.gallery { display:grid; grid-template-columns:1fr 1fr; gap:22px; margin:20px 0 8px; }
+.creative { background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; display:flex; flex-direction:column; }
+.creative .thumb { display:block; position:relative; background:#0a0908; aspect-ratio:1/1; overflow:hidden; cursor:zoom-in; border:none; padding:0; width:100%; }
+.creative .thumb img { display:block; width:100%; height:100%; object-fit:cover; transition:transform .4s ease; }
+.creative .thumb::after { content:''; position:absolute; top:12px; right:12px; width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.94) url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%231a1a17' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6'/%3E%3C/svg%3E") center / 18px no-repeat; box-shadow:0 6px 18px -4px rgba(0,0,0,0.2); opacity:0; transform:scale(0.85); transition:all .3s cubic-bezier(.2,.8,.2,1); z-index:5; pointer-events:none; }
+.creative .thumb:hover::after { opacity:1; transform:scale(1); }
+.creative:hover .thumb img { transform:scale(1.02); }
+.creative .info { padding:16px 18px 18px; flex:1; display:flex; flex-direction:column; }
+.creative .ptag { font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:lowercase; color:var(--accent); letter-spacing:0.05em; margin-bottom:6px; }
+.creative h3 { font-family:'Fraunces',serif; font-style:italic; font-weight:500; font-size:19px; color:var(--ink); margin:0 0 8px; }
+.creative p { font-size:14px; line-height:1.5; color:var(--muted); margin:0; }
+.gallery-group-label { font-family:'JetBrains Mono',monospace; font-size:12px; text-transform:lowercase; color:var(--muted); letter-spacing:0.05em; margin:22px 0 8px; padding-top:16px; border-top:1px dashed var(--line); }
+.gallery-group-label:first-of-type { padding-top:0; border-top:none; }
+.cabinets { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:18px 0; }
+.cab { background:var(--surface); border:1px solid var(--line); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; }
+.cab .thumb { display:block; position:relative; background:#f0eee7; overflow:hidden; cursor:zoom-in; border:none; padding:0; width:100%; }
+.cab .thumb img { display:block; width:100%; height:auto; transition:transform .4s ease; }
+.cab .thumb::after { content:''; position:absolute; top:10px; right:10px; width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,0.96) url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231a1a17' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6'/%3E%3C/svg%3E") center / 16px no-repeat; box-shadow:0 4px 14px -3px rgba(0,0,0,0.2); opacity:0; transform:scale(0.85); transition:all .3s cubic-bezier(.2,.8,.2,1); }
+.cab .thumb:hover::after { opacity:1; transform:scale(1); }
+.cab:hover .thumb img { transform:scale(1.01); }
+.cab .info { padding:14px 16px 16px; }
+.cab .ptag { font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:lowercase; color:var(--accent); letter-spacing:0.05em; margin-bottom:4px; }
+.cab h3 { font-family:'Fraunces',serif; font-style:italic; font-weight:500; font-size:18px; margin:0; }
+.lightbox { position:fixed; inset:0; z-index:1000; background:rgba(10,10,8,0.96); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); display:flex; align-items:center; justify-content:center; animation:lb-in .25s cubic-bezier(.2,.8,.2,1); }
+.lightbox[hidden] { display:none !important; }
+@keyframes lb-in { from { opacity:0; } to { opacity:1; } }
+.lb-stage { max-width:94vw; max-height:88vh; display:flex; align-items:center; justify-content:center; position:relative; }
+.lb-img { max-width:94vw; max-height:88vh; object-fit:contain; border-radius:8px; box-shadow:0 30px 80px -20px rgba(0,0,0,0.7); display:block; animation:lb-img-in .35s cubic-bezier(.2,.8,.2,1); cursor:zoom-in; transition:transform .25s cubic-bezier(.2,.8,.2,1); touch-action:manipulation; user-select:none; -webkit-user-select:none; -webkit-user-drag:none; -webkit-touch-callout:none; will-change:transform; }
+.lb-img.zoomed { cursor:grab; touch-action:none; }
+.lb-img.dragging { cursor:grabbing; transition:none; }
+@keyframes lb-img-in { from { opacity:0; transform:scale(0.96); } to { opacity:1; transform:scale(1); } }
+.lb-btn { position:fixed; z-index:1001; width:48px; height:48px; border-radius:50%; background:rgba(255,255,255,0.08); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.12); color:#fff; font-size:22px; line-height:1; cursor:pointer; transition:all .25s cubic-bezier(.2,.8,.2,1); display:grid; place-items:center; padding:0; }
+.lb-btn:hover { background:rgba(255,255,255,0.18); border-color:rgba(255,255,255,0.22); }
+.lb-close { top:20px; right:20px; font-size:24px; }
+.lb-prev { left:20px; top:50%; transform:translateY(-50%); }
+.lb-next { right:20px; top:50%; transform:translateY(-50%); }
+.lb-prev:hover { transform:translateY(-50%) translateX(-2px); }
+.lb-next:hover { transform:translateY(-50%) translateX(2px); }
+.lb-counter { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); color:rgba(255,255,255,0.65); font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; padding:8px 14px; background:rgba(255,255,255,0.06); border-radius:999px; backdrop-filter:blur(8px); }
+.lb-counter b { color:#fff; font-weight:500; }
+.lb-caption { position:fixed; bottom:64px; left:50%; transform:translateX(-50%); color:rgba(255,255,255,0.9); font-size:14px; max-width:80vw; text-align:center; font-family:'Geist',sans-serif; line-height:1.4; }
+.lb-hint { position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); display:none; align-items:center; gap:12px; color:#fff; font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.06em; pointer-events:none; z-index:1002; padding:10px 18px; background:rgba(255,255,255,0.08); border-radius:999px; }
+.lb-hint.show { display:flex; animation:hint-in .3s ease; }
+.lb-hint.hide { animation:hint-out .3s ease forwards; }
+@keyframes hint-in { from { opacity:0; transform:translate(-50%,-50%) scale(.85); } to { opacity:1; transform:translate(-50%,-50%) scale(1); } }
+@keyframes hint-out { from { opacity:1; } to { opacity:0; } }
+@media (max-width:720px) {
+  main { padding:36px 18px 60px; }
+  .hero { padding:28px 0; margin-bottom:28px; }
+  .hero h1 { font-size:36px; }
+  .lead { font-size:17px; }
+  section { padding:32px 0; }
+  h2 { font-size:26px; }
+  p, ul { font-size:16px; }
+  .cols, .cols-3, .stats-row { grid-template-columns:1fr; }
+  .stat { font-size:42px; }
+  .toc ol { columns:1; }
+  .flow-step { flex:1 1 100%; }
+  .flow-arrow { display:none; }
+  .gallery { grid-template-columns:1fr; gap:16px; }
+  .cabinets { grid-template-columns:1fr; gap:14px; }
 }
 </style>
 </head>
 <body>
 <main>
-
 <div class="hero">
   <div class="label"><span class="dot"></span>внутренняя памятка</div>
   <h1>чем мы занимаемся <em>на самом деле</em></h1>
-  <p class="lead">короткий разбор. что такое перформанс-маркетинг, какие клиенты у нас сейчас и что отвечать, когда спросят «а вы чем занимаетесь?».</p>
-  <div class="chips">
-    <span class="chip accent">10 минут на чтение</span>
-    <span class="chip">примеры из нашей реальной работы</span>
-  </div>
-
+  <p class="lead">короткий разбор. что такое перформанс-маркетинг, какие клиенты у нас сейчас, как выглядит наша работа изнутри и что отвечать, когда спросят «а вы чем занимаетесь?».</p>
+  <div class="chips"><span class="chip accent">15 минут на чтение</span><span class="chip">примеры из нашей реальной работы</span></div>
   <nav class="toc">
     <div class="toc-title">содержание</div>
     <ol>
@@ -325,6 +140,7 @@ ul li::marker { color: var(--accent); }
       <li><a href="#slovar">словарь · 8 слов</a></li>
       <li><a href="#matematika">математика на пальцах</a></li>
       <li><a href="#den">обычный рабочий день</a></li>
+      <li><a href="#cabinets">из наших кабинетов</a></li>
       <li><a href="#klinika">кейс · клиника</a></li>
       <li><a href="#franchise">кейс · франшиза</a></li>
       <li><a href="#youtube">кейс · YouTube</a></li>
@@ -335,112 +151,53 @@ ul li::marker { color: var(--accent); }
       <li><a href="#ai">AI в стеке</a></li>
       <li><a href="#komanda">команда</a></li>
       <li><a href="#shpargalka">шпаргалка ответов</a></li>
+      <li><a href="#dtv">DTV · подготовка к интервью</a></li>
     </ol>
   </nav>
 </div>
 
-<!-- ============ SUT ============ -->
 <section id="sut">
   <div class="label"><span class="dot"></span>суть · за 30 секунд</div>
   <h2>мы покупаем у площадок <em>показы рекламы</em> и продаём клиентам <em>заявки и продажи</em></h2>
   <div class="cols">
-    <div class="card">
-      <div class="meta">сторона 1 · что мы делаем</div>
-      <p>настраиваем кабинеты в Яндекс Директ, VK Рекламе, Telegram Ads, Google Ads, Meta. крутим бюджет клиента. меряем что работает. убираем что сливает деньги. усиливаем что заходит.</p>
-    </div>
-    <div class="card">
-      <div class="meta">сторона 2 · за что нам платят</div>
-      <p>клиент сам не умеет (или не хочет) тратить часы каждый день на эти кабинеты. ему нужны не «отчёты с красивыми графиками», а звонки, заявки и оплаты — за деньги, которые экономически окупаются.</p>
-    </div>
+    <div class="card"><div class="meta">сторона 1 · что мы делаем</div><p>настраиваем кабинеты в Яндекс Директ, VK Рекламе, Telegram Ads, Google Ads, Meta. крутим бюджет клиента. меряем что работает. убираем что сливает деньги. усиливаем что заходит.</p></div>
+    <div class="card"><div class="meta">сторона 2 · за что нам платят</div><p>клиент сам не умеет (или не хочет) тратить часы каждый день на эти кабинеты. ему нужны не «отчёты с красивыми графиками», а звонки, заявки и оплаты — за деньги, которые экономически окупаются.</p></div>
   </div>
   <p class="muted">это и есть «перформанс-маркетинг» — маркетинг по результату, который можно посчитать в рублях.</p>
 </section>
 
-<!-- ============ DVA TIPA ============ -->
 <section id="dva-tipa">
   <div class="label"><span class="dot"></span>основы · 2 типа рекламы</div>
   <h2>интернет-реклама бывает <em>двух типов</em> — мы делаем обе</h2>
   <div class="cols">
-    <div class="card">
-      <div class="meta">тип 1 · контекстная</div>
-      <h3>человек уже ищет — мы ловим</h3>
-      <p>пользователь сам вбил в поиске «пластика груди Краснодар» или «робототехника для детей Вена». реклама показывается прямо в результатах. он уже горячий — нужно только не упустить.</p>
-      <div class="chips">
-        <span class="chip">Яндекс Директ</span>
-        <span class="chip">Google Ads</span>
-      </div>
-    </div>
-    <div class="card">
-      <div class="meta">тип 2 · таргетированная</div>
-      <h3>человек не ищет — но подходит</h3>
-      <p>пользователь листает ленту ВК или Instagram. он ничего не искал, но по портрету (возраст, гео, интересы, поведение) подходит под продукт. реклама вклинивается между постами.</p>
-      <div class="chips">
-        <span class="chip">VK Реклама</span>
-        <span class="chip">Telegram Ads</span>
-        <span class="chip">Meta (FB / Instagram)</span>
-      </div>
-    </div>
+    <div class="card"><div class="meta">тип 1 · контекстная</div><h3>человек уже ищет — мы ловим</h3><p>пользователь сам вбил в поиске «пластика груди Краснодар» или «робототехника для детей Вена». реклама показывается прямо в результатах. он уже горячий — нужно только не упустить.</p><div class="chips"><span class="chip">Яндекс Директ</span><span class="chip">Google Ads</span></div></div>
+    <div class="card"><div class="meta">тип 2 · таргетированная</div><h3>человек не ищет — но подходит</h3><p>пользователь листает ленту ВК или Instagram. он ничего не искал, но по портрету (возраст, гео, интересы, поведение) подходит под продукт. реклама вклинивается между постами.</p><div class="chips"><span class="chip">VK Реклама</span><span class="chip">Telegram Ads</span><span class="chip">Meta (FB / Instagram)</span></div></div>
   </div>
 </section>
 
-<!-- ============ ANALOGIYA ============ -->
 <section id="analogiya">
   <div class="label"><span class="dot"></span>аналогия · из офлайна</div>
   <h2>если перевести <em>в офлайн</em></h2>
   <div class="cols">
-    <div class="card">
-      <div class="meta">контекст = вывеска на улице</div>
-      <p>человек идёт по городу <b>голодный</b> и видит вывеску <b>«Кафе — обед 250₽»</b>. он зашёл — потому что уже хотел есть.</p>
-      <p class="muted" style="margin-top:8px;font-size:14px;">в интернете: он гуглит «обед рядом» — наш клиент-кафе показывается в выдаче.</p>
-    </div>
-    <div class="card">
-      <div class="meta">таргет = листовка в почтовом ящике</div>
-      <p>в почтовый ящик в районе, <b>где живут любители кофе</b>, мы кладём флаер «открылась кофейня». они не искали — но мы знаем, что попадаем в их интересы.</p>
-      <p class="muted" style="margin-top:8px;font-size:14px;">в интернете: ВКонтакте показывает рекламу женщинам 30+, которые подписаны на паблики о красоте.</p>
-    </div>
+    <div class="card"><div class="meta">контекст = вывеска на улице</div><p>человек идёт по городу <b>голодный</b> и видит вывеску <b>«Кафе — обед 250₽»</b>. он зашёл — потому что уже хотел есть.</p><p class="muted" style="font-size:14px;">в интернете: он гуглит «обед рядом» — наш клиент-кафе показывается в выдаче.</p></div>
+    <div class="card"><div class="meta">таргет = листовка в почтовом ящике</div><p>в почтовый ящик в районе, <b>где живут любители кофе</b>, мы кладём флаер «открылась кофейня». они не искали — но мы знаем, что попадаем в их интересы.</p><p class="muted" style="font-size:14px;">в интернете: ВКонтакте показывает рекламу женщинам 30+, которые подписаны на паблики о красоте.</p></div>
   </div>
   <p class="muted">контекст — короткая дорога к продаже. таргет — длиннее, но дешевле и шире охват.</p>
 </section>
 
-<!-- ============ PLOSHHADKI ============ -->
 <section id="ploshhadki">
   <div class="label"><span class="dot"></span>площадки · с которыми работаем</div>
   <h2>где конкретно <em>крутим рекламу</em></h2>
   <div class="cols-3">
-    <div class="card">
-      <div class="meta">контекст</div>
-      <h3>Яндекс Директ</h3>
-      <p>главная российская система контекста. поиск Яндекса + сайты-партнёры (РСЯ). у нас <b>27 клиентов</b> здесь.</p>
-    </div>
-    <div class="card">
-      <div class="meta">контекст</div>
-      <h3>Google Ads</h3>
-      <p>зарубежный контекст + YouTube. для тех, кто работает на западные рынки или продвигает YouTube-канал.</p>
-    </div>
-    <div class="card">
-      <div class="meta">таргет</div>
-      <h3>VK Реклама</h3>
-      <p>таргет ВКонтакте, Одноклассники, мини-приложения. сейчас <b>2 клиента</b>: танцстудия и земельные участки.</p>
-    </div>
-    <div class="card">
-      <div class="meta">таргет</div>
-      <h3>Telegram Ads</h3>
-      <p>реклама в чужих каналах Telegram. подписчики, переходы в боты, продажа курсов и услуг.</p>
-    </div>
-    <div class="card">
-      <div class="meta">таргет · международный</div>
-      <h3>Meta Ads</h3>
-      <p>Facebook + Instagram для зарубежных клиентов. сейчас <b>4 клиента</b> — США, Австрия, Испания.</p>
-    </div>
-    <div class="card">
-      <div class="meta">не реклама, но обязательно</div>
-      <h3>аналитика и лендинги</h3>
-      <p>Яндекс Метрика, GA4, сквозная аналитика, посадочные на Tilda. иначе непонятно «что окупается».</p>
-    </div>
+    <div class="card"><div class="meta">контекст</div><h3>Яндекс Директ</h3><p>главная российская система контекста. поиск Яндекса + сайты-партнёры (РСЯ). у нас <b>27 клиентов</b> здесь.</p></div>
+    <div class="card"><div class="meta">контекст</div><h3>Google Ads</h3><p>зарубежный контекст + YouTube. для тех, кто работает на западные рынки или продвигает YouTube-канал.</p></div>
+    <div class="card"><div class="meta">таргет</div><h3>VK Реклама</h3><p>таргет ВКонтакте, Одноклассники, мини-приложения. сейчас <b>2 клиента</b>: фитнес-студия и земельные участки.</p></div>
+    <div class="card"><div class="meta">таргет</div><h3>Telegram Ads</h3><p>реклама в чужих каналах Telegram. подписчики, переходы в боты, продажа курсов и услуг.</p></div>
+    <div class="card"><div class="meta">таргет · международный</div><h3>Meta Ads</h3><p>Facebook + Instagram для зарубежных клиентов. сейчас <b>4 клиента</b> — США, Австрия, Испания.</p></div>
+    <div class="card"><div class="meta">не реклама, но обязательно</div><h3>аналитика и лендинги</h3><p>Яндекс Метрика, GA4, сквозная аналитика, посадочные на Tilda. иначе непонятно «что окупается».</p></div>
   </div>
 </section>
 
-<!-- ============ ANATOMIYA ============ -->
 <section id="anatomiya">
   <div class="label"><span class="dot"></span>анатомия рекламы</div>
   <h2>любая реклама — это <em>4 кирпичика</em></h2>
@@ -450,12 +207,9 @@ ul li::marker { color: var(--accent); }
     <li><b>посадка</b> — куда ведёт клик. сайт, лендинг, лид-форма, бот в Telegram, мини-приложение</li>
     <li><b>цель</b> — что считаем «успехом». заявка с формы, звонок, оплата, регистрация на вебинар</li>
   </ul>
-  <div class="example-box">
-    <b>пример (клиент-клиника).</b> <b>оффер:</b> «консультация у нашего хирурга». <b>креатив:</b> фото врача + «опыт 12 лет, бесплатный осмотр». <b>посадка:</b> страница с формой записи. <b>цель:</b> заявка с подтверждённым телефоном.
-  </div>
+  <div class="example-box"><b>пример (клиент-клиника).</b> <b>оффер:</b> «консультация у нашего хирурга». <b>креатив:</b> фото врача + «опыт 12 лет, бесплатный осмотр». <b>посадка:</b> страница с формой записи. <b>цель:</b> заявка с подтверждённым телефоном.</div>
 </section>
 
-<!-- ============ SLOVAR ============ -->
 <section id="slovar">
   <div class="label"><span class="dot"></span>словарь · 8 слов</div>
   <h2>что значат <em>слова</em>, которые звучат у нас каждый день</h2>
@@ -475,7 +229,6 @@ ul li::marker { color: var(--accent); }
   </div>
 </section>
 
-<!-- ============ MATEMATIKA ============ -->
 <section id="matematika">
   <div class="label"><span class="dot"></span>математика · одна кампания</div>
   <h2>как из <em>10 000₽ бюджета</em> рождаются клиенты</h2>
@@ -491,12 +244,9 @@ ul li::marker { color: var(--accent); }
     <div class="flow-step"><b>60 000₽</b>выручки клиента</div>
   </div>
   <p class="muted">это идеальный случай. реальные цифры везде разные: иногда CPL $1, иногда €40. наша работа — <b>держать эти цифры в плановых рамках</b> и улучшать их со временем.</p>
-  <div class="example-box">
-    когда клиент платит нам 50 000₽ в месяц и получает с рекламы 1 000 000₽ выручки — он будет работать с нами годами. поэтому самые длинные наши клиенты — <b>4–5 лет</b>, медиана — <b>2+ года</b>.
-  </div>
+  <div class="example-box">когда клиент платит нам 50 000₽ в месяц и получает с рекламы 1 000 000₽ выручки — он будет работать с нами годами. поэтому самые длинные наши клиенты — <b>4–5 лет</b>, медиана — <b>2+ года</b>.</div>
 </section>
 
-<!-- ============ DEN ============ -->
 <section id="den">
   <div class="label"><span class="dot"></span>наш день · процесс</div>
   <h2>как выглядит <em>обычный рабочий день</em></h2>
@@ -510,321 +260,339 @@ ul li::marker { color: var(--accent); }
   </ul>
 </section>
 
-<!-- ============ KLINIKA ============ -->
+<section id="cabinets">
+  <div class="label"><span class="dot"></span>из наших кабинетов</div>
+  <h2>как выглядят <em>рекламные кабинеты</em> изнутри</h2>
+  <p>жми на любой скриншот — откроется в полный размер. ещё раз тапнуть = зум, можно потаскать пальцем. это рабочие интерфейсы — проводим там по 4–6 часов каждый день.</p>
+  <div class="cabinets">
+    <div class="cab">
+      <button class="thumb" data-lb="dlya-svoih-assets/cab-yandex-direct.jpg" data-lb-group="cabinets" data-lb-cap="Яндекс Директ — кабинет с кампаниями клиента"><img src="dlya-svoih-assets/cab-yandex-direct-thumb.jpg" alt="Кабинет Яндекс Директ" loading="lazy"></button>
+      <div class="info"><div class="ptag">контекст · поиск + РСЯ</div><h3>Яндекс Директ</h3></div>
+    </div>
+    <div class="cab">
+      <button class="thumb" data-lb="dlya-svoih-assets/cab-vk-ads.jpg" data-lb-group="cabinets" data-lb-cap="VK Реклама — кабинет с активными объявлениями"><img src="dlya-svoih-assets/cab-vk-ads-thumb.jpg" alt="Кабинет VK Реклама" loading="lazy"></button>
+      <div class="info"><div class="ptag">таргет · VK + Одноклассники</div><h3>VK Реклама</h3></div>
+    </div>
+    <div class="cab">
+      <button class="thumb" data-lb="dlya-svoih-assets/cab-meta-ads.jpg" data-lb-group="cabinets" data-lb-cap="Meta Ads Manager — Facebook + Instagram"><img src="dlya-svoih-assets/cab-meta-ads-thumb.jpg" alt="Кабинет Meta Ads Manager" loading="lazy"></button>
+      <div class="info"><div class="ptag">таргет · facebook + instagram</div><h3>Meta Ads Manager</h3></div>
+    </div>
+    <div class="cab">
+      <button class="thumb" data-lb="dlya-svoih-assets/cab-google-ads.jpg" data-lb-group="cabinets" data-lb-cap="Google Ads — контекст + YouTube"><img src="dlya-svoih-assets/cab-google-ads-thumb.jpg" alt="Кабинет Google Ads" loading="lazy"></button>
+      <div class="info"><div class="ptag">контекст · google + youtube</div><h3>Google Ads</h3></div>
+    </div>
+  </div>
+  <p class="muted" style="font-size:15px;">наведи на скриншот — появится иконка ⤢ в правом верхнем углу. это значит, что можно открыть полностью.</p>
+</section>
+
 <section id="klinika">
   <div class="label"><span class="dot"></span>кейс · клиника</div>
   <h2>клиника эстетической медицины · <em>3 года с нами</em></h2>
   <p>7 врачей в штате. до нас они трижды меняли подрядчиков — каждый предыдущий «настраивал рекламу», но <b>заявки приходили мусорные</b>: люди, которые не записывались или записывались и не приходили. деньги уходили — пациентов не прибавлялось.</p>
-  <div class="example-box">
-    <b>что мы сделали в первый месяц:</b> не торопились запускать новое. сначала <b>поставили аналитику</b> — связали сайт, телефонию и CRM, чтобы было видно <i>не клики, а реальные записи и оплаты</i>. без этого любая реклама — стрельба наугад.<br><br>
-    <b>что было дальше:</b> когда стало видно, какие услуги маржинальные, а какие — пустая трата, перезапустили рекламу прицельно. <b>сейчас это основной канал записей клиники.</b>
-  </div>
+  <div class="example-box"><b>что мы сделали в первый месяц:</b> не торопились запускать новое. сначала <b>поставили аналитику</b> — связали сайт, телефонию и CRM, чтобы было видно <i>не клики, а реальные записи и оплаты</i>. без этого любая реклама — стрельба наугад.<br><br><b>что было дальше:</b> когда стало видно, какие услуги маржинальные, а какие — пустая трата, перезапустили рекламу прицельно. <b>сейчас это основной канал записей клиники.</b></div>
   <div class="stats-row">
-    <div>
-      <div class="stat">7</div>
-      <div class="stat-sub">врачей в штате</div>
-    </div>
-    <div>
-      <div class="stat">3</div>
-      <div class="stat-sub">года вместе</div>
-    </div>
-    <div>
-      <div class="stat">×3</div>
-      <div class="stat-sub">меняли подрядчиков до нас</div>
-    </div>
+    <div><div class="stat">7</div><div class="stat-sub">врачей в штате</div></div>
+    <div><div class="stat">3</div><div class="stat-sub">года вместе</div></div>
+    <div><div class="stat">×3</div><div class="stat-sub">меняли подрядчиков до нас</div></div>
   </div>
-  <div class="chips">
-    <span class="chip">Яндекс Директ</span>
-    <span class="chip">сквозная аналитика</span>
-    <span class="chip">CRM + касса</span>
-  </div>
+  <div class="chips"><span class="chip">Яндекс Директ</span><span class="chip">сквозная аналитика</span><span class="chip">CRM + касса</span></div>
 </section>
 
-<!-- ============ FRANCHISE ============ -->
 <section id="franchise">
   <div class="label"><span class="dot"></span>кейс · франшиза</div>
   <h2>сеть клубов <em>художественной гимнастики</em> на юге России</h2>
   <p>взяли один город «посмотреть». сейчас под нами <b>вся франшиза</b>. каждый филиал — свой бюджет, своё руководство, своя площадка.</p>
-  <div class="example-box">
-    <b>главный KPI клиента:</b> управляющие на местах перестали приходить к собственнику с претензиями «нет заявок». <b>тишина в чате франчайзи = успех.</b>
-  </div>
+  <div class="example-box"><b>главный KPI клиента:</b> управляющие на местах перестали приходить к собственнику с претензиями «нет заявок». <b>тишина в чате франчайзи = успех.</b></div>
   <p class="muted">самое сложное в франшизе — то, что нельзя «настроить одну кампанию на всех». у каждого города свой бюджет, свой кружок около дома, свои тренеры. для нас это десятки параллельных микро-кампаний с одной методологией.</p>
-  <div class="chips">
-    <span class="chip">Яндекс Директ</span>
-    <span class="chip">ВКонтакте</span>
-    <span class="chip">мульти-локация</span>
-  </div>
+  <div class="chips"><span class="chip">Яндекс Директ</span><span class="chip">ВКонтакте</span><span class="chip">мульти-локация</span></div>
 </section>
 
-<!-- ============ YOUTUBE ============ -->
 <section id="youtube">
   <div class="label"><span class="dot"></span>кейс · YouTube-канал</div>
   <h2>YouTube-канал с нуля · <em>185 000+ подписчиков за год</em></h2>
   <p>экспертный YouTube-канал с приглашёнными гостями. упаковка, шорты, продвижение через Google Ads. без накруток, реальные люди, реальные просмотры.</p>
-  <div class="example-box">
-    это редкий случай, когда мы делаем не только трафик, но и <b>контент-стратегию</b> — какой ролик снять, какой заголовок поставить, какие гости приведут аудиторию.
-  </div>
-  <div class="chips">
-    <span class="chip">Google Ads</span>
-    <span class="chip">YouTube</span>
-    <span class="chip">контент-стратегия</span>
-  </div>
+  <div class="example-box">это редкий случай, когда мы делаем не только трафик, но и <b>контент-стратегию</b> — какой ролик снять, какой заголовок поставить, какие гости приведут аудиторию.</div>
+  <div class="chips"><span class="chip">Google Ads</span><span class="chip">YouTube</span><span class="chip">контент-стратегия</span></div>
 </section>
 
-<!-- ============ INTERNATIONAL ============ -->
 <section id="international">
   <div class="label"><span class="dot"></span>портфолио · международные</div>
   <h2>что у нас крутится <em>прямо сейчас</em> · Meta Ads</h2>
   <div class="cols">
-    <div class="card">
-      <div class="meta">США · Великобритания · Австралия</div>
-      <h3>Dr. Ales · MindBodyFace</h3>
-      <p>онлайн-курсы натурального омоложения лица для англоязычных женщин 30–60. большой англоязычный аккаунт, бюджет — <b>десятки тысяч долларов в месяц</b>. главный наш клиент в Meta.</p>
-    </div>
-    <div class="card">
-      <div class="meta">Испания</div>
-      <h3>Kazantools · 3D-моделирование одежды</h3>
-      <p>онлайн-школа цифровой моды (CLO 3D + Blender). 5-месячный курс, бесплатные вебинары на испанском. диалект Испании, не латиноамериканский.</p>
-    </div>
-    <div class="card">
-      <div class="meta">Вена, Австрия</div>
-      <h3>ROBBO Club · детские робо-лагеря</h3>
-      <p>летние Sommercamps по робототехнике и программированию для детей 6–16 лет. реклама на немецком, родителям в Вене. сейчас идёт сезон продаж лагерей 2026.</p>
-    </div>
-    <div class="card">
-      <div class="meta">Telegram / партнёрский</div>
-      <h3>Askarov-Ildar</h3>
-      <p>четвёртый клиент в Meta. эмоциональный lifestyle-стиль, отдельный почерк креативов.</p>
-    </div>
+    <div class="card"><div class="meta">США · Великобритания · Австралия</div><h3>Dr. Ales · MindBodyFace</h3><p>онлайн-курсы натурального омоложения лица для англоязычных женщин 30–60. большой англоязычный аккаунт, бюджет — <b>десятки тысяч долларов в месяц</b>. главный наш клиент в Meta.</p></div>
+    <div class="card"><div class="meta">Испания</div><h3>Kazantools · 3D-моделирование одежды</h3><p>онлайн-школа цифровой моды (CLO 3D + Blender). 5-месячный курс, бесплатные вебинары на испанском. диалект Испании, не латиноамериканский.</p></div>
+    <div class="card"><div class="meta">Вена, Австрия</div><h3>ROBBO Club · детские робо-лагеря</h3><p>летние Sommercamps по робототехнике и программированию для детей 6–16 лет. реклама на немецком, родителям в Вене. сейчас идёт сезон продаж лагерей 2026.</p></div>
+    <div class="card"><div class="meta">Telegram / партнёрский</div><h3>Askarov-Ildar</h3><p>четвёртый клиент в Meta. эмоциональный lifestyle-стиль, отдельный почерк креативов.</p></div>
   </div>
 </section>
 
-<!-- ============ RUSSIA ============ -->
 <section id="russia">
   <div class="label"><span class="dot"></span>портфолио · Россия</div>
   <h2>что крутится <em>в России</em></h2>
   <div class="cols">
     <div class="card">
-      <div class="meta">VK Реклама · Пермь</div>
-      <h3>Танцевальная студия «у Алёны»</h3>
-      <p>фитнес-формат на ул. Белинского 31. реклама в ленте ВКонтакте + видео-Клипы. лид-формы прямо в кабинете VK — без перехода на сайт.</p>
+      <div class="meta">VK Реклама · Омск</div>
+      <h3>Фитнес-проект в Омске</h3>
+      <p>групповой фитнес-формат — небольшая студия, своё помещение, тренеры в штате. цель — <b>заявки на пробное занятие</b>.</p>
+      <p>таргет очень узкий: радиус <b>1–1.5 км вокруг адреса студии</b> (только жители ближайших домов), возраст 25–40, аудитория — женщины с интересами «фитнес / wellness / красота».</p>
+      <p>лид-формы открываются <b>прямо во ВКонтакте</b>, без перехода на сайт — это снижает сопротивление и поднимает конверсию. форматы: лента ВКонтакте + Reels-клипы.</p>
+      <p>за несколько месяцев протестировали <b>около 80 разных адсетов</b> чтобы найти лучшую связку «возраст × радиус × формат × аудитория». сейчас стабильный поток заявок при цене лида ~700–900₽.</p>
     </div>
     <div class="card">
       <div class="meta">VK Реклама · вся РФ</div>
       <h3>Hesoyam · земельные участки</h3>
-      <p>VK Mini App «Земельные участки по госпрограмме». реклама ведёт в приложение внутри ВКонтакте. таргет по областям РФ.</p>
+      <p>VK Mini App «Земельные участки по госпрограмме». реклама ведёт в приложение <b>внутри ВКонтакте</b>, без сайта.</p>
+      <p>таргет по областям РФ — десятки региональных мутаций креатива (своя картинка под каждый регион: герб, фотография местности, формулировка про местный кадастр).</p>
     </div>
   </div>
   <p>+ <b>27 клиентов на Яндекс Директе</b>. ниши, в которых у нас глубокий опыт:</p>
   <div class="chips">
-    <span class="chip">эстетическая медицина</span>
-    <span class="chip">пластическая хирургия</span>
-    <span class="chip">фитнес и групповые занятия</span>
-    <span class="chip">EdTech · онлайн-школы</span>
-    <span class="chip">e-commerce</span>
-    <span class="chip">недвижимость</span>
-    <span class="chip">локальные услуги</span>
-    <span class="chip">детский спорт</span>
+    <span class="chip">эстетическая медицина</span><span class="chip">пластическая хирургия</span><span class="chip">фитнес и групповые занятия</span><span class="chip">EdTech · онлайн-школы</span><span class="chip">e-commerce</span><span class="chip">недвижимость</span><span class="chip">локальные услуги</span><span class="chip">детский спорт</span>
   </div>
 </section>
 
-<!-- ============ CREATIVES ============ -->
 <section id="creatives">
   <div class="label"><span class="dot"></span>как выглядят наши крео</div>
   <h2>что мы <em>реально</em> показываем людям в ленте</h2>
-  <p>каждая площадка — свой формат и свой язык. ниже — настоящие креативы, которые сейчас крутятся в кабинетах наших клиентов. посмотри — это материал, который мы делаем десятками каждую неделю.</p>
+  <p>каждая площадка — свой формат и свой язык. ниже — настоящие креативы из живых кабинетов наших клиентов. жми на любой — откроется в полный размер, можно ещё раз тапнуть для зума и потаскать.</p>
 
   <div class="gallery-group-label">Meta Ads · США, Великобритания, Австралия · Dr. Ales</div>
   <div class="gallery">
     <div class="creative">
-      <a class="thumb" href="dlya-svoih-assets/mbf-lft-realism.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/mbf-lft-realism.jpg" alt="Креатив Dr. Ales — лифтинг, Before/After"></a>
-      <div class="info">
-        <div class="ptag">фейсбук · instagram</div>
-        <h3>лифтинг лица за $1</h3>
-        <p>Before/After с маркировкой «куда смотреть». английский язык, аудитория — женщины 40+. оффер: пробный курс за $1 вместо $190.</p>
-      </div>
+      <button class="thumb" data-lb="dlya-svoih-assets/mbf-lft-realism.jpg" data-lb-group="creatives" data-lb-cap="Dr. Ales — лифтинг лица, Before/After"><img src="dlya-svoih-assets/mbf-lft-realism.jpg" alt="Креатив Dr. Ales — лифтинг" loading="lazy"></button>
+      <div class="info"><div class="ptag">фейсбук · instagram</div><h3>лифтинг лица за $1</h3><p>Before/After с маркировкой «куда смотреть». английский язык, аудитория — женщины 40+. оффер: пробный курс за $1 вместо $190.</p></div>
     </div>
     <div class="creative">
-      <a class="thumb" href="dlya-svoih-assets/mbf-mrn-realism.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/mbf-mrn-realism.jpg" alt="Креатив Dr. Ales — двойной подбородок"></a>
-      <div class="info">
-        <div class="ptag">фейсбук · instagram</div>
-        <h3>проблема «двойного подбородка»</h3>
-        <p>селфи-стиль, узнаваемая бытовая сцена. формат типа «увидела себя в видеозвонке» — попадает в боль конкретной аудитории.</p>
-      </div>
+      <button class="thumb" data-lb="dlya-svoih-assets/mbf-mrn-realism.jpg" data-lb-group="creatives" data-lb-cap="Dr. Ales — двойной подбородок, селфи-сцена"><img src="dlya-svoih-assets/mbf-mrn-realism.jpg" alt="Креатив Dr. Ales — двойной подбородок" loading="lazy"></button>
+      <div class="info"><div class="ptag">фейсбук · instagram</div><h3>проблема «двойного подбородка»</h3><p>селфи-стиль, узнаваемая бытовая сцена. формат типа «увидела себя в видеозвонке» — попадает в боль конкретной аудитории.</p></div>
     </div>
     <div class="creative">
-      <a class="thumb" href="dlya-svoih-assets/mbf-bdy-anatomical.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/mbf-bdy-anatomical.jpg" alt="Креатив Dr. Ales — лимфа ног, анатомическая инфографика"></a>
-      <div class="info">
-        <div class="ptag">фейсбук · instagram</div>
-        <h3>анатомическая инфографика</h3>
-        <p>«тяжёлые ноги» — показываем застой лимфы и результат после 15 дней. отдельная категория крео — медицинская визуализация, заходит лучше «красивых» лайфстайлов.</p>
-      </div>
+      <button class="thumb" data-lb="dlya-svoih-assets/mbf-bdy-anatomical.jpg" data-lb-group="creatives" data-lb-cap="Dr. Ales — анатомическая инфографика лимфы ног"><img src="dlya-svoih-assets/mbf-bdy-anatomical.jpg" alt="Креатив Dr. Ales — лимфа ног" loading="lazy"></button>
+      <div class="info"><div class="ptag">фейсбук · instagram</div><h3>анатомическая инфографика</h3><p>«тяжёлые ноги» — показываем застой лимфы и результат после 15 дней. отдельная категория крео — медицинская визуализация, заходит лучше «красивых» лайфстайлов.</p></div>
     </div>
   </div>
 
   <div class="gallery-group-label">Meta Ads · Испания · Kaizen School (3D-моделирование одежды)</div>
   <div class="gallery">
     <div class="creative">
-      <a class="thumb" href="dlya-svoih-assets/kzn-001.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/kzn-001.jpg" alt="Креатив Kaizen School — webinar"></a>
-      <div class="info">
-        <div class="ptag">фейсбук · instagram · es</div>
-        <h3>приглашение на бесплатный вебинар</h3>
-        <p>портрет преподавательницы + коллаж 3D-работ. язык — диалект Испании. цель — регистрация на вебинар.</p>
-      </div>
+      <button class="thumb" data-lb="dlya-svoih-assets/kzn-001.jpg" data-lb-group="creatives" data-lb-cap="Kaizen School — приглашение на бесплатный вебинар"><img src="dlya-svoih-assets/kzn-001.jpg" alt="Креатив Kaizen — webinar" loading="lazy"></button>
+      <div class="info"><div class="ptag">фейсбук · instagram · es</div><h3>приглашение на бесплатный вебинар</h3><p>портрет преподавательницы + коллаж 3D-работ. язык — диалект Испании. цель — регистрация на вебинар.</p></div>
     </div>
     <div class="creative">
-      <a class="thumb" href="dlya-svoih-assets/kzn-068.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/kzn-068.jpg" alt="Креатив Kaizen School — Trajes de novio"></a>
-      <div class="info">
-        <div class="ptag">фейсбук · instagram · es</div>
-        <h3>узкая ниша: свадебные костюмы в 3D</h3>
-        <p>тот же продукт, но «узкий вход» — для тех, кто шьёт мужские свадебные костюмы. узкие крео работают лучше широких.</p>
-      </div>
+      <button class="thumb" data-lb="dlya-svoih-assets/kzn-068.jpg" data-lb-group="creatives" data-lb-cap="Kaizen School — узкая ниша: свадебные костюмы"><img src="dlya-svoih-assets/kzn-068.jpg" alt="Креатив Kaizen — Trajes de novio" loading="lazy"></button>
+      <div class="info"><div class="ptag">фейсбук · instagram · es</div><h3>узкая ниша: свадебные костюмы в 3D</h3><p>тот же продукт, но «узкий вход» — для тех, кто шьёт мужские свадебные костюмы. узкие крео работают лучше широких.</p></div>
     </div>
   </div>
 
   <div class="gallery-group-label">Meta Ads · образование · Askarov</div>
   <div class="gallery">
     <div class="creative">
-      <a class="thumb" href="dlya-svoih-assets/askarov-w002.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/askarov-w002.jpg" alt="Креатив Askarov — реформы пенсии"></a>
-      <div class="info">
-        <div class="ptag">фейсбук · instagram</div>
-        <h3>«сейчас vs через 10 лет»</h3>
-        <p>эмоциональный lifestyle, две сцены — текущее состояние и желаемое будущее. ниша: финансовое планирование для эмигрантов.</p>
-      </div>
+      <button class="thumb" data-lb="dlya-svoih-assets/askarov-w002.jpg" data-lb-group="creatives" data-lb-cap="Askarov — «сейчас vs через 10 лет», финансовый вебинар"><img src="dlya-svoih-assets/askarov-w002.jpg" alt="Креатив Askarov — пенсия" loading="lazy"></button>
+      <div class="info"><div class="ptag">фейсбук · instagram</div><h3>«сейчас vs через 10 лет»</h3><p>эмоциональный lifestyle, две сцены — текущее состояние и желаемое будущее. ниша: финансовое планирование для эмигрантов.</p></div>
     </div>
   </div>
 
   <div class="gallery-group-label">VK Реклама · мини-приложение · Hesoyam (земельные участки)</div>
   <div class="gallery">
     <div class="creative">
-      <a class="thumb" href="dlya-svoih-assets/hesoyam-leningrad.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/hesoyam-leningrad.jpg" alt="Креатив Hesoyam — Ленобласть"></a>
-      <div class="info">
-        <div class="ptag">вконтакте · ленобласть</div>
-        <h3>региональная адаптация · Ленобласть</h3>
-        <p>один и тот же продукт — но под каждый регион своя «обёртка» с гербом и местной формулировкой. так лучше кликают.</p>
-      </div>
+      <button class="thumb" data-lb="dlya-svoih-assets/hesoyam-leningrad.jpg" data-lb-group="creatives" data-lb-cap="Hesoyam — региональная адаптация под Ленинградскую область"><img src="dlya-svoih-assets/hesoyam-leningrad.jpg" alt="Креатив Hesoyam — Ленобласть" loading="lazy"></button>
+      <div class="info"><div class="ptag">вконтакте · ленобласть</div><h3>региональная адаптация · Ленобласть</h3><p>один и тот же продукт — но под каждый регион своя «обёртка» с гербом и местной формулировкой. так лучше кликают.</p></div>
     </div>
     <div class="creative">
-      <a class="thumb" href="dlya-svoih-assets/hesoyam-tatarstan.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/hesoyam-tatarstan.jpg" alt="Креатив Hesoyam — Татарстан"></a>
-      <div class="info">
-        <div class="ptag">вконтакте · татарстан</div>
-        <h3>региональная адаптация · Татарстан</h3>
-        <p>та же связка, но «лицо» меняется под местность — фон, формулировка, упоминание Земельного кодекса. таких креативов у нас десятки на разные регионы РФ.</p>
-      </div>
+      <button class="thumb" data-lb="dlya-svoih-assets/hesoyam-tatarstan.jpg" data-lb-group="creatives" data-lb-cap="Hesoyam — региональная адаптация под Татарстан"><img src="dlya-svoih-assets/hesoyam-tatarstan.jpg" alt="Креатив Hesoyam — Татарстан" loading="lazy"></button>
+      <div class="info"><div class="ptag">вконтакте · татарстан</div><h3>региональная адаптация · Татарстан</h3><p>та же связка, но «лицо» меняется под местность — фон, формулировка, упоминание Земельного кодекса. таких креативов у нас десятки на разные регионы РФ.</p></div>
     </div>
   </div>
 
   <div class="gallery-group-label">Яндекс Директ · РСЯ · клиника эстетики</div>
   <div class="gallery">
     <div class="creative">
-      <a class="thumb" href="dlya-svoih-assets/yandex-golubeva.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/yandex-golubeva.jpg" alt="Креатив РСЯ — Жаркова"></a>
-      <div class="info">
-        <div class="ptag">яндекс · рся</div>
-        <h3>текстовое объявление на партнёрских сайтах</h3>
-        <p>в Яндекс Директе крео часто — это просто короткий текст + заголовок. показывается на сайтах-партнёрах Яндекса. голый смысл, без украшательств.</p>
-      </div>
+      <button class="thumb" data-lb="dlya-svoih-assets/yandex-golubeva.jpg" data-lb-group="creatives" data-lb-cap="Яндекс РСЯ — текстовое объявление на сайтах-партнёрах"><img src="dlya-svoih-assets/yandex-golubeva.jpg" alt="Креатив РСЯ — Жаркова" loading="lazy"></button>
+      <div class="info"><div class="ptag">яндекс · рся</div><h3>текстовое объявление на партнёрских сайтах</h3><p>в Яндекс Директе крео часто — это просто короткий текст + заголовок. показывается на сайтах-партнёрах Яндекса. голый смысл, без украшательств.</p></div>
     </div>
   </div>
 
   <p class="muted" style="margin-top:24px;">это лишь 9 примеров из тысяч. в активных аккаунтах у нас одновременно крутится <b>сотни</b> разных креативов — каждый со своим оффером, аудиторией и языком.</p>
 </section>
 
-<!-- ============ DOLGO ============ -->
 <section id="dolgo">
   <div class="label"><span class="dot"></span>почему остаются с нами</div>
   <h2>наш <em>главный KPI</em> — не цена клика, а сколько лет с нами клиент</h2>
   <div class="stats-row">
-    <div>
-      <div class="stat">2+</div>
-      <div class="stat-sub">года · медиана работы с клиентом</div>
-    </div>
-    <div>
-      <div class="stat">4–5</div>
-      <div class="stat-sub">лет · самые длинные</div>
-    </div>
-    <div>
-      <div class="stat">400+</div>
-      <div class="stat-sub">проектов за 13 лет</div>
-    </div>
+    <div><div class="stat">2+</div><div class="stat-sub">года · медиана работы с клиентом</div></div>
+    <div><div class="stat">4–5</div><div class="stat-sub">лет · самые длинные</div></div>
+    <div><div class="stat">400+</div><div class="stat-sub">проектов за 13 лет</div></div>
   </div>
-  <div class="example-box">
-    обычное агентство гонится за новыми клиентами и теряет старых через 3–6 месяцев. мы наоборот — берём проект, только если понимаем, что сможем его окупить. поэтому первый месяц иногда уходит в аналитику, а не в открутку. <b>зато потом — годы.</b>
-  </div>
+  <div class="example-box">обычное агентство гонится за новыми клиентами и теряет старых через 3–6 месяцев. мы наоборот — берём проект, только если понимаем, что сможем его окупить. поэтому первый месяц иногда уходит в аналитику, а не в открутку. <b>зато потом — годы.</b></div>
 </section>
 
-<!-- ============ AI ============ -->
 <section id="ai">
   <div class="label"><span class="dot"></span>AI в стеке · честный разбор</div>
   <h2>«у нас свои <em>AI-агенты</em>» — что это значит</h2>
   <p>за последний год у нас в команде собраны три собственные программы-помощника для трёх рекламных систем:</p>
   <div class="cols-3">
-    <div class="card">
-      <div class="meta">проект</div>
-      <h3>ai_ads_agent</h3>
-      <p>помощник для Facebook / Instagram. 58 инструментов, 17 «скиллов».</p>
-    </div>
-    <div class="card">
-      <div class="meta">проект</div>
-      <h3>yandex-direct-ai</h3>
-      <p>помощник для Яндекс Директа + VK Ads. 170+ инструментов.</p>
-    </div>
-    <div class="card">
-      <div class="meta">проект</div>
-      <h3>vk-ads-ai</h3>
-      <p>отдельный помощник для VK Рекламы с мониторингом.</p>
-    </div>
+    <div class="card"><div class="meta">проект</div><h3>ai_ads_agent</h3><p>помощник для Facebook / Instagram. 58 инструментов, 17 «скиллов».</p></div>
+    <div class="card"><div class="meta">проект</div><h3>yandex-direct-ai</h3><p>помощник для Яндекс Директа + VK Ads. 170+ инструментов.</p></div>
+    <div class="card"><div class="meta">проект</div><h3>vk-ads-ai</h3><p>отдельный помощник для VK Рекламы с мониторингом.</p></div>
   </div>
-  <div class="example-box">
-    <b>что они делают:</b> анализируют отчёты, генерируют десятки текстов и заголовков, подсвечивают что отключить, рисуют картинки-креативы.<br><br>
-    <b>что они НЕ делают:</b> не принимают решения. не общаются с клиентом. не выбирают стратегию. <b>человек по-прежнему за рулём.</b>
-  </div>
+  <div class="example-box"><b>что они делают:</b> анализируют отчёты, генерируют десятки текстов и заголовков, подсвечивают что отключить, рисуют картинки-креативы.<br><br><b>что они НЕ делают:</b> не принимают решения. не общаются с клиентом. не выбирают стратегию. <b>человек по-прежнему за рулём.</b></div>
   <p class="muted">это позволяет нам вести десятки клиентов вдвоём — без офиса и менеджеров.</p>
 </section>
 
-<!-- ============ KOMANDA ============ -->
 <section id="komanda">
   <div class="label"><span class="dot"></span>команда</div>
   <h2>семейная команда · <em>и в жизни, и в проектах</em></h2>
   <p>вместе 13 лет: вырастили сына Марка и больше 400 проектов в трафике. работаем вдвоём — <b>без офиса, без менеджеров-прокладок.</b></p>
   <div class="cols">
-    <div class="card">
-      <h3>стратегия и клиент</h3>
-      <p>оффер, позиционирование, переговоры, видение проекта, общение с клиентами. ИП оформлено на меня — я юридическое лицо команды.</p>
-    </div>
-    <div class="card">
-      <h3>трафик и аналитика</h3>
-      <p>настройка и ведение кабинетов, креативы, аналитика, AI-стек. ежедневная рутина в кабинетах.</p>
-    </div>
+    <div class="card"><h3>стратегия и клиент</h3><p>оффер, позиционирование, переговоры, видение проекта, общение с клиентами. ИП оформлено на меня — я юридическое лицо команды.</p></div>
+    <div class="card"><h3>трафик и аналитика</h3><p>настройка и ведение кабинетов, креативы, аналитика, AI-стек. ежедневная рутина в кабинетах.</p></div>
   </div>
   <p class="muted" style="font-size:15px;">сайт: <b>yul-n-ily.com</b> · email: <b>info@yul-n-ily.com</b> · телефон: <b>+7 906 199 55 50</b></p>
 </section>
 
-<!-- ============ SHPARGALKA ============ -->
 <section id="shpargalka">
   <div class="label"><span class="dot"></span>шпаргалка · что говорить</div>
   <h2>готовые <em>фразы-ответы</em> на типовые вопросы</h2>
-  <div class="example-box">
-    <b>спрашивают «чем вы занимаетесь?»</b><br>
-    → <i>«Мы настраиваем интернет-рекламу для бизнеса. Площадки — Яндекс, ВКонтакте, Telegram, Google, Facebook. Сейчас около 30 клиентов в России и несколько за рубежом — США, Австрия, Испания. Команде 13 лет, 400+ проектов.»</i>
-  </div>
-  <div class="example-box">
-    <b>спрашивают «а что конкретно делаешь ты?»</b><br>
-    → <i>«Я отвечаю за стратегию и общение с клиентами. Юридически наша компания оформлена на меня — самозанятая. Работаем вдвоём, как маленькое агентство.»</i>
-  </div>
-  <div class="example-box">
-    <b>спрашивают «а ниши какие?»</b><br>
-    → <i>«В основном эстетическая медицина, пластическая хирургия, фитнес, онлайн-школы. Есть и редкие — детский робо-лагерь в Вене, испанский курс 3D-моделирования одежды, курсы омоложения для англоязычных женщин.»</i>
-  </div>
-  <div class="example-box">
-    <b>спрашивают «а сколько это стоит?»</b><br>
-    → <i>«Под задачу. Обычно — бесплатный 30-минутный созвон, на нём понимаем, сможем ли быть полезны. Бюджеты клиентов от десятков тысяч рублей в месяц до десятков тысяч долларов.»</i>
-  </div>
+  <div class="example-box"><b>спрашивают «чем вы занимаетесь?»</b><br>→ <i>«Мы настраиваем интернет-рекламу для бизнеса. Площадки — Яндекс, ВКонтакте, Telegram, Google, Facebook. Сейчас около 30 клиентов в России и несколько за рубежом — США, Австрия, Испания. Команде 13 лет, 400+ проектов.»</i></div>
+  <div class="example-box"><b>спрашивают «а что конкретно делаешь ты?»</b><br>→ <i>«Я отвечаю за стратегию и общение с клиентами. Юридически наша компания оформлена на меня — самозанятая. Работаем вдвоём, как маленькое агентство.»</i></div>
+  <div class="example-box"><b>спрашивают «а ниши какие?»</b><br>→ <i>«В основном эстетическая медицина, пластическая хирургия, фитнес, онлайн-школы. Есть и редкие — детский робо-лагерь в Вене, испанский курс 3D-моделирования одежды, курсы омоложения для англоязычных женщин.»</i></div>
+  <div class="example-box"><b>спрашивают «а сколько это стоит?»</b><br>→ <i>«Под задачу. Обычно — бесплатный 30-минутный созвон, на нём понимаем, сможем ли быть полезны. Бюджеты клиентов от десятков тысяч рублей в месяц до десятков тысяч долларов.»</i></div>
 </section>
 
-<div class="footer">
-  ромашовы в диджитал · 2026 · yul-n-ily.com
+<section id="dtv">
+  <div class="label"><span class="dot"></span>DTV · подготовка к интервью</div>
+  <h2>что спрашивают на <em>тайской визе</em> и как отвечать</h2>
+  <p>DTV (Destination Thailand Visa) — пятилетняя виза для удалённых работников. подача из Турции или Грузии. С 2025 — в основном <b>онлайн через thaievisa.go.th</b>; очные интервью редки, но запросы документов по email — часто. если позовут на разговор — длится 3–5 минут. главное за 60 секунд продать историю.</p>
+
+  <h3 class="h3-section">главное правило</h3>
+  <div class="example-box">цифры и формулировки должны звучать <b>уверенно и одинаково</b>: на интервью, в cover letter, в банковской выписке и в портфолио. любая нестыковка = красный флаг.</div>
+
+  <h3 class="h3-section">топ-10 вопросов и готовые ответы</h3>
+
+  <div class="example-box"><b>1. «Расскажите, чем именно вы занимаетесь?»</b> — главный вопрос интервью.<br>→ <i>«I'm a performance marketer. I set up and manage online advertising for businesses — Yandex Direct, Google Ads, Meta. 13 years of experience, 400+ projects. I work remotely from home with a small team.»</i></div>
+
+  <div class="example-box"><b>2. «Покажите баланс на телефоне прямо сейчас»</b><br>→ Открыть приложение банка, показать баланс. Должно быть <b>≥ 500 000 THB (~$15k / ~1.4 млн ₽)</b>. Лучше — запас до $20k и стабильные поступления в выписке за 6 мес.</div>
+
+  <div class="example-box"><b>3. «Какие страны вы посещали? Покажите визы и штампы»</b><br>→ Спокойно показать паспорт. Тайские туристические штампы (если их много) — отдельный флаг, готовь объяснение «была туристом, теперь хочу легализовать workcation».</div>
+
+  <div class="example-box"><b>4. «Где вы будете жить в Таиланде?»</b><br>→ Нужна бронь жилья хотя бы на первые 14 дней + конкретный регион. <i>«First two weeks at [hotel name] in Chiang Mai / Phuket / Bangkok. Then long-term rental.»</i></div>
+
+  <div class="example-box"><b>5. «Как часто планируете быть в Таиланде и что будете делать?»</b><br>→ <i>«Workcation. Working remotely with my existing clients, exploring the country between work hours. Several months at a time over the next years.»</i></div>
+
+  <div class="example-box"><b>6. «Кто ваши клиенты? Есть ли клиенты в Таиланде?»</b> — ключевой вопрос про работу.<br>→ <i>«All my clients are based in Russia and other markets — Spain, Austria, USA. I have no Thai clients, no Thai office, no Thai income. The visa is for living in Thailand while serving foreign clients only.»</i></div>
+
+  <div class="example-box"><b>7. «Сколько вы зарабатываете в месяц?»</b><br>→ Назвать чёткую сумму в USD/THB, должна биться с выпиской. Например: <i>«Around $X,XXX per month, confirmed by my bank statements and self-employed tax records.»</i></div>
+
+  <div class="example-box"><b>8. «Подчеркните клиентские поступления в банковской выписке»</b><br>→ Реальный кейс из Ханоя: сотрудник попросил выделить маркером поступления и подписать их эквивалент в батах. В выписке заранее должны быть <b>видны регулярные поступления от клиентов</b>, желательно с пометками.</div>
+
+  <div class="example-box"><b>9. «Что будете делать после 5 лет визы?»</b><br>→ <i>«Continue running my business remotely. The DTV is for legal long-stay workcation, not a step toward permanent residency.»</i></div>
+
+  <div class="example-box"><b>10. «Покажите портфолио, сайт или LinkedIn»</b><br>→ Открыть на телефоне: yul-n-ily.com + LinkedIn-профиль + 1–2 кейса. Заранее проверить, что всё открывается и понятно с первого взгляда.</div>
+
+  <h3 class="h3-section">документы — чек-лист (самозанятый)</h3>
+  <ul>
+    <li>загранпаспорт (≥ 6 мес. срока)</li>
+    <li>фото 4×6 см, ≤ 6 мес.</li>
+    <li><b>подтверждение нахождения в стране подачи</b> (Турция/Грузия) — штамп въезда, договор аренды, hotel booking</li>
+    <li><b>банк-выписка за 3–6 мес.</b>, остаток ≥ 500 000 THB (~$15k), желательно $20k+ для подстраховки</li>
+    <li><b>справка о постановке на учёт самозанятого</b> (ФНС) + нотариальный перевод на английский</li>
+    <li><b>3–6 договоров с клиентами</b> + инвойсы за 6–12 мес.</li>
+    <li>скриншоты приложения «Мой налог» (income statements) за год</li>
+    <li><b>portfolio PDF</b> на 10–15 страниц: кейсы, скрины кабинетов, метрики, отзывы</li>
+    <li>LinkedIn (минимальный профиль обязателен)</li>
+    <li><b>cover letter</b> на английском (1 стр.): кто, чем занимается, откуда доход, зачем в Таиланд, какие гарантии</li>
+    <li>бронь жилья в Таиланде (≥ 14 дней)</li>
+    <li>авиабилеты (опционально, но усиливает)</li>
+  </ul>
+
+  <h3 class="h3-section">красные флаги — за что отказывают</h3>
+  <ul>
+    <li><b>размытое «I work remotely»</b> без конкретики → отказ. Нужны имена клиентов, договоры, инвойсы.</li>
+    <li><b>нестыковка инвойсов и поступлений</b> в выписке — самый частый флаг для фрилансеров.</li>
+    <li><b>ровно 500 000 THB на счёте</b> — теперь недостаточно. Хотят запас.</li>
+    <li><b>свежие крупные поступления</b> за 1–2 дня до подачи → выглядит как «занятые деньги». Деньги должны лежать <b>≥ 60–90 дней</b>.</li>
+    <li><b>только Wise / PayPal</b>, без реального банка → отказ.</li>
+    <li><b>много тайских туристических штампов</b> в паспорте → подозрение на скрытый residency.</li>
+    <li><b>нет LinkedIn / нет следа в интернете</b> → для маркетолога с 13-летним опытом критично.</li>
+  </ul>
+
+  <h3 class="h3-section">Турция vs Грузия — куда подавать</h3>
+  <div class="cols">
+    <div class="card"><div class="meta">Турция · Анкара</div><h3>Royal Thai Embassy Ankara</h3><p>Подача — онлайн через thaievisa.go.th. Очно записываются через rteankara.setmore.com. Сбор <b>$400</b>. Срок <b>7–12 дней</b>. Стамбул (Honorary Consulate) для иностранцев официально <b>не выдаёт DTV</b> — только онлайн на Анкару.</p></div>
+    <div class="card"><div class="meta">Грузия · только онлайн</div><h3>Через ереванское консульство / e-Visa</h3><p>Тайского консульства в Грузии <b>нет</b>. Ближайшее — Ереван (Армения, 255 км). Реальный путь — <b>онлайн</b> через thaievisa.go.th, location proof = Грузия (договор аренды / штамп). Сбор <b>350 EUR</b>. Срок 7–14 дней.</p></div>
+  </div>
+
+  <h3 class="h3-section">идеальный 60-секундный ответ</h3>
+  <div class="example-box"><i>«I'm a performance marketer — I run online advertising for businesses. 13 years of experience, more than 400 projects. I work as a self-employed professional in Russia, all my clients are based in Russia and Europe — no Thai clients, no Thai income. I have over $20,000 in my account, confirmed by six months of bank statements and self-employed tax records. In Thailand I plan workcation — living and working remotely from Chiang Mai with my existing clients.»</i></div>
+</section>
+
+<div class="footer">ромашовы в диджитал · 2026 · yul-n-ily.com</div>
+</main>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Просмотр изображения" hidden>
+  <button class="lb-btn lb-close" id="lb-close" aria-label="Закрыть (Esc)">×</button>
+  <button class="lb-btn lb-prev" id="lb-prev" aria-label="Предыдущий (←)">←</button>
+  <button class="lb-btn lb-next" id="lb-next" aria-label="Следующий (→)">→</button>
+  <div class="lb-stage"><img class="lb-img" id="lb-img" src="" alt="Изображение" /></div>
+  <div class="lb-hint" id="lb-hint" aria-hidden="true"><span>нажми и двигай — чтобы рассмотреть</span></div>
+  <div class="lb-caption" id="lb-caption"></div>
+  <div class="lb-counter"><b id="lb-index">1</b> / <span id="lb-total">1</span></div>
 </div>
 
-</main>
+<script>
+(function () {
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  const lbIndex = document.getElementById('lb-index');
+  const lbTotal = document.getElementById('lb-total');
+  const lbCap = document.getElementById('lb-caption');
+  const lbHint = document.getElementById('lb-hint');
+  let lbSet = [], lbCaps = [], lbCur = 0;
+  const ZOOM = 2.5;
+  let zoomed = false, tx = 0, ty = 0;
+  function applyTransform() { lbImg.style.transform = zoomed ? `translate(${tx}px, ${ty}px) scale(${ZOOM})` : ''; }
+  function clampPan() { const w = lbImg.offsetWidth, h = lbImg.offsetHeight; const maxX = (ZOOM - 1) * w / 2, maxY = (ZOOM - 1) * h / 2; tx = Math.max(-maxX, Math.min(maxX, tx)); ty = Math.max(-maxY, Math.min(maxY, ty)); }
+  function lbResetZoom() { zoomed = false; tx = 0; ty = 0; lbImg.classList.remove('zoomed', 'dragging'); applyTransform(); }
+  function zoomAt(cx, cy) { const r = lbImg.getBoundingClientRect(); tx = ZOOM * (r.left + r.width / 2 - cx); ty = ZOOM * (r.top + r.height / 2 - cy); zoomed = true; lbImg.classList.add('zoomed'); clampPan(); applyTransform(); }
+  function showHint() { if (!lbHint) return; lbHint.classList.remove('hide'); lbHint.classList.add('show'); setTimeout(hideHint, 2400); }
+  function hideHint() { if (!lbHint || !lbHint.classList.contains('show')) return; lbHint.classList.add('hide'); setTimeout(() => { lbHint.classList.remove('show', 'hide'); }, 320); }
+  function lbShow(i) { lbCur = (i + lbSet.length) % lbSet.length; lbResetZoom(); lbImg.src = lbSet[lbCur]; lbIndex.textContent = lbCur + 1; if (lbCap) lbCap.textContent = lbCaps[lbCur] || ''; }
+  function lbOpen(set, caps, start) { if (!set.length) return; lbSet = set; lbCaps = caps || []; lbTotal.textContent = set.length; lbShow(start); lb.hidden = false; document.body.classList.add('lb-open'); document.getElementById('lb-close').focus(); showHint(); }
+  function lbClose() { lb.hidden = true; document.body.classList.remove('lb-open'); lbImg.src = ''; lbSet = []; lbCaps = []; if (lbCap) lbCap.textContent = ''; if (lbHint) lbHint.classList.remove('show', 'hide'); }
+  document.getElementById('lb-close').addEventListener('click', lbClose);
+  document.getElementById('lb-prev').addEventListener('click', () => lbShow(lbCur - 1));
+  document.getElementById('lb-next').addEventListener('click', () => lbShow(lbCur + 1));
+  lb.addEventListener('click', e => { if (e.target === lb) lbClose(); });
+  const groups = {};
+  document.querySelectorAll('[data-lb]').forEach(el => {
+    const g = el.getAttribute('data-lb-group') || 'default';
+    if (!groups[g]) groups[g] = { srcs: [], caps: [], els: [] };
+    groups[g].srcs.push(el.getAttribute('data-lb'));
+    groups[g].caps.push(el.getAttribute('data-lb-cap') || '');
+    groups[g].els.push(el);
+  });
+  Object.keys(groups).forEach(g => {
+    groups[g].els.forEach((el, i) => {
+      el.addEventListener('click', e => { e.preventDefault(); lbOpen(groups[g].srcs, groups[g].caps, i); });
+    });
+  });
+  let drag = null, moved = false, suppressClick = false;
+  function startDrag(cx, cy) { drag = { cx, cy, tx, ty }; moved = false; if (zoomed) lbImg.classList.add('dragging'); }
+  function moveDrag(cx, cy) { if (!drag) return; const dx = cx - drag.cx, dy = cy - drag.cy; if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true; if (zoomed) { tx = drag.tx + dx; ty = drag.ty + dy; clampPan(); applyTransform(); } }
+  function endDrag() { if (!drag) return; const start = drag, wasMoved = moved; drag = null; lbImg.classList.remove('dragging'); if (!wasMoved) { if (zoomed) lbResetZoom(); else zoomAt(start.cx, start.cy); } }
+  lbImg.addEventListener('touchstart', e => { if (e.touches.length !== 1) { drag = null; return; } suppressClick = true; hideHint(); startDrag(e.touches[0].clientX, e.touches[0].clientY); if (zoomed) e.preventDefault(); }, { passive: false });
+  lbImg.addEventListener('touchmove', e => { if (!drag || e.touches.length !== 1) return; if (zoomed) e.preventDefault(); moveDrag(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+  lbImg.addEventListener('touchend', e => { if (!drag) return; e.preventDefault(); endDrag(); }, { passive: false });
+  lbImg.addEventListener('touchcancel', () => { drag = null; lbImg.classList.remove('dragging'); });
+  lbImg.addEventListener('mousedown', e => { if (e.button !== 0) return; e.preventDefault(); startDrag(e.clientX, e.clientY); });
+  window.addEventListener('mousemove', e => { if (!drag) return; moveDrag(e.clientX, e.clientY); });
+  window.addEventListener('mouseup', e => { if (!drag) return; endDrag(); });
+  lbImg.addEventListener('click', e => { e.stopPropagation(); if (suppressClick) { suppressClick = false; e.preventDefault(); } });
+  let touchX = null;
+  lb.addEventListener('touchstart', e => { if (e.touches.length > 1 || zoomed || e.target === lbImg) { touchX = null; return; } touchX = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', e => { if (touchX === null) return; const dx = e.changedTouches[0].clientX - touchX; if (Math.abs(dx) > 40) lbShow(lbCur + (dx < 0 ? 1 : -1)); touchX = null; });
+  document.addEventListener('keydown', e => { if (lb.hidden) return; if (e.key === 'Escape') lbClose(); else if (e.key === 'ArrowLeft') lbShow(lbCur - 1); else if (e.key === 'ArrowRight') lbShow(lbCur + 1); });
+})();
+</script>
 </body>
 </html>
