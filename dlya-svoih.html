@@ -169,6 +169,59 @@ ul li::marker { color: var(--accent); }
 .example-box b { color: var(--accent); font-weight: 600; }
 .example-box + .example-box { margin-top: 12px; }
 
+.gallery {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 22px; margin: 20px 0 8px;
+}
+.creative {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.creative .thumb {
+  display: block;
+  background: #0a0908;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+.creative .thumb img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform .4s ease;
+}
+.creative:hover .thumb img { transform: scale(1.02); }
+.creative .info {
+  padding: 16px 18px 18px;
+  flex: 1; display: flex; flex-direction: column;
+}
+.creative .ptag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; text-transform: lowercase;
+  color: var(--accent); letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+.creative h3 {
+  font-family: 'Fraunces', serif;
+  font-style: italic; font-weight: 500;
+  font-size: 19px; color: var(--ink);
+  margin: 0 0 8px;
+}
+.creative p {
+  font-size: 14px; line-height: 1.5; color: var(--muted);
+  margin: 0;
+}
+.gallery-group-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; text-transform: lowercase;
+  color: var(--muted); letter-spacing: 0.05em;
+  margin: 22px 0 8px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--line);
+}
+.gallery-group-label:first-of-type { padding-top: 0; border-top: none; }
+
 .quote {
   font-family: 'Fraunces', serif;
   font-style: italic;
@@ -245,6 +298,7 @@ ul li::marker { color: var(--accent); }
   .toc ol { columns: 1; }
   .flow-step { flex: 1 1 100%; }
   .flow-arrow { display: none; }
+  .gallery { grid-template-columns: 1fr; gap: 16px; }
 }
 </style>
 </head>
@@ -276,6 +330,7 @@ ul li::marker { color: var(--accent); }
       <li><a href="#youtube">кейс · YouTube</a></li>
       <li><a href="#international">международные клиенты</a></li>
       <li><a href="#russia">российские клиенты</a></li>
+      <li><a href="#creatives">как выглядят наши крео</a></li>
       <li><a href="#dolgo">почему остаются с нами</a></li>
       <li><a href="#ai">AI в стеке</a></li>
       <li><a href="#komanda">команда</a></li>
@@ -571,6 +626,107 @@ ul li::marker { color: var(--accent); }
     <span class="chip">локальные услуги</span>
     <span class="chip">детский спорт</span>
   </div>
+</section>
+
+<!-- ============ CREATIVES ============ -->
+<section id="creatives">
+  <div class="label"><span class="dot"></span>как выглядят наши крео</div>
+  <h2>что мы <em>реально</em> показываем людям в ленте</h2>
+  <p>каждая площадка — свой формат и свой язык. ниже — настоящие креативы, которые сейчас крутятся в кабинетах наших клиентов. посмотри — это материал, который мы делаем десятками каждую неделю.</p>
+
+  <div class="gallery-group-label">Meta Ads · США, Великобритания, Австралия · Dr. Ales</div>
+  <div class="gallery">
+    <div class="creative">
+      <a class="thumb" href="dlya-svoih-assets/mbf-lft-realism.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/mbf-lft-realism.jpg" alt="Креатив Dr. Ales — лифтинг, Before/After"></a>
+      <div class="info">
+        <div class="ptag">фейсбук · instagram</div>
+        <h3>лифтинг лица за $1</h3>
+        <p>Before/After с маркировкой «куда смотреть». английский язык, аудитория — женщины 40+. оффер: пробный курс за $1 вместо $190.</p>
+      </div>
+    </div>
+    <div class="creative">
+      <a class="thumb" href="dlya-svoih-assets/mbf-mrn-realism.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/mbf-mrn-realism.jpg" alt="Креатив Dr. Ales — двойной подбородок"></a>
+      <div class="info">
+        <div class="ptag">фейсбук · instagram</div>
+        <h3>проблема «двойного подбородка»</h3>
+        <p>селфи-стиль, узнаваемая бытовая сцена. формат типа «увидела себя в видеозвонке» — попадает в боль конкретной аудитории.</p>
+      </div>
+    </div>
+    <div class="creative">
+      <a class="thumb" href="dlya-svoih-assets/mbf-bdy-anatomical.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/mbf-bdy-anatomical.jpg" alt="Креатив Dr. Ales — лимфа ног, анатомическая инфографика"></a>
+      <div class="info">
+        <div class="ptag">фейсбук · instagram</div>
+        <h3>анатомическая инфографика</h3>
+        <p>«тяжёлые ноги» — показываем застой лимфы и результат после 15 дней. отдельная категория крео — медицинская визуализация, заходит лучше «красивых» лайфстайлов.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery-group-label">Meta Ads · Испания · Kaizen School (3D-моделирование одежды)</div>
+  <div class="gallery">
+    <div class="creative">
+      <a class="thumb" href="dlya-svoih-assets/kzn-001.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/kzn-001.jpg" alt="Креатив Kaizen School — webinar"></a>
+      <div class="info">
+        <div class="ptag">фейсбук · instagram · es</div>
+        <h3>приглашение на бесплатный вебинар</h3>
+        <p>портрет преподавательницы + коллаж 3D-работ. язык — диалект Испании. цель — регистрация на вебинар.</p>
+      </div>
+    </div>
+    <div class="creative">
+      <a class="thumb" href="dlya-svoih-assets/kzn-068.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/kzn-068.jpg" alt="Креатив Kaizen School — Trajes de novio"></a>
+      <div class="info">
+        <div class="ptag">фейсбук · instagram · es</div>
+        <h3>узкая ниша: свадебные костюмы в 3D</h3>
+        <p>тот же продукт, но «узкий вход» — для тех, кто шьёт мужские свадебные костюмы. узкие крео работают лучше широких.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery-group-label">Meta Ads · образование · Askarov</div>
+  <div class="gallery">
+    <div class="creative">
+      <a class="thumb" href="dlya-svoih-assets/askarov-w002.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/askarov-w002.jpg" alt="Креатив Askarov — реформы пенсии"></a>
+      <div class="info">
+        <div class="ptag">фейсбук · instagram</div>
+        <h3>«сейчас vs через 10 лет»</h3>
+        <p>эмоциональный lifestyle, две сцены — текущее состояние и желаемое будущее. ниша: финансовое планирование для эмигрантов.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery-group-label">VK Реклама · мини-приложение · Hesoyam (земельные участки)</div>
+  <div class="gallery">
+    <div class="creative">
+      <a class="thumb" href="dlya-svoih-assets/hesoyam-leningrad.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/hesoyam-leningrad.jpg" alt="Креатив Hesoyam — Ленобласть"></a>
+      <div class="info">
+        <div class="ptag">вконтакте · ленобласть</div>
+        <h3>региональная адаптация · Ленобласть</h3>
+        <p>один и тот же продукт — но под каждый регион своя «обёртка» с гербом и местной формулировкой. так лучше кликают.</p>
+      </div>
+    </div>
+    <div class="creative">
+      <a class="thumb" href="dlya-svoih-assets/hesoyam-tatarstan.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/hesoyam-tatarstan.jpg" alt="Креатив Hesoyam — Татарстан"></a>
+      <div class="info">
+        <div class="ptag">вконтакте · татарстан</div>
+        <h3>региональная адаптация · Татарстан</h3>
+        <p>та же связка, но «лицо» меняется под местность — фон, формулировка, упоминание Земельного кодекса. таких креативов у нас десятки на разные регионы РФ.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery-group-label">Яндекс Директ · РСЯ · клиника эстетики</div>
+  <div class="gallery">
+    <div class="creative">
+      <a class="thumb" href="dlya-svoih-assets/yandex-golubeva.jpg" target="_blank" rel="noopener"><img src="dlya-svoih-assets/yandex-golubeva.jpg" alt="Креатив РСЯ — Жаркова"></a>
+      <div class="info">
+        <div class="ptag">яндекс · рся</div>
+        <h3>текстовое объявление на партнёрских сайтах</h3>
+        <p>в Яндекс Директе крео часто — это просто короткий текст + заголовок. показывается на сайтах-партнёрах Яндекса. голый смысл, без украшательств.</p>
+      </div>
+    </div>
+  </div>
+
+  <p class="muted" style="margin-top:24px;">это лишь 9 примеров из тысяч. в активных аккаунтах у нас одновременно крутится <b>сотни</b> разных креативов — каждый со своим оффером, аудиторией и языком.</p>
 </section>
 
 <!-- ============ DOLGO ============ -->
