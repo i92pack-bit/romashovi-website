@@ -1089,7 +1089,22 @@ ${t('tg.contact')}: ${d.contact}
       });
       if (!res.ok) throw new Error('request failed');
       btn.dataset.state = 'sent';
-      label.textContent = currentLang === 'en' ? '✓ brief sent' : '✓ бриф отправлен';
+      const isEn = currentLang === 'en';
+      const done = document.querySelector('.step[data-step="done"]');
+      if (done) {
+        done.innerHTML =
+          '<div class="done-head">' +
+            '<div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4 10-10"/></svg></div>' +
+            '<div class="kicker">' + (isEn ? 'sent' : 'отправлено') + '</div>' +
+            '<h2>' + (isEn ? 'brief <em>sent</em> 🙌' : 'бриф <em>отправлен</em> 🙌') + '</h2>' +
+            '<p class="step-hint" style="max-width:520px;margin:0 auto;">' +
+              (isEn
+                ? 'thank you! I got your brief and will come back with a plan within a business day. taking you back to the homepage…'
+                : 'спасибо! бриф у меня — вернусь с планом в течение рабочего дня. возвращаю на главную…') +
+            '</p>' +
+          '</div>';
+      }
+      setTimeout(function () { window.location.href = '/'; }, 2800);
     } catch (e) {
       btn.dataset.state = '';
       label.textContent = currentLang === 'en' ? 'send brief' : 'отправить бриф';
