@@ -98,6 +98,11 @@
   .tagi{display:inline-block; font-size:12px; font-weight:600; padding:2px 9px; border-radius:99px; vertical-align:middle;}
   .tagi.ok{background:var(--sage-soft); color:var(--sage);}
   .tagi.vpn{background:var(--accent-soft); color:var(--accent);}
+  .help p{color:var(--ink-soft); font-size:15px;}
+  .help p.knote{margin:4px 0 12px;}
+  .help p.knote:last-child{margin:14px 0 0;}
+  .ksetup{border-color:rgba(247,214,0,.55);}
+  .ksetup > summary{background:linear-gradient(90deg,rgba(247,214,0,.16),rgba(247,214,0,0));}
 
   /* ── Наш Telegram (в самом низу) ── */
   .tg{margin-top:22px; padding:16px 4px 4px;}
@@ -135,6 +140,24 @@
 
   <!-- Карточки людей рендерит JS -->
   <div id="people"></div>
+
+  <!-- Как установить KakaoTalk (один раз) -->
+  <details class="ksetup">
+    <summary><span>📲 Первый раз через KakaoTalk? Как установить</span><span class="chev">▾</span></summary>
+    <div class="help">
+      <p class="knote">KakaoTalk — корейский мессенджер, работает в России <b>без VPN</b>. Но при регистрации код подтверждения из-за границы часто <b>не приходит сам</b> — тогда нужно один раз отправить SMS вручную. Это ~5 минут и делается один раз.</p>
+      <ol>
+        <li><b>Скачайте приложение.</b> iPhone — App&nbsp;Store; Android — Google&nbsp;Play или RuStore. Ищите «KakaoTalk». <span class="tagi ok">VPN не нужен</span></li>
+        <li><b>Откройте, нажмите «Start» → «Sign up»</b> (Начать / Регистрация) и примите условия.</li>
+        <li><b>Введите свой номер.</b> Выберите страну <b>Russia (+7)</b> и наберите номер без первой восьмёрки, например <b>912&nbsp;345&#8209;67&#8209;89</b>.</li>
+        <li><b>Нажмите «Send» / «Отправить код»</b> и подождите минуту.</li>
+        <li><b>Код не пришёл — для России это нормально.</b> На экране появятся <b>номер</b> и <b>готовый текст</b>. Отправьте SMS <b>ровно на этот номер и ровно с этим текстом</b>, ничего не меняя. <span class="tagi vpn">SMS платная, ~10&nbsp;₽ — проверьте баланс</span></li>
+        <li><b>Вернитесь в приложение и нажмите «Verify» / «Подтвердить».</b> Через пару секунд номер подтвердится.</li>
+        <li><b>Придумайте имя</b> (по желанию — почту для восстановления). Готово — можно звонить кнопкой KakaoTalk выше.</li>
+      </ol>
+      <p class="knote"><b>Если не проходит:</b> не переустанавливайте приложение и не жмите «отправить код» много раз подряд — номер блокируется на сутки, просто подождите. Проверьте на телефоне верные дату и время; у оператора должны быть разрешены международные SMS (обычно так и есть).</p>
+    </div>
+  </details>
 
   <details>
     <summary><span>Что делать, если не работает</span><span class="chev">▾</span></summary>
