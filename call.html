@@ -62,7 +62,8 @@
     box-shadow:0 0 0 2px var(--bg), 0 0 0 4px var(--m,var(--accent));}
   .mono img{width:100%; height:100%; object-fit:cover; display:block;}
   .phead h2{font-size:23px; font-weight:600; line-height:1.1;}
-  .phead .psub{color:var(--muted); font-size:14px; margin-top:1px;}
+  .phead .psub{color:var(--muted); font-size:14px; margin-top:1px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .psub-o{display:none;}
   .psub-c{color:var(--accent); font-weight:600;}
   .person[open] .psub-c{display:none;}
@@ -312,7 +313,7 @@ const CONFIG = {
     card.innerHTML = `
       <summary class="phead">
         ${mono}
-        <div class="pname"><h2>${esc(p.name)}</h2><div class="psub"><span class="psub-c">Нажмите, чтобы открыть способы связи ↓</span><span class="psub-o">выберите способ связи</span></div></div>
+        <div class="pname"><h2>${esc(p.name)}</h2><div class="psub"><span class="psub-c">Нажмите, чтобы открыть ↓</span><span class="psub-o">выберите способ связи</span></div></div>
         <span class="chev">▾</span>
       </summary>
       <div class="chans">${chans}</div>`;
