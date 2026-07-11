@@ -23,7 +23,8 @@
     --sage:#5f8a5b; --sage-soft:#e4ede0;
     --ocean:#2f5e8c; --ocean-soft:#dfe9f2;
     --kakao:#f7d600; --kakao-ink:#3a2a00;
-    --wa:#25a95a;
+    --wa:#25a95a; --vk:#0077ff; --sky:#3f88b5;
+    --butter:#f4d67a; --butter-soft:#fbeab5;
     --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
     --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
   }
@@ -96,6 +97,16 @@
   .go.wa{background:var(--wa); color:#fff;}
   .go.tel{background:var(--surface); color:var(--ink); border:1px solid var(--line);}
   .go.tel .gtxt small{opacity:.6;}
+  .go.vk{background:var(--vk); color:#fff; box-shadow:0 12px 24px -14px rgba(0,119,255,.6);}
+  .go.vk .ic{font-weight:800; font-size:15px; letter-spacing:.5px;}
+  .go.sky{background:var(--sky); color:#fff; box-shadow:0 12px 24px -14px rgba(63,136,181,.55);}
+  .go.muted{background:#fff; color:var(--ink); border:1px solid var(--line);}
+  .go.muted .gtxt small{opacity:.62;}
+  .go.muted .gtag{background:var(--accent-soft); color:var(--accent);}
+  /* заголовки групп каналов */
+  .grp{margin:16px 2px 4px; font-size:12px; font-weight:700; letter-spacing:.4px; text-transform:uppercase; color:var(--ink-soft);}
+  .grp:first-child{margin-top:2px;}
+  .grp .gn{display:block; margin-top:2px; font-size:12.5px; font-weight:400; letter-spacing:0; text-transform:none; color:var(--faint);}
 
   .copy{display:inline-flex; align-items:center; gap:6px; margin:2px 0 0 4px; align-self:flex-start;
     color:var(--muted); font-size:13px; font-weight:500; padding:5px 2px; cursor:pointer;
@@ -142,16 +153,7 @@
   .ksetup{border-color:rgba(247,214,0,.55);}
   .ksetup > summary{background:linear-gradient(90deg,rgba(247,214,0,.16),rgba(247,214,0,0));}
 
-  /* ── Наш Telegram (в самом низу) ── */
-  .tg{margin-top:22px; padding:16px 4px 4px;}
-  .tg .mini{font-size:14px; font-weight:600; color:var(--muted); text-transform:uppercase;
-    letter-spacing:.5px; margin-bottom:10px;}
-  .tg .row{display:flex; gap:10px; flex-wrap:wrap;}
-  .tg a{display:flex; align-items:center; justify-content:center; gap:9px; min-height:54px; padding:0 18px; flex:1 1 0;
-    background:#fff; border:1px solid var(--line); border-radius:14px; font-size:17px; font-weight:600; white-space:nowrap;
-    box-shadow:0 4px 14px -12px rgba(0,0,0,.3);}
-  .tg a:active{transform:scale(.98);}
-  .tg .tgic{width:23px; height:23px; flex:none;}
+  .tgic{width:22px; height:22px; flex:none;}
 
   footer{margin-top:30px; padding:0 4px; color:var(--faint); font-size:13px; text-align:center;}
   footer a{color:var(--muted); border-bottom:1px solid var(--line);}
@@ -173,12 +175,12 @@
 
   <div class="hero">
     <h1>Позвонить<br>Илье&nbsp;и&nbsp;Юле</h1>
-    <p>Выберите, кому звоните, и нажмите кнопку — откроется прямо в браузере. Устанавливать ничего не нужно.</p>
+    <p>Выберите, кому звоните, и раскройте карточку — способы связи расставлены по надёжности.</p>
   </div>
 
   <div class="note">
     <span class="ni">💡</span>
-    <div>Кнопки-<b>комнаты</b> (Телемост, Google&nbsp;Meet) сами <b>не звонят</b> — по ним заходят, когда договорились о времени. Чтобы позвонить <b>прямо сейчас и чтобы у нас зазвонило</b> — жмите звонок в <b>Telegram</b> (внизу страницы) или в приложении <b>Яндекс&nbsp;Телемост</b>.</div>
+    <div>Чтобы просто позвонить и <b>чтобы у нас зазвонило</b> — берите верхний блок <b>«Позвонить, чтобы зазвонило»</b> (Телемост, KakaoTalk, VK): в России работает <b>без VPN</b>. Кнопки-<b>комнаты</b> ниже сами <b>не звонят</b> — по ним заходят, когда договорились о времени.</div>
   </div>
 
   <!-- Карточки людей рендерит JS -->
@@ -215,18 +217,11 @@
         <li><b>Не открылось за 10 секунд?</b> Нажмите следующую кнопку у того же человека — <b>KakaoTalk</b> или запасной <b>Google&nbsp;Meet</b>.</li>
         <li><b>Не грузится в России?</b> Обновите страницу и откройте в браузере <b>Chrome</b> или <b>Safari</b> (не внутри Instagram/VK).</li>
         <li><b>Google&nbsp;Meet не открывается?</b> <span class="tagi vpn">нужен&nbsp;VPN</span> Включите VPN. <span class="tagi ok">Телемост и KakaoTalk работают без&nbsp;VPN</span></li>
-        <li><b>Совсем ничего?</b> Напишите в <b>Telegram</b> внизу страницы.</li>
+        <li><b>Совсем ничего?</b> Позвоните через приложение <b>Телемост</b> или <b>KakaoTalk</b> (блок «Позвонить, чтобы зазвонило») — они работают без VPN.</li>
         <li><b>Договоритесь заранее о времени</b> — так один из нас точно откроет комнату к звонку.</li>
       </ol>
     </div>
   </details>
-
-  <!-- Наш Telegram — в самом низу (рендерит JS) -->
-  <div class="tg" id="tg-block" hidden>
-    <div class="mini">Наш Telegram — если ничего не вышло</div>
-    <div class="row" id="tg-row"></div>
-    <div class="cinstr" style="margin-top:10px">Напишите или позвоните в Telegram. В России иногда требуется включить VPN.</div>
-  </div>
 
   <footer>Личная страница связи семьи Ромашовых · <a href="https://yul-n-ily.com" target="_blank" rel="noopener">yul-n-ily.com</a></footer>
 </div>
@@ -235,8 +230,8 @@
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════════
-   ✏️  ЗАПОЛНИ ЗДЕСЬ — единственное место со ссылками.
-   Пустая строка "" = канал скрыт. Telegram уезжает в нижний блок.
+   ✏️  ЗАПОЛНИ ЗДЕСЬ — единственное место со ссылками. Пустое "" / false = канал скрыт.
+   Каналы сами раскладываются по группам: «зазвонит без VPN» → «комната» → «нужен VPN».
    ═══════════════════════════════════════════════════════════════════════ */
 const CONFIG = {
   people: [
@@ -244,21 +239,25 @@ const CONFIG = {
       name: "Илья",
       color: "#ff5c3e",
       avatar: "/avatar-ilya.jpg",
-      telemost:  "https://telemost.yandex.ru/",   // ДЕМО
-      kakaotalk: "https://open.kakao.com/",         // ДЕМО
-      meet:      "https://meet.google.com/",        // ДЕМО
-      whatsapp:  "https://wa.me/66000000000",       // ДЕМО
-      phone:     "+66000000000",                    // ДЕМО
-      telegram:  "https://t.me/telegram",           // ДЕМО
+      telemostCall: true,                                  // ДЕМО
+      kakaotalk:    "https://open.kakao.com/",             // ДЕМО
+      vk:           "https://vk.com/id1",                  // ДЕМО
+      telemostRoom: "https://telemost.yandex.ru/",         // ДЕМО
+      meet:         "https://meet.google.com/",            // ДЕМО
+      telegram:     "https://t.me/telegram",               // ДЕМО
+      whatsapp:     "https://wa.me/66000000000",           // ДЕМО
+      phone:        "+66000000000",                        // ДЕМО
     },
     {
       name: "Юля",
       color: "#8ba888",
       avatar: "/avatar-yulia.jpg",
-      telemost:  "https://telemost.yandex.ru/",   // ДЕМО
-      kakaotalk: "https://open.kakao.com/",         // ДЕМО
-      meet:      "https://meet.google.com/",        // ДЕМО
-      telegram:  "https://t.me/telegram",           // ДЕМО
+      telemostCall: true,                                  // ДЕМО
+      kakaotalk:    "https://open.kakao.com/",             // ДЕМО
+      vk:           "https://vk.com/id1",                  // ДЕМО
+      telemostRoom: "https://telemost.yandex.ru/",         // ДЕМО
+      meet:         "https://meet.google.com/",            // ДЕМО
+      telegram:     "https://t.me/telegram",               // ДЕМО
     },
   ],
 };
@@ -273,54 +272,79 @@ const CONFIG = {
   const ICON_GPLAY = '<svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path fill="#00c8ff" d="M3.7 2 13.4 12 3.7 22Z"/><path fill="#ff424b" d="M3.7 2 17.9 9.4 13.4 12Z"/><path fill="#00e574" d="M3.7 22 13.4 12 17.9 14.6Z"/><path fill="#ffcd00" d="M17.9 9.4 20.7 11c.7.4.7 1.6 0 2l-2.8 1.6L13.4 12Z"/></svg>';
   const ICON_TG = '<svg class="tgic" viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="120" r="120" fill="#2AABEE"/><path fill="#fff" d="M53 118.5c35-15.2 58.3-25.3 70-30.2 33.3-13.9 40.2-16.3 44.7-16.4 1 0 3.2.2 4.7 1.4 1 .9 1.3 2.1 1.4 3 .2 .9 .4 2.9 .2 4.5-1.8 19-9.6 65.1-13.6 86.4-1.7 9-5 12-8.2 12.3-7 .6-12.3-4.6-19-9-10.5-6.9-16.4-11.2-26.6-17.9-11.8-7.8-4.2-12 2.6-19 1.8-1.8 32.5-29.8 33.1-32.3 .1-.3 .1-1.5-.6-2.1-.7-.6-1.7-.4-2.5-.2-1.1 .2-17.9 11.4-50.6 33.4-4.8 3.3-9.1 4.9-13 4.8-4.3-.1-12.5-2.4-18.7-4.4-7.5-2.4-13.5-3.7-13-7.9 .3-2.2 3.3-4.4 9-6.7z"/></svg>';
 
-  // Порядок и вид каналов внутри карточки человека
+  // Группы каналов (порядок сверху вниз)
+  const GROUPS = [
+    { key:"ring", title:"Позвонить, чтобы зазвонило", note:"без VPN · у вас реально зазвонит телефон" },
+    { key:"room", title:"Зайти в комнату по договорённости", note:"не звонит — только когда договорились о времени" },
+    { key:"vpn",  title:"Если включён VPN", note:"без VPN в России сейчас ненадёжны" },
+    { key:"last", title:"Совсем крайний случай", note:"" },
+  ];
+
+  // Каталог каналов: что показать, как выглядит, к какой группе относится
   const CHANNELS = [
-    { key:"telemost",  cls:"green", ic:"🎥", title:"Видеозвонок",        via:"Яндекс Телемост",  tag:"без VPN", tagcls:"ok",  copy:true,
-      instr:"Нажмите — звонок откроется прямо в браузере. Когда спросит про камеру и микрофон, нажмите «Разрешить». Ставить приложение и VPN не нужно. Это общая комната — заходить по договорённости о времени (сама не звонит).",
+    // ── звонит, без VPN ──
+    { key:"telemostCall", group:"ring", cls:"green", ic:"📲", title:"Позвонить в Телемост", via:"в приложении · звонит", tag:"без VPN", tagcls:"ok",
+      flag:true, fixedHref:"https://telemost.yandex.ru/",
+      instr:"Русский, звонит по-настоящему и без VPN. Один раз: поставьте приложение Телемост (кнопки ниже), разрешите доступ к контактам или добавьте нас — и звоните. Входящий придёт, даже когда приложение закрыто.",
       apps:{ ios:"https://apps.apple.com/ru/app/id1527737302", android:"https://play.google.com/store/apps/details?id=ru.yandex.telemost" } },
-    { key:"kakaotalk", cls:"kakao", ic:"💬", title:"Звонок в KakaoTalk", via:"мессенджер",       tag:"без VPN", tagcls:"ok",
-      instr:'Нужен установленный KakaoTalk. Если его ещё нет — сначала установите и зарегистрируйтесь: <a class="ilink" href="#kakao-setup">открыть подробную инструкцию ↓</a>. Потом нажмите эту кнопку. Работает без VPN.' },
-    { key:"meet",      cls:"blue",  ic:"🔵", title:"Запасной видеозвонок", via:"Google Meet",    tag:"нужен VPN", tagcls:"vpn", copy:true,
-      instr:"Откроется в браузере. В России почти наверняка нужен включённый VPN — включите его заранее. Разрешите камеру и микрофон. Тоже комната по договорённости — сама не звонит.",
+    { key:"kakaotalk", group:"ring", cls:"kakao", ic:"💬", title:"Позвонить в KakaoTalk", via:"мессенджер · звонит", tag:"без VPN", tagcls:"ok",
+      instr:'Нейтральный мессенджер, звонит без VPN. Первый раз нужно установить и зарегистрироваться: <a class="ilink" href="#kakao-setup">открыть подробную инструкцию ↓</a>. Потом нажмите эту кнопку.' },
+    { key:"vk", group:"ring", cls:"vk", ic:"VK", title:"Позвонить ВКонтакте", via:"VK Звонки · звонит", tag:"без VPN", tagcls:"ok",
+      instr:"VK Звонки работают в России без VPN. Откроется чат ВКонтакте — нажмите там «Позвонить»." },
+    // ── комната по договорённости (не звонит) ──
+    { key:"telemostRoom", group:"room", cls:"sky", ic:"🚪", title:"Видеокомната Телемост", via:"по ссылке · не звонит", tag:"без VPN", tagcls:"ok", copy:true,
+      instr:"Открывается прямо в браузере, ставить ничего не нужно. Это общая комната — заходите, когда договорились о времени. Разрешите камеру и микрофон.",
+      apps:{ ios:"https://apps.apple.com/ru/app/id1527737302", android:"https://play.google.com/store/apps/details?id=ru.yandex.telemost" } },
+    { key:"meet", group:"room", cls:"blue", ic:"🚪", title:"Видеокомната Google Meet", via:"по ссылке · не звонит", tag:"нужен VPN", tagcls:"vpn", copy:true,
+      instr:"Запасная комната. В России почти наверняка нужен включённый VPN — включите заранее. Тоже по договорённости, сама не звонит.",
       apps:{ ios:"https://apps.apple.com/ru/app/id1096918571", android:"https://play.google.com/store/apps/details?id=com.google.android.apps.tachyon" } },
-    { key:"whatsapp",  cls:"wa",    ic:"🟢", title:"WhatsApp",            via:"мессенджер",        tag:"", tagcls:"",
-      instr:"Откроется звонок в WhatsApp. В России звонки бывают нестабильны — держите наготове VPN." },
-    { key:"phone",     cls:"tel",   ic:"📞", title:"Позвонить по телефону", via:"самый крайний случай", tag:"роуминг", tagcls:"warn", tel:true, warn:true,
-      instr:"⚠️ Международный роуминг — от 30 ₽ за минуту, это дорого и не вариант для обычного общения. Только если совсем ничего выше не сработало." },
+    // ── если включён VPN ──
+    { key:"telegram", group:"vpn", cls:"muted", ic:ICON_TG, title:"Telegram", via:"звонок или чат", tag:"нужен VPN", tagcls:"vpn",
+      instr:"В 2026 звонки в Telegram в России режут, а сам мессенджер замедляют — стабильно только с включённым VPN." },
+    { key:"whatsapp", group:"vpn", cls:"muted", ic:"🟢", title:"WhatsApp", via:"звонок или чат", tag:"нужен VPN", tagcls:"vpn",
+      instr:"Звонки WhatsApp в России заблокированы и нестабильны — нужен VPN." },
+    // ── крайний случай ──
+    { key:"phone", group:"last", cls:"tel", ic:"☎️", title:"Позвонить по телефону", via:"роуминг · крайний случай", tag:"роуминг", tagcls:"warn", tel:true, warn:true,
+      instr:"⚠️ Международный роуминг — от 30 ₽ за минуту, дорого. Только если совсем ничего выше не сработало." },
   ];
 
   const peopleEl = $("people");
-  const tgList = [];
 
   (CONFIG.people || []).forEach(p => {
-    if (p.telegram && p.telegram.trim()) tgList.push({ name:p.name, href:p.telegram.trim() });
-
     const card = document.createElement("details");
     card.className = "person";
     card.setAttribute("name", "person");   // нативный эксклюзивный аккордеон (совр. браузеры)
     const initial = (p.name || "?").trim().charAt(0);
 
-    let chans = "";
+    // раскладываем каналы по группам
+    const buckets = { ring:[], room:[], vpn:[], last:[] };
     CHANNELS.forEach(ch => {
-      const raw = (p[ch.key] || "").trim();
-      if (!raw) return;
-      const href = ch.tel ? "tel:" + raw.replace(/[^\d+]/g,"") : raw;
+      let val;
+      if (ch.flag){ if (!p[ch.key]) return; val = ch.fixedHref; }
+      else { val = (p[ch.key] || "").trim(); if (!val) return; }
+      const href = ch.tel ? "tel:" + val.replace(/[^\d+]/g,"") : val;
       const tag = ch.tag ? `<span class="gtag ${ch.tagcls}">${ch.tag}</span>` : "";
-      chans += `<a class="go ${ch.cls}" href="${esc(href)}"${ch.tel?"":' target="_blank" rel="noopener"'}>
+      let html = `<a class="go ${ch.cls}" href="${esc(href)}"${ch.tel?"":' target="_blank" rel="noopener"'}>
           <span class="ic">${ch.ic}</span>
           <span class="gtxt"><b>${esc(ch.title)}</b>${ch.via?`<small>${esc(ch.via)}</small>`:""}</span>
           ${tag}
         </a>`;
-      if (ch.copy) chans += `<span class="copy" data-copy="${esc(raw)}">скопировать ссылку</span>`;
-      if (ch.instr) chans += `<div class="cinstr${ch.warn?" warn":""}">${ch.instr}</div>`;
+      if (ch.copy && !ch.flag) html += `<span class="copy" data-copy="${esc(val)}">скопировать ссылку</span>`;
+      if (ch.instr) html += `<div class="cinstr${ch.warn?" warn":""}">${ch.instr}</div>`;
       if (ch.apps){
         let btns = "";
         if (ch.apps.ios)     btns += `<a class="store" href="${esc(ch.apps.ios)}" target="_blank" rel="noopener">${ICON_APPLE}App Store</a>`;
         if (ch.apps.android) btns += `<a class="store" href="${esc(ch.apps.android)}" target="_blank" rel="noopener">${ICON_GPLAY}Google Play</a>`;
-        chans += `<div class="stores"><span class="slbl">Есть приложение:</span><span class="storebtns">${btns}</span></div>`;
+        html += `<div class="stores"><span class="slbl">Есть приложение:</span><span class="storebtns">${btns}</span></div>`;
       }
+      (buckets[ch.group] || buckets.last).push(html);
     });
 
+    let chans = "";
+    GROUPS.forEach(g => {
+      if (!buckets[g.key].length) return;
+      chans += `<div class="grp">${esc(g.title)}${g.note?`<span class="gn">${esc(g.note)}</span>`:""}</div>` + buckets[g.key].join("");
+    });
     if (!chans) chans = `<div class="empty">Ссылки пока не добавлены</div>`;
 
     const avaUrl = (p.avatar || "").trim();
@@ -342,18 +366,6 @@ const CONFIG = {
   persons.forEach(d => d.addEventListener("toggle", () => {
     if (d.open) persons.forEach(o => { if (o !== d) o.open = false; });
   }));
-
-  // Наш Telegram — внизу
-  if (tgList.length){
-    $("tg-block").hidden = false;
-    const row = $("tg-row");
-    tgList.forEach(t => {
-      const a = document.createElement("a");
-      a.href = t.href; a.target = "_blank"; a.rel = "noopener";
-      a.innerHTML = `${ICON_TG}<span>${esc(t.name)}</span>`;
-      row.appendChild(a);
-    });
-  }
 
   // Клик по внутренней ссылке-якорю: раскрыть <details>, доскроллить, подсветить
   document.addEventListener("click", e => {
