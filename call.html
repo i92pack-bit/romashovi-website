@@ -83,6 +83,11 @@
     border-bottom:1px dashed var(--faint);}
   .copy:active{color:var(--accent);}
   .empty{color:var(--faint); font-size:14px; padding:8px 4px;}
+  /* точная инструкция под каждым каналом */
+  .cinstr{font-size:13.5px; line-height:1.42; color:var(--muted); padding:0 6px 4px; margin-top:-2px;}
+  .cinstr.warn{color:var(--accent); font-weight:500;}
+  .gtag.warn{background:var(--accent-soft); color:var(--accent);}
+  .go.tel{opacity:.9;} .go.tel .gtxt b{font-weight:500;}
 
   /* ── Что делать если не работает ── */
   details{margin-top:22px; background:var(--surface); border:1px solid var(--line); border-radius:18px; overflow:hidden;}
@@ -177,6 +182,7 @@
   <div class="tg" id="tg-block" hidden>
     <div class="mini">Наш Telegram — если ничего не вышло</div>
     <div class="row" id="tg-row"></div>
+    <div class="cinstr" style="margin-top:10px">Напишите или позвоните в Telegram. В России иногда требуется включить VPN.</div>
   </div>
 
   <footer>Личная страница связи семьи Ромашовых · <a href="https://yul-n-ily.com" target="_blank" rel="noopener">yul-n-ily.com</a></footer>
@@ -219,11 +225,16 @@ const CONFIG = {
 
   // Порядок и вид каналов внутри карточки человека
   const CHANNELS = [
-    { key:"telemost",  cls:"green", ic:"🎥", title:"Видеозвонок",        via:"Яндекс Телемост",  tag:"без VPN", tagcls:"ok",  copy:true },
-    { key:"kakaotalk", cls:"kakao", ic:"💬", title:"Звонок в KakaoTalk", via:"мессенджер",       tag:"без VPN", tagcls:"ok" },
-    { key:"meet",      cls:"blue",  ic:"🔵", title:"Запасной видеозвонок", via:"Google Meet",    tag:"нужен VPN", tagcls:"vpn", copy:true },
-    { key:"whatsapp",  cls:"wa",    ic:"🟢", title:"WhatsApp",            via:"мессенджер",        tag:"", tagcls:"" },
-    { key:"phone",     cls:"tel",   ic:"📞", title:"Позвонить по телефону", via:"",               tag:"", tagcls:"", tel:true },
+    { key:"telemost",  cls:"green", ic:"🎥", title:"Видеозвонок",        via:"Яндекс Телемост",  tag:"без VPN", tagcls:"ok",  copy:true,
+      instr:"Нажмите — звонок откроется прямо в браузере. Когда спросит про камеру и микрофон, нажмите «Разрешить». Ставить приложение и включать VPN не нужно." },
+    { key:"kakaotalk", cls:"kakao", ic:"💬", title:"Звонок в KakaoTalk", via:"мессенджер",       tag:"без VPN", tagcls:"ok",
+      instr:"Нужен установленный KakaoTalk. Если его ещё нет — сначала установите и зарегистрируйтесь по инструкции ниже «📲 Первый раз через KakaoTalk?». Потом нажмите эту кнопку. Работает без VPN." },
+    { key:"meet",      cls:"blue",  ic:"🔵", title:"Запасной видеозвонок", via:"Google Meet",    tag:"нужен VPN", tagcls:"vpn", copy:true,
+      instr:"Откроется в браузере. В России почти наверняка нужен включённый VPN — включите его заранее. Разрешите камеру и микрофон." },
+    { key:"whatsapp",  cls:"wa",    ic:"🟢", title:"WhatsApp",            via:"мессенджер",        tag:"", tagcls:"",
+      instr:"Откроется звонок в WhatsApp. В России звонки бывают нестабильны — держите наготове VPN." },
+    { key:"phone",     cls:"tel",   ic:"📞", title:"Позвонить по телефону", via:"самый крайний случай", tag:"роуминг", tagcls:"warn", tel:true, warn:true,
+      instr:"⚠️ Международный роуминг — от 30 ₽ за минуту, это дорого и не вариант для обычного общения. Только если совсем ничего выше не сработало." },
   ];
 
   const peopleEl = $("people");
@@ -248,6 +259,7 @@ const CONFIG = {
           ${tag}
         </a>`;
       if (ch.copy) chans += `<span class="copy" data-copy="${esc(raw)}">скопировать ссылку</span>`;
+      if (ch.instr) chans += `<div class="cinstr${ch.warn?" warn":""}">${ch.instr}</div>`;
     });
 
     if (!chans) chans = `<div class="empty">Ссылки пока не добавлены</div>`;
