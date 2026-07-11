@@ -89,6 +89,14 @@
   .cinstr{font-size:13.5px; line-height:1.42; color:var(--muted); padding:0 6px 4px; margin-top:-2px;}
   .cinstr.warn{color:var(--accent); font-weight:500;}
   .ilink{color:var(--accent); font-weight:600; text-decoration:underline; text-underline-offset:2px;}
+  /* кнопки-ссылки на сторы приложений */
+  .stores{display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:2px 6px 6px;}
+  .stores .slbl{font-size:12.5px; color:var(--muted);}
+  .store{display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 14px;
+    border:1px solid var(--line); border-radius:11px; background:#fff; font-size:13.5px; font-weight:600; color:var(--ink);}
+  .store:active{transform:scale(.97);}
+  .store .si{font-size:15px; line-height:1;}
+  .help .stores{padding:8px 0 2px;}
   /* подсветка блока инструкции при переходе по якорю */
   #kakao-setup.flash{animation:flash 1.6s ease;}
   @keyframes flash{0%,100%{box-shadow:0 0 0 0 rgba(247,214,0,0);}20%{box-shadow:0 0 0 4px rgba(247,214,0,.55);}}
@@ -158,7 +166,12 @@
     <div class="help">
       <p class="knote">KakaoTalk — корейский мессенджер, работает в России <b>без VPN</b>. Но при регистрации код подтверждения из-за границы часто <b>не приходит сам</b> — тогда нужно один раз отправить SMS вручную. Это ~5 минут и делается один раз.</p>
       <ol>
-        <li><b>Скачайте приложение.</b> iPhone — App&nbsp;Store; Android — Google&nbsp;Play или RuStore. Ищите «KakaoTalk». <span class="tagi ok">VPN не нужен</span></li>
+        <li><b>Скачайте приложение</b> (ищите «KakaoTalk», Android — ещё и в RuStore). <span class="tagi ok">VPN не нужен</span>
+          <div class="stores">
+            <a class="store" href="https://apps.apple.com/ru/app/id362057947" target="_blank" rel="noopener"><span class="si"></span>App&nbsp;Store</a>
+            <a class="store" href="https://play.google.com/store/apps/details?id=com.kakao.talk" target="_blank" rel="noopener"><span class="si">▶</span>Google&nbsp;Play</a>
+          </div>
+        </li>
         <li><b>Откройте, нажмите «Start» → «Sign up»</b> (Начать / Регистрация) и примите условия.</li>
         <li><b>Введите свой номер.</b> Выберите страну <b>Russia (+7)</b> и наберите номер без первой восьмёрки, например <b>912&nbsp;345&#8209;67&#8209;89</b>.</li>
         <li><b>Нажмите «Send» / «Отправить код»</b> и подождите минуту.</li>
@@ -234,11 +247,13 @@ const CONFIG = {
   // Порядок и вид каналов внутри карточки человека
   const CHANNELS = [
     { key:"telemost",  cls:"green", ic:"🎥", title:"Видеозвонок",        via:"Яндекс Телемост",  tag:"без VPN", tagcls:"ok",  copy:true,
-      instr:"Нажмите — звонок откроется прямо в браузере. Когда спросит про камеру и микрофон, нажмите «Разрешить». Ставить приложение и включать VPN не нужно." },
+      instr:"Нажмите — звонок откроется прямо в браузере. Когда спросит про камеру и микрофон, нажмите «Разрешить». Ставить приложение и включать VPN не нужно.",
+      apps:{ ios:"https://apps.apple.com/ru/app/id1527737302", android:"https://play.google.com/store/apps/details?id=ru.yandex.telemost" } },
     { key:"kakaotalk", cls:"kakao", ic:"💬", title:"Звонок в KakaoTalk", via:"мессенджер",       tag:"без VPN", tagcls:"ok",
       instr:'Нужен установленный KakaoTalk. Если его ещё нет — сначала установите и зарегистрируйтесь: <a class="ilink" href="#kakao-setup">открыть подробную инструкцию ↓</a>. Потом нажмите эту кнопку. Работает без VPN.' },
     { key:"meet",      cls:"blue",  ic:"🔵", title:"Запасной видеозвонок", via:"Google Meet",    tag:"нужен VPN", tagcls:"vpn", copy:true,
-      instr:"Откроется в браузере. В России почти наверняка нужен включённый VPN — включите его заранее. Разрешите камеру и микрофон." },
+      instr:"Откроется в браузере. В России почти наверняка нужен включённый VPN — включите его заранее. Разрешите камеру и микрофон.",
+      apps:{ ios:"https://apps.apple.com/ru/app/id1096918571", android:"https://play.google.com/store/apps/details?id=com.google.android.apps.tachyon" } },
     { key:"whatsapp",  cls:"wa",    ic:"🟢", title:"WhatsApp",            via:"мессенджер",        tag:"", tagcls:"",
       instr:"Откроется звонок в WhatsApp. В России звонки бывают нестабильны — держите наготове VPN." },
     { key:"phone",     cls:"tel",   ic:"📞", title:"Позвонить по телефону", via:"самый крайний случай", tag:"роуминг", tagcls:"warn", tel:true, warn:true,
@@ -268,6 +283,12 @@ const CONFIG = {
         </a>`;
       if (ch.copy) chans += `<span class="copy" data-copy="${esc(raw)}">скопировать ссылку</span>`;
       if (ch.instr) chans += `<div class="cinstr${ch.warn?" warn":""}">${ch.instr}</div>`;
+      if (ch.apps){
+        let s = `<div class="stores"><span class="slbl">Есть приложение:</span>`;
+        if (ch.apps.ios)     s += `<a class="store" href="${esc(ch.apps.ios)}" target="_blank" rel="noopener"><span class="si"></span>App&nbsp;Store</a>`;
+        if (ch.apps.android) s += `<a class="store" href="${esc(ch.apps.android)}" target="_blank" rel="noopener"><span class="si">▶</span>Google&nbsp;Play</a>`;
+        chans += s + `</div>`;
+      }
     });
 
     if (!chans) chans = `<div class="empty">Ссылки пока не добавлены</div>`;
