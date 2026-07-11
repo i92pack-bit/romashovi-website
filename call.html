@@ -86,6 +86,10 @@
   /* точная инструкция под каждым каналом */
   .cinstr{font-size:13.5px; line-height:1.42; color:var(--muted); padding:0 6px 4px; margin-top:-2px;}
   .cinstr.warn{color:var(--accent); font-weight:500;}
+  .ilink{color:var(--accent); font-weight:600; text-decoration:underline; text-underline-offset:2px;}
+  /* подсветка блока инструкции при переходе по якорю */
+  #kakao-setup.flash{animation:flash 1.6s ease;}
+  @keyframes flash{0%,100%{box-shadow:0 0 0 0 rgba(247,214,0,0);}20%{box-shadow:0 0 0 4px rgba(247,214,0,.55);}}
   .gtag.warn{background:var(--accent-soft); color:var(--accent);}
   .go.tel{opacity:.9;} .go.tel .gtxt b{font-weight:500;}
 
@@ -147,7 +151,7 @@
   <div id="people"></div>
 
   <!-- Как установить KakaoTalk (один раз) -->
-  <details class="ksetup">
+  <details class="ksetup" id="kakao-setup">
     <summary><span>📲 Первый раз через KakaoTalk? Как установить</span><span class="chev">▾</span></summary>
     <div class="help">
       <p class="knote">KakaoTalk — корейский мессенджер, работает в России <b>без VPN</b>. Но при регистрации код подтверждения из-за границы часто <b>не приходит сам</b> — тогда нужно один раз отправить SMS вручную. Это ~5 минут и делается один раз.</p>
@@ -228,7 +232,7 @@ const CONFIG = {
     { key:"telemost",  cls:"green", ic:"🎥", title:"Видеозвонок",        via:"Яндекс Телемост",  tag:"без VPN", tagcls:"ok",  copy:true,
       instr:"Нажмите — звонок откроется прямо в браузере. Когда спросит про камеру и микрофон, нажмите «Разрешить». Ставить приложение и включать VPN не нужно." },
     { key:"kakaotalk", cls:"kakao", ic:"💬", title:"Звонок в KakaoTalk", via:"мессенджер",       tag:"без VPN", tagcls:"ok",
-      instr:"Нужен установленный KakaoTalk. Если его ещё нет — сначала установите и зарегистрируйтесь по инструкции ниже «📲 Первый раз через KakaoTalk?». Потом нажмите эту кнопку. Работает без VPN." },
+      instr:'Нужен установленный KakaoTalk. Если его ещё нет — сначала установите и зарегистрируйтесь: <a class="ilink" href="#kakao-setup">открыть подробную инструкцию ↓</a>. Потом нажмите эту кнопку. Работает без VPN.' },
     { key:"meet",      cls:"blue",  ic:"🔵", title:"Запасной видеозвонок", via:"Google Meet",    tag:"нужен VPN", tagcls:"vpn", copy:true,
       instr:"Откроется в браузере. В России почти наверняка нужен включённый VPN — включите его заранее. Разрешите камеру и микрофон." },
     { key:"whatsapp",  cls:"wa",    ic:"🟢", title:"WhatsApp",            via:"мессенджер",        tag:"", tagcls:"",
@@ -284,6 +288,18 @@ const CONFIG = {
       row.appendChild(a);
     });
   }
+
+  // Клик по внутренней ссылке-якорю: раскрыть <details>, доскроллить, подсветить
+  document.addEventListener("click", e => {
+    const link = e.target.closest('a[href^="#"]');
+    if (!link) return;
+    const target = document.getElementById(link.getAttribute("href").slice(1));
+    if (!target) return;
+    e.preventDefault();
+    if (target.tagName === "DETAILS") target.open = true;
+    target.scrollIntoView({ behavior:"smooth", block:"start" });
+    target.classList.remove("flash"); void target.offsetWidth; target.classList.add("flash");
+  });
 
   // Копирование ссылок (для видеозвонков)
   let toastT;
