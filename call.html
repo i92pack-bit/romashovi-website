@@ -63,6 +63,10 @@
   .mono img{width:100%; height:100%; object-fit:cover; display:block;}
   .phead h2{font-size:23px; font-weight:600; line-height:1.1;}
   .phead .psub{color:var(--muted); font-size:14px; margin-top:1px;}
+  .psub-o{display:none;}
+  .psub-c{color:var(--accent); font-weight:600;}
+  .person[open] .psub-c{display:none;}
+  .person[open] .psub-o{display:inline; color:var(--muted); font-weight:400;}
   .chans{display:flex; flex-direction:column; gap:10px; padding:0 16px 18px;}
 
   /* Кнопка канала */
@@ -308,7 +312,7 @@ const CONFIG = {
     card.innerHTML = `
       <summary class="phead">
         ${mono}
-        <div class="pname"><h2>${esc(p.name)}</h2><div class="psub">выберите способ связи</div></div>
+        <div class="pname"><h2>${esc(p.name)}</h2><div class="psub"><span class="psub-c">Нажмите, чтобы открыть способы связи ↓</span><span class="psub-o">выберите способ связи</span></div></div>
         <span class="chev">▾</span>
       </summary>
       <div class="chans">${chans}</div>`;
