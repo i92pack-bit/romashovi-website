@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Позвонить Илье и Юле · видеозвонок</title>
+<meta name="description" content="Видеозвонок с Ильёй и Юлей. Нажмите зелёную кнопку — откроется видео. Ничего устанавливать не нужно." />
+<meta name="theme-color" content="#fbfaf7" />
+<meta name="robots" content="noindex, nofollow" />
+<meta property="og:title" content="Позвонить Илье и Юле" />
+<meta property="og:description" content="Нажмите зелёную кнопку — откроется видеозвонок. Ничего устанавливать не нужно." />
+
+<!-- Ромашка-фавикон, как на yul-n-ily.com. Инлайн, чтобы не тянуть внешних файлов. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Cg fill='%23ff5c3e'%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5'/%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5' transform='rotate(72 14 14)'/%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5' transform='rotate(144 14 14)'/%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5' transform='rotate(216 14 14)'/%3E%3Cellipse cx='14' cy='5' rx='2.7' ry='5' transform='rotate(288 14 14)'/%3E%3C/g%3E%3Ccircle cx='14' cy='14' r='3.2' fill='%231a1a17'/%3E%3C/svg%3E" />
+
+<style>
+  /* ── Дизайн-токены с yul-n-ily.com. Шрифты — системные (никаких внешних CDN,
+     чтобы страница гарантированно грузилась из России без VPN). ── */
+  :root{
+    --bg:#fbfaf7; --surface:#f3f1ea; --ink:#1a1a17; --ink-soft:#3d3d38;
+    --muted:#7a7870; --faint:#b5b3aa; --line:rgba(26,26,23,.10);
+    --accent:#ff5c3e; --accent-soft:#ffe8e0;
+    --sage:#5f8a5b; --sage-soft:#e4ede0;
+    --ocean:#2f5e8c; --ocean-soft:#dfe9f2;
+    --butter:#f4d67a; --butter-soft:#fbeab5;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    font-family:var(--sans); background:var(--bg); color:var(--ink);
+    line-height:1.5; font-size:18px;
+    padding:env(safe-area-inset-top) 20px calc(40px + env(safe-area-inset-bottom));
+    display:flex; flex-direction:column; align-items:center;
+    min-height:100dvh;
+  }
+  .wrap{width:100%; max-width:520px;}
+  a{color:inherit; text-decoration:none;}
+
+  /* ── Шапка ── */
+  .top{display:flex; align-items:center; gap:10px; padding:22px 2px 6px;}
+  .top .daisy{width:26px; height:26px; flex:none;}
+  .top b{font-weight:600; font-size:16px; letter-spacing:.2px;}
+  .top span{color:var(--muted); font-size:14px;}
+
+  /* ── Заголовок ── */
+  .hero{padding:26px 4px 8px;}
+  .hero h1{
+    font-family:var(--serif); font-weight:600; letter-spacing:-.5px;
+    font-size:clamp(30px,8.5vw,40px); line-height:1.08;
+  }
+  .hero p{margin-top:12px; color:var(--ink-soft); font-size:17px;}
+
+  /* ── Карточки-каналы ── */
+  .cards{display:flex; flex-direction:column; gap:14px; margin-top:24px;}
+  .card{
+    background:#fff; border:1px solid var(--line); border-radius:22px;
+    padding:20px 20px 22px; box-shadow:0 6px 20px -14px rgba(0,0,0,.25);
+  }
+  .card .lbl{display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600;
+    letter-spacing:.4px; text-transform:uppercase; color:var(--muted);}
+  .card .dot{width:9px; height:9px; border-radius:99px; flex:none;}
+  .card h2{font-size:21px; font-weight:600; margin:8px 0 2px;}
+  .card .sub{color:var(--muted); font-size:15px;}
+  .card .via{display:inline-flex; align-items:center; gap:6px; margin-top:2px;
+    color:var(--ink-soft); font-size:14px; font-weight:500;}
+
+  /* Большая кнопка «войти» */
+  .go{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    width:100%; margin-top:16px; min-height:64px; padding:0 22px;
+    border-radius:16px; font-size:19px; font-weight:600; color:#fff;
+    transition:transform .12s ease, filter .12s ease, box-shadow .2s ease;
+  }
+  .go:active{transform:scale(.98);}
+  .go .arw{font-size:22px; line-height:1;}
+  .go.green{background:var(--sage); box-shadow:0 12px 26px -12px rgba(95,138,91,.7);}
+  .go.blue{background:var(--ocean); box-shadow:0 12px 26px -12px rgba(47,94,140,.6);}
+  .card.primary{border-color:rgba(95,138,91,.35); background:linear-gradient(#fff,var(--sage-soft));}
+  .card.backup{background:linear-gradient(#fff,var(--ocean-soft));}
+
+  /* Ссылка «скопировать» под кнопкой */
+  .copy{display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    color:var(--ink-soft); font-size:14px; font-weight:500; padding:6px 2px; cursor:pointer;
+    border-bottom:1px dashed var(--faint);}
+  .copy:active{color:var(--accent);}
+
+  /* Заблокированная кнопка (ссылка не заполнена) */
+  .go.off{background:var(--surface); color:var(--faint); box-shadow:none; pointer-events:none;}
+  .warn{margin-top:10px; font-size:13px; color:var(--accent); font-weight:600;}
+  .warn[hidden]{display:none;}
+
+  /* ── Мессенджеры / телефон ── */
+  .mini-title{margin:26px 4px 12px; font-size:14px; font-weight:600; color:var(--muted);
+    text-transform:uppercase; letter-spacing:.5px;}
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .chip{
+    display:flex; align-items:center; gap:10px; min-height:56px; padding:0 16px;
+    background:#fff; border:1px solid var(--line); border-radius:14px;
+    font-size:16px; font-weight:500; box-shadow:0 4px 14px -12px rgba(0,0,0,.3);
+    transition:transform .12s ease;
+  }
+  .chip:active{transform:scale(.98);}
+  .chip .ic{width:22px; height:22px; flex:none; display:flex; align-items:center; justify-content:center;}
+  .chip.wide{grid-column:1 / -1;}
+  .chip small{color:var(--muted); font-weight:400; font-size:13px;}
+
+  /* ── Что делать если не работает ── */
+  details{margin-top:26px; background:var(--surface); border:1px solid var(--line);
+    border-radius:18px; overflow:hidden;}
+  summary{list-style:none; cursor:pointer; padding:18px 20px; font-weight:600; font-size:17px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  summary::-webkit-details-marker{display:none;}
+  summary .chev{transition:transform .2s ease; color:var(--muted);}
+  details[open] summary .chev{transform:rotate(180deg);}
+  .help{padding:2px 20px 20px;}
+  .help ol{margin:0; padding-left:20px; display:flex; flex-direction:column; gap:12px;}
+  .help li{color:var(--ink-soft); font-size:16px;}
+  .help li b{color:var(--ink);}
+  .tag{display:inline-block; font-size:12px; font-weight:600; padding:2px 9px; border-radius:99px;
+    vertical-align:middle; margin-left:2px;}
+  .tag.ok{background:var(--sage-soft); color:var(--sage);}
+  .tag.vpn{background:var(--accent-soft); color:var(--accent);}
+
+  /* ── Подвал ── */
+  footer{margin-top:32px; padding:0 4px; color:var(--faint); font-size:13px; text-align:center;}
+  footer a{color:var(--muted); border-bottom:1px solid var(--line);}
+
+  /* всплывашка «скопировано» */
+  .toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px);
+    background:var(--ink); color:#fff; padding:11px 18px; border-radius:99px; font-size:15px;
+    font-weight:500; opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; z-index:50;}
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+  [hidden]{display:none !important;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <svg class="daisy" viewBox="0 0 28 28" aria-hidden="true"><g fill="#ff5c3e"><ellipse cx="14" cy="5" rx="2.7" ry="5"/><ellipse cx="14" cy="5" rx="2.7" ry="5" transform="rotate(72 14 14)"/><ellipse cx="14" cy="5" rx="2.7" ry="5" transform="rotate(144 14 14)"/><ellipse cx="14" cy="5" rx="2.7" ry="5" transform="rotate(216 14 14)"/><ellipse cx="14" cy="5" rx="2.7" ry="5" transform="rotate(288 14 14)"/></g><circle cx="14" cy="14" r="3.2" fill="#1a1a17"/></svg>
+    <b>Илья&nbsp;и&nbsp;Юля</b>
+    <span>· видеосвязь</span>
+  </div>
+
+  <div class="hero">
+    <h1>Позвонить<br>Илье&nbsp;и&nbsp;Юле</h1>
+    <p>Нажмите зелёную кнопку — откроется видеозвонок прямо в браузере. Устанавливать ничего не нужно.</p>
+  </div>
+
+  <div class="cards">
+
+    <!-- ОСНОВНОЙ: Яндекс Телемост -->
+    <div class="card primary">
+      <div class="lbl"><span class="dot" style="background:var(--sage)"></span>Основной звонок</div>
+      <h2>Видеозвонок</h2>
+      <div class="via">через Яндекс&nbsp;Телемост · <span style="color:var(--sage)">работает в России без VPN</span></div>
+      <a class="go green" id="btn-telemost" href="#" target="_blank" rel="noopener">
+        <span>Войти в звонок</span><span class="arw">→</span>
+      </a>
+      <div class="warn" id="warn-telemost" hidden>⚠ Вставьте ссылку на комнату в CONFIG</div>
+      <span class="copy" id="copy-telemost" hidden>Скопировать ссылку</span>
+    </div>
+
+    <!-- ЗАПАСНОЙ: Google Meet -->
+    <div class="card backup">
+      <div class="lbl"><span class="dot" style="background:var(--ocean)"></span>Запасной звонок</div>
+      <h2>Если основной не открылся</h2>
+      <div class="via">через Google&nbsp;Meet · <span style="color:var(--accent)">в России может понадобиться VPN</span></div>
+      <a class="go blue" id="btn-meet" href="#" target="_blank" rel="noopener">
+        <span>Войти в запасной</span><span class="arw">→</span>
+      </a>
+      <div class="warn" id="warn-meet" hidden>⚠ Вставьте ссылку на комнату в CONFIG</div>
+      <span class="copy" id="copy-meet" hidden>Скопировать ссылку</span>
+    </div>
+
+  </div>
+
+  <!-- МЕССЕНДЖЕРЫ -->
+  <div id="msg-block" hidden>
+    <div class="mini-title">Написать или позвонить в мессенджере</div>
+    <div class="grid" id="msg-grid"></div>
+  </div>
+
+  <!-- ТЕЛЕФОН -->
+  <div id="tel-block" hidden>
+    <div class="mini-title">Позвонить по телефону</div>
+    <div class="grid" id="tel-grid"></div>
+  </div>
+
+  <!-- ЧТО ДЕЛАТЬ ЕСЛИ НЕ РАБОТАЕТ -->
+  <details>
+    <summary><span>Что делать, если не работает</span><span class="chev">▾</span></summary>
+    <div class="help">
+      <ol>
+        <li><b>Разрешите камеру и микрофон.</b> Когда браузер спросит — нажмите «Разрешить». Без этого будет видно, но не слышно.</li>
+        <li><b>Не открылось за 10 секунд?</b> Закройте вкладку и нажмите <b>запасную синюю кнопку</b>.</li>
+        <li><b>Основной не грузится в России?</b> Обновите страницу. Откройте в браузере <b>Chrome</b> или <b>Safari</b> (не внутри Instagram/VK).</li>
+        <li><b>Синий (Google&nbsp;Meet) не открывается в России?</b> <span class="tag vpn">нужен&nbsp;VPN</span> Включите VPN и попробуйте снова. <span class="tag ok">зелёный работает без&nbsp;VPN</span></li>
+        <li><b>Совсем ничего?</b> Напишите нам в мессенджере или позвоните по телефону — кнопки выше.</li>
+        <li><b>Договоритесь заранее</b> о времени звонка — так один из нас точно будет на связи и откроет комнату.</li>
+      </ol>
+    </div>
+  </details>
+
+  <footer>
+    Личная страница связи семьи Ромашовых · <a href="https://yul-n-ily.com" target="_blank" rel="noopener">yul-n-ily.com</a>
+  </footer>
+
+</div>
+
+<div class="toast" id="toast">Ссылка скопирована</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   ✏️  ЗАПОЛНИ ЗДЕСЬ — это единственное место с ссылками.
+   Пустая строка "" = канал скрыт и не показывается на странице.
+   ═══════════════════════════════════════════════════════════════════════ */
+const CONFIG = {
+  // ⚠ ДЕМО-ДАННЫЕ ДЛЯ ПРЕДПРОСМОТРА. Кнопки ведут на сами сервисы, не на вашу комнату.
+  telemost: "https://telemost.yandex.ru/",   // ← замени на постоянную комнату telemost.yandex.ru/j/...
+  meet: "https://meet.google.com/",           // ← замени на постоянную ссылку meet.google.com/...
+  messengers: [
+    { name:"Telegram Ильи", href:"https://t.me/telegram",    hint:"звонок и чат" },
+    { name:"Telegram Юли",  href:"https://t.me/telegram",    hint:"звонок и чат" },
+    { name:"WhatsApp",      href:"https://wa.me/66000000000", hint:"в РФ бывает нестабильно" },
+  ],
+  phones: [
+    { name:"Илья", tel:"+66000000000" },
+    { name:"Юля",  tel:"+66000000000" },
+  ],
+};
+/* ═══════════════ дальше можно не трогать ═══════════════ */
+
+(function(){
+  const $ = id => document.getElementById(id);
+
+  // — основные видеокнопки —
+  function setupCall(key, url){
+    const btn  = $("btn-"+key),
+          warn = $("warn-"+key),
+          copy = $("copy-"+key);
+    if (url && url.trim()){
+      btn.href = url.trim();
+      copy.hidden = false;
+      copy.addEventListener("click", () => copyText(url.trim()));
+    } else {
+      btn.classList.add("off");
+      btn.querySelector("span").textContent = "Ссылка не добавлена";
+      warn.hidden = false;
+    }
+  }
+  setupCall("telemost", CONFIG.telemost);
+  setupCall("meet", CONFIG.meet);
+
+  // — мессенджеры —
+  const msgs = (CONFIG.messengers || []).filter(m => m && m.href && m.href.trim());
+  if (msgs.length){
+    $("msg-block").hidden = false;
+    const g = $("msg-grid");
+    msgs.forEach((m, i) => {
+      const a = document.createElement("a");
+      a.className = "chip" + (msgs.length % 2 && i === msgs.length-1 ? " wide" : "");
+      a.href = m.href.trim(); a.target = "_blank"; a.rel = "noopener";
+      a.innerHTML = `<span class="ic">💬</span><span>${esc(m.name)}${m.hint ? ` <small>· ${esc(m.hint)}</small>`:""}</span>`;
+      g.appendChild(a);
+    });
+  }
+
+  // — телефоны —
+  const tels = (CONFIG.phones || []).filter(p => p && p.tel && p.tel.trim());
+  if (tels.length){
+    $("tel-block").hidden = false;
+    const g = $("tel-grid");
+    tels.forEach(p => {
+      const a = document.createElement("a");
+      a.className = "chip";
+      a.href = "tel:" + p.tel.replace(/[^\d+]/g,"");
+      a.innerHTML = `<span class="ic">📞</span><span>Позвонить ${esc(p.name)}<br><small>${esc(p.tel)}</small></span>`;
+      g.appendChild(a);
+    });
+  }
+
+  // — утилиты —
+  function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+  function copyText(t){
+    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject())
+      .then(showToast)
+      .catch(() => { // старый фолбэк
+        const ta = document.createElement("textarea"); ta.value = t; document.body.appendChild(ta);
+        ta.select(); try{ document.execCommand("copy"); showToast(); }catch(e){} ta.remove();
+      });
+  }
+  let toastT;
+  function showToast(){
+    const el = $("toast"); el.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove("show"), 1800);
+  }
+})();
+</script>
+</body>
+</html>
