@@ -107,7 +107,7 @@
     height:38px; padding:0 12px; border:1px solid var(--line); border-radius:11px; background:#fff;
     font-size:13.5px; font-weight:600; color:var(--ink); white-space:nowrap;}
   .store:active{transform:scale(.97);}
-  .store .si{font-size:15px; line-height:1;}
+  .store .si{height:17px; width:auto; flex:none;}
   .help .stores{padding:8px 0 2px;}
   /* подсветка блока инструкции при переходе по якорю */
   #kakao-setup.flash{animation:flash 1.6s ease;}
@@ -180,8 +180,8 @@
       <ol>
         <li><b>Скачайте приложение</b> (ищите «KakaoTalk», Android — ещё и в RuStore). <span class="tagi ok">VPN не нужен</span>
           <div class="stores"><span class="storebtns">
-            <a class="store" href="https://apps.apple.com/ru/app/id362057947" target="_blank" rel="noopener"><span class="si"></span>App Store</a>
-            <a class="store" href="https://play.google.com/store/apps/details?id=com.kakao.talk" target="_blank" rel="noopener"><span class="si">▶</span>Google Play</a>
+            <a class="store" href="https://apps.apple.com/ru/app/id362057947" target="_blank" rel="noopener"><svg class="si" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>App Store</a>
+            <a class="store" href="https://play.google.com/store/apps/details?id=com.kakao.talk" target="_blank" rel="noopener"><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path fill="#00c8ff" d="M3.7 2 13.4 12 3.7 22Z"/><path fill="#ff424b" d="M3.7 2 17.9 9.4 13.4 12Z"/><path fill="#00e574" d="M3.7 22 13.4 12 17.9 14.6Z"/><path fill="#ffcd00" d="M17.9 9.4 20.7 11c.7.4.7 1.6 0 2l-2.8 1.6L13.4 12Z"/></svg>Google Play</a>
           </span></div>
         </li>
         <li><b>Откройте, нажмите «Start» → «Sign up»</b> (Начать / Регистрация) и примите условия.</li>
@@ -256,6 +256,10 @@ const CONFIG = {
   const $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
+  // Инлайн-иконки сторов (без внешних файлов)
+  const ICON_APPLE = '<svg class="si" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>';
+  const ICON_GPLAY = '<svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path fill="#00c8ff" d="M3.7 2 13.4 12 3.7 22Z"/><path fill="#ff424b" d="M3.7 2 17.9 9.4 13.4 12Z"/><path fill="#00e574" d="M3.7 22 13.4 12 17.9 14.6Z"/><path fill="#ffcd00" d="M17.9 9.4 20.7 11c.7.4.7 1.6 0 2l-2.8 1.6L13.4 12Z"/></svg>';
+
   // Порядок и вид каналов внутри карточки человека
   const CHANNELS = [
     { key:"telemost",  cls:"green", ic:"🎥", title:"Видеозвонок",        via:"Яндекс Телемост",  tag:"без VPN", tagcls:"ok",  copy:true,
@@ -298,8 +302,8 @@ const CONFIG = {
       if (ch.instr) chans += `<div class="cinstr${ch.warn?" warn":""}">${ch.instr}</div>`;
       if (ch.apps){
         let btns = "";
-        if (ch.apps.ios)     btns += `<a class="store" href="${esc(ch.apps.ios)}" target="_blank" rel="noopener"><span class="si"></span>App Store</a>`;
-        if (ch.apps.android) btns += `<a class="store" href="${esc(ch.apps.android)}" target="_blank" rel="noopener"><span class="si">▶</span>Google Play</a>`;
+        if (ch.apps.ios)     btns += `<a class="store" href="${esc(ch.apps.ios)}" target="_blank" rel="noopener">${ICON_APPLE}App Store</a>`;
+        if (ch.apps.android) btns += `<a class="store" href="${esc(ch.apps.android)}" target="_blank" rel="noopener">${ICON_GPLAY}Google Play</a>`;
         chans += `<div class="stores"><span class="slbl">Есть приложение:</span><span class="storebtns">${btns}</span></div>`;
       }
     });
