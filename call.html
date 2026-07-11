@@ -76,7 +76,20 @@
   .psub-c{color:var(--accent); font-weight:600;}
   .person[open] .psub-c{display:none;}
   .person[open] .psub-o{display:inline; color:var(--muted); font-weight:400;}
-  .chans{display:flex; flex-direction:column; gap:8px; padding:0 16px 18px;}
+  .chans{display:flex; flex-direction:column; gap:12px; padding:0 16px 18px;}
+  /* канал = кнопка + раскрывающаяся подробная инструкция */
+  .chan{display:flex; flex-direction:column; gap:5px;}
+  details.how{margin:0; background:var(--surface); border:1px solid var(--line); border-radius:12px; overflow:hidden;}
+  details.how > summary{list-style:none; cursor:pointer; padding:9px 13px; font-size:13.5px; font-weight:600;
+    color:var(--ink-soft); display:flex; align-items:center; gap:6px; justify-content:flex-start;}
+  details.how > summary::-webkit-details-marker{display:none;}
+  details.how .hchev{margin-left:auto; font-size:12px; color:var(--muted); transition:transform .2s ease;}
+  details.how[open] > summary .hchev{transform:rotate(180deg);}
+  .howbody{padding:2px 14px 13px; font-size:14px; line-height:1.5; color:var(--ink-soft);}
+  .howbody b{color:var(--ink);}
+  .howbody ol{margin:6px 0 0; padding-left:20px; display:flex; flex-direction:column; gap:7px;}
+  .howbody .stores{padding:10px 0 0;}
+  .howbody .copy{margin:10px 0 0;}
 
   /* Кнопка канала */
   .go{display:flex; align-items:center; gap:12px; width:100%; min-height:54px; padding:8px 16px 8px 18px;
@@ -276,21 +289,58 @@ const CONFIG = {
     { key:"last", title:"", note:"" },
   ];
 
-  // Каталог каналов (компактно: кнопка + короткая пометка)
+  // Каталог каналов: кнопка + раскрывающаяся подробная инструкция (how)
   const CHANNELS = [
     // ── звонит, без VPN ──
     { key:"telemostCall", group:"ring", cls:"green", ic:"📲", title:"Телемост", flag:true, fixedHref:"https://telemost.yandex.ru/",
-      instr:"Поставьте приложение, добавьте нас в контакты — и звоните.",
+      howSummary:"Как позвонить — нужно приложение",
+      how:`<b>Чтобы у нас зазвонил телефон:</b>
+        <ol>
+          <li>Установите приложение «Яндекс&nbsp;Телемост» — кнопки ниже. Без VPN.</li>
+          <li>Откройте и войдите — через Яндекс или по номеру телефона.</li>
+          <li>Разрешите доступ к контактам <b>или</b> добавьте наш номер в телефон.</li>
+          <li>Найдите нас в списке и нажмите значок звонка&nbsp;📞.</li>
+          <li>У нас зазвонит — как обычный звонок, даже если приложение закрыто.</li>
+        </ol>`,
       apps:{ ios:"https://apps.apple.com/ru/app/id1527737302", android:"https://play.google.com/store/apps/details?id=ru.yandex.telemost" } },
     { key:"kakaotalk", group:"ring", cls:"kakao", ic:"💬", title:"KakaoTalk",
-      instr:'Первый раз? <a class="ilink" href="#kakao-setup">как установить ↓</a>' },
-    { key:"vk", group:"ring", cls:"vk", ic:"VK", title:"ВКонтакте" },
+      howSummary:"Как настроить и позвонить",
+      how:`<b>Корейский мессенджер — звонит без VPN.</b>
+        <ol>
+          <li>Первый раз нужно установить и зарегистрироваться (из России — отправить одну SMS): <a class="ilink" href="#kakao-setup">открыть подробную инструкцию ↓</a>.</li>
+          <li>Когда установлен — нажмите кнопку выше, откроется чат с нами.</li>
+          <li>Нажмите значок звонка&nbsp;📞 вверху.</li>
+        </ol>` },
+    { key:"vk", group:"ring", cls:"vk", ic:"VK", title:"ВКонтакте",
+      howSummary:"Как позвонить",
+      how:`<b>VK Звонки — работают в России без VPN.</b>
+        <ol>
+          <li>Нажмите кнопку выше — откроется чат ВКонтакте с нами.</li>
+          <li>Нажмите значок звонка&nbsp;📞 вверху справа (аудио или видео).</li>
+          <li>У нас зазвонит. Нужен аккаунт ВКонтакте (обычно уже есть).</li>
+        </ol>` },
     // ── комната по договорённости (не звонит) ──
-    { key:"telemostRoom", group:"room", cls:"sky", ic:"🚪", title:"Телемост", tag:"без VPN", tagcls:"ok", copy:true },
-    { key:"meet", group:"room", cls:"blue", ic:"🚪", title:"Google Meet", tag:"нужен VPN", tagcls:"vpn", copy:true },
+    { key:"telemostRoom", group:"room", cls:"sky", ic:"🚪", title:"Телемост", tag:"без VPN", tagcls:"ok", copy:true,
+      howSummary:"Как зайти в комнату",
+      how:`<b>Видеовстреча по ссылке. Не звонит — заходят по договорённости.</b>
+        <ol>
+          <li>Заранее договоритесь с нами о времени.</li>
+          <li>В нужное время нажмите кнопку выше — откроется прямо в браузере.</li>
+          <li>Разрешите камеру и микрофон.</li>
+          <li>Вы в комнате — мы заходим по этой же ссылке.</li>
+        </ol>
+        Работает без VPN, устанавливать ничего не нужно.` },
+    { key:"meet", group:"room", cls:"blue", ic:"🚪", title:"Google Meet", tag:"нужен VPN", tagcls:"vpn", copy:true,
+      howSummary:"Как зайти — нужен VPN",
+      how:`<b>Запасная видеокомната. Тоже не звонит — по договорённости.</b>
+        <ol>
+          <li>⚠️ В России почти всегда нужен включённый VPN — включите заранее.</li>
+          <li>Нажмите кнопку выше — откроется в браузере.</li>
+          <li>Разрешите камеру и микрофон и ждите нас.</li>
+        </ol>` },
     // ── крайний случай ──
     { key:"phone", group:"last", cls:"tel", ic:"☎️", title:"Телефон", tag:"роуминг", tagcls:"warn", tel:true, warn:true,
-      instr:"⚠️ Роуминг ~30 ₽/мин — только на крайний случай." },
+      warnLine:"⚠️ Международный роуминг — от 30 ₽/минуту, дорого. Только если совсем ничего выше не сработало." },
   ];
 
   const peopleEl = $("people");
@@ -309,20 +359,24 @@ const CONFIG = {
       else { val = (p[ch.key] || "").trim(); if (!val) return; }
       const href = ch.tel ? "tel:" + val.replace(/[^\d+]/g,"") : val;
       const tag = ch.tag ? `<span class="gtag ${ch.tagcls}">${ch.tag}</span>` : "";
-      let html = `<a class="go ${ch.cls}" href="${esc(href)}"${ch.tel?"":' target="_blank" rel="noopener"'}>
+      let inner = `<a class="go ${ch.cls}" href="${esc(href)}"${ch.tel?"":' target="_blank" rel="noopener"'}>
           <span class="ic">${ch.ic}</span>
-          <span class="gtxt"><b>${esc(ch.title)}</b>${ch.via?`<small>${esc(ch.via)}</small>`:""}</span>
+          <span class="gtxt"><b>${esc(ch.title)}</b></span>
           ${tag}
         </a>`;
-      if (ch.copy && !ch.flag) html += `<span class="copy" data-copy="${esc(val)}">скопировать ссылку</span>`;
-      if (ch.instr) html += `<div class="cinstr${ch.warn?" warn":""}">${ch.instr}</div>`;
-      if (ch.apps){
-        let btns = "";
-        if (ch.apps.ios)     btns += `<a class="store" href="${esc(ch.apps.ios)}" target="_blank" rel="noopener">${ICON_APPLE}App Store</a>`;
-        if (ch.apps.android) btns += `<a class="store" href="${esc(ch.apps.android)}" target="_blank" rel="noopener">${ICON_GPLAY}Google Play</a>`;
-        html += `<div class="stores"><span class="slbl">Скачать:</span><span class="storebtns">${btns}</span></div>`;
+      if (ch.warnLine) inner += `<div class="cinstr warn">${ch.warnLine}</div>`;
+      if (ch.how){
+        let body = ch.how;
+        if (ch.copy && !ch.flag) body += `<span class="copy" data-copy="${esc(val)}">Скопировать ссылку на комнату</span>`;
+        if (ch.apps){
+          let btns = "";
+          if (ch.apps.ios)     btns += `<a class="store" href="${esc(ch.apps.ios)}" target="_blank" rel="noopener">${ICON_APPLE}App Store</a>`;
+          if (ch.apps.android) btns += `<a class="store" href="${esc(ch.apps.android)}" target="_blank" rel="noopener">${ICON_GPLAY}Google Play</a>`;
+          body += `<div class="stores"><span class="slbl">Скачать приложение:</span><span class="storebtns">${btns}</span></div>`;
+        }
+        inner += `<details class="how"><summary>${esc(ch.howSummary||"Подробнее")}<span class="hchev">▾</span></summary><div class="howbody">${body}</div></details>`;
       }
-      (buckets[ch.group] || buckets.last).push(html);
+      (buckets[ch.group] || buckets.last).push(`<div class="chan">${inner}</div>`);
     });
 
     let chans = "";
