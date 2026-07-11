@@ -49,8 +49,13 @@
 
   /* ── Карточка человека ── */
   .person{background:#fff; border:1px solid var(--line); border-radius:24px;
-    padding:18px 18px 20px; margin-top:18px; box-shadow:0 8px 24px -16px rgba(0,0,0,.28);}
-  .phead{display:flex; align-items:center; gap:13px; padding:2px 2px 4px;}
+    margin-top:14px; box-shadow:0 8px 24px -16px rgba(0,0,0,.28); overflow:hidden;}
+  .person[open]{box-shadow:0 14px 32px -16px rgba(0,0,0,.32);}
+  summary.phead{display:flex; align-items:center; justify-content:flex-start; gap:13px;
+    padding:15px 18px; cursor:pointer; list-style:none; font-weight:400; font-size:15px;}
+  summary.phead::-webkit-details-marker{display:none;}
+  .phead .pname{flex:1; min-width:0;}
+  .phead .chev{margin-left:auto; font-size:18px;}
   .mono{width:56px; height:56px; flex:none; border-radius:50%; display:flex; align-items:center;
     justify-content:center; font-family:var(--serif); font-size:24px; font-weight:600; color:#fff;
     background:var(--m,var(--accent)); overflow:hidden;
@@ -58,7 +63,7 @@
   .mono img{width:100%; height:100%; object-fit:cover; display:block;}
   .phead h2{font-size:23px; font-weight:600; line-height:1.1;}
   .phead .psub{color:var(--muted); font-size:14px; margin-top:1px;}
-  .chans{display:flex; flex-direction:column; gap:10px; margin-top:14px;}
+  .chans{display:flex; flex-direction:column; gap:10px; padding:0 16px 18px;}
 
   /* Кнопка канала */
   .go{display:flex; align-items:center; gap:12px; width:100%; min-height:62px; padding:10px 16px 10px 18px;
@@ -90,10 +95,12 @@
   .cinstr.warn{color:var(--accent); font-weight:500;}
   .ilink{color:var(--accent); font-weight:600; text-decoration:underline; text-underline-offset:2px;}
   /* кнопки-ссылки на сторы приложений */
-  .stores{display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:2px 6px 6px;}
+  .stores{display:flex; flex-direction:column; gap:6px; padding:2px 6px 6px;}
   .stores .slbl{font-size:12.5px; color:var(--muted);}
-  .store{display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 14px;
-    border:1px solid var(--line); border-radius:11px; background:#fff; font-size:13.5px; font-weight:600; color:var(--ink);}
+  .storebtns{display:flex; gap:8px;}
+  .store{flex:1 1 0; min-width:0; display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    height:38px; padding:0 12px; border:1px solid var(--line); border-radius:11px; background:#fff;
+    font-size:13.5px; font-weight:600; color:var(--ink); white-space:nowrap;}
   .store:active{transform:scale(.97);}
   .store .si{font-size:15px; line-height:1;}
   .help .stores{padding:8px 0 2px;}
@@ -167,10 +174,10 @@
       <p class="knote">KakaoTalk — корейский мессенджер, работает в России <b>без VPN</b>. Но при регистрации код подтверждения из-за границы часто <b>не приходит сам</b> — тогда нужно один раз отправить SMS вручную. Это ~5 минут и делается один раз.</p>
       <ol>
         <li><b>Скачайте приложение</b> (ищите «KakaoTalk», Android — ещё и в RuStore). <span class="tagi ok">VPN не нужен</span>
-          <div class="stores">
-            <a class="store" href="https://apps.apple.com/ru/app/id362057947" target="_blank" rel="noopener"><span class="si"></span>App&nbsp;Store</a>
-            <a class="store" href="https://play.google.com/store/apps/details?id=com.kakao.talk" target="_blank" rel="noopener"><span class="si">▶</span>Google&nbsp;Play</a>
-          </div>
+          <div class="stores"><span class="storebtns">
+            <a class="store" href="https://apps.apple.com/ru/app/id362057947" target="_blank" rel="noopener"><span class="si"></span>App Store</a>
+            <a class="store" href="https://play.google.com/store/apps/details?id=com.kakao.talk" target="_blank" rel="noopener"><span class="si">▶</span>Google Play</a>
+          </span></div>
         </li>
         <li><b>Откройте, нажмите «Start» → «Sign up»</b> (Начать / Регистрация) и примите условия.</li>
         <li><b>Введите свой номер.</b> Выберите страну <b>Russia (+7)</b> и наберите номер без первой восьмёрки, например <b>912&nbsp;345&#8209;67&#8209;89</b>.</li>
@@ -266,8 +273,9 @@ const CONFIG = {
   (CONFIG.people || []).forEach(p => {
     if (p.telegram && p.telegram.trim()) tgList.push({ name:p.name, href:p.telegram.trim() });
 
-    const card = document.createElement("section");
+    const card = document.createElement("details");
     card.className = "person";
+    card.setAttribute("name", "person");   // нативный эксклюзивный аккордеон (совр. браузеры)
     const initial = (p.name || "?").trim().charAt(0);
 
     let chans = "";
@@ -284,10 +292,10 @@ const CONFIG = {
       if (ch.copy) chans += `<span class="copy" data-copy="${esc(raw)}">скопировать ссылку</span>`;
       if (ch.instr) chans += `<div class="cinstr${ch.warn?" warn":""}">${ch.instr}</div>`;
       if (ch.apps){
-        let s = `<div class="stores"><span class="slbl">Есть приложение:</span>`;
-        if (ch.apps.ios)     s += `<a class="store" href="${esc(ch.apps.ios)}" target="_blank" rel="noopener"><span class="si"></span>App&nbsp;Store</a>`;
-        if (ch.apps.android) s += `<a class="store" href="${esc(ch.apps.android)}" target="_blank" rel="noopener"><span class="si">▶</span>Google&nbsp;Play</a>`;
-        chans += s + `</div>`;
+        let btns = "";
+        if (ch.apps.ios)     btns += `<a class="store" href="${esc(ch.apps.ios)}" target="_blank" rel="noopener"><span class="si"></span>App Store</a>`;
+        if (ch.apps.android) btns += `<a class="store" href="${esc(ch.apps.android)}" target="_blank" rel="noopener"><span class="si">▶</span>Google Play</a>`;
+        chans += `<div class="stores"><span class="slbl">Есть приложение:</span><span class="storebtns">${btns}</span></div>`;
       }
     });
 
@@ -298,13 +306,20 @@ const CONFIG = {
       ? `<span class="mono" style="--m:${esc(p.color||'#ff5c3e')}"><img src="${esc(avaUrl)}" alt="${esc(p.name)}" loading="lazy"></span>`
       : `<span class="mono" style="--m:${esc(p.color||'#ff5c3e')}">${esc(initial)}</span>`;
     card.innerHTML = `
-      <div class="phead">
+      <summary class="phead">
         ${mono}
-        <div><h2>${esc(p.name)}</h2><div class="psub">выберите способ связи</div></div>
-      </div>
+        <div class="pname"><h2>${esc(p.name)}</h2><div class="psub">выберите способ связи</div></div>
+        <span class="chev">▾</span>
+      </summary>
       <div class="chans">${chans}</div>`;
     peopleEl.appendChild(card);
   });
+
+  // Аккордеон: открыт только один человек (фолбэк для браузеров без атрибута name)
+  const persons = peopleEl.querySelectorAll("details.person");
+  persons.forEach(d => d.addEventListener("toggle", () => {
+    if (d.open) persons.forEach(o => { if (o !== d) o.open = false; });
+  }));
 
   // Наш Telegram — внизу
   if (tgList.length){
