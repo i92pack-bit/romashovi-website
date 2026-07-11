@@ -51,9 +51,11 @@
   .person{background:#fff; border:1px solid var(--line); border-radius:24px;
     padding:18px 18px 20px; margin-top:18px; box-shadow:0 8px 24px -16px rgba(0,0,0,.28);}
   .phead{display:flex; align-items:center; gap:13px; padding:2px 2px 4px;}
-  .mono{width:46px; height:46px; flex:none; border-radius:50%; display:flex; align-items:center;
-    justify-content:center; font-family:var(--serif); font-size:22px; font-weight:600; color:#fff;
-    background:var(--m,var(--accent));}
+  .mono{width:56px; height:56px; flex:none; border-radius:50%; display:flex; align-items:center;
+    justify-content:center; font-family:var(--serif); font-size:24px; font-weight:600; color:#fff;
+    background:var(--m,var(--accent)); overflow:hidden;
+    box-shadow:0 0 0 2px var(--bg), 0 0 0 4px var(--m,var(--accent));}
+  .mono img{width:100%; height:100%; object-fit:cover; display:block;}
   .phead h2{font-size:23px; font-weight:600; line-height:1.1;}
   .phead .psub{color:var(--muted); font-size:14px; margin-top:1px;}
   .chans{display:flex; flex-direction:column; gap:10px; margin-top:14px;}
@@ -204,6 +206,7 @@ const CONFIG = {
     {
       name: "Илья",
       color: "#ff5c3e",
+      avatar: "/avatar-ilya.jpg",
       telemost:  "https://telemost.yandex.ru/",   // ДЕМО
       kakaotalk: "https://open.kakao.com/",         // ДЕМО
       meet:      "https://meet.google.com/",        // ДЕМО
@@ -214,6 +217,7 @@ const CONFIG = {
     {
       name: "Юля",
       color: "#8ba888",
+      avatar: "/avatar-yulia.jpg",
       telemost:  "https://telemost.yandex.ru/",   // ДЕМО
       kakaotalk: "https://open.kakao.com/",         // ДЕМО
       meet:      "https://meet.google.com/",        // ДЕМО
@@ -268,9 +272,13 @@ const CONFIG = {
 
     if (!chans) chans = `<div class="empty">Ссылки пока не добавлены</div>`;
 
+    const avaUrl = (p.avatar || "").trim();
+    const mono = avaUrl
+      ? `<span class="mono" style="--m:${esc(p.color||'#ff5c3e')}"><img src="${esc(avaUrl)}" alt="${esc(p.name)}" loading="lazy"></span>`
+      : `<span class="mono" style="--m:${esc(p.color||'#ff5c3e')}">${esc(initial)}</span>`;
     card.innerHTML = `
       <div class="phead">
-        <span class="mono" style="--m:${esc(p.color||'#ff5c3e')}">${esc(initial)}</span>
+        ${mono}
         <div><h2>${esc(p.name)}</h2><div class="psub">выберите способ связи</div></div>
       </div>
       <div class="chans">${chans}</div>`;
